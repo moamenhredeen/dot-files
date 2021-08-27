@@ -178,3 +178,11 @@ set laststatus=2
 
 " reload .vimrc
 nnoremap <leader>r :source ~/.vimrc<CR>
+
+" autocompletion 
+set complete+=kspell " spell checking
+set completeopt=menuone,longest,preview
+set shortmess+=c " hide messages about the autocompletion
+
+" snippets 
+

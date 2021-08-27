@@ -12,33 +12,36 @@
 * basics customization
 #+BEGIN_SRC emacs-lisp
 
-(ido-mode 1)                           ;; better autocomplation
-(blink-cursor-mode 0)                  ;; disable binking cursor
-(show-paren-mode 1)                    ;; show matching parens or failure to match
-(global-auto-revert-mode 1)            ;; reload files that chage on disk
-(column-number-mode 1)                 ;; show column numbers in mode line
-(global-hl-line-mode 1)                ;; change the color of the line the cursor is on
-(setq visible-bell 1)                  ;; disable sounds
-(setq-default truncate-lines t)         ;; default to NOT wrapping long lines in display
-(tool-bar-mode 0)                       ;; hide the tool bar
-(menu-bar-mode 0)                       ;; hide the "File Edit..." menu
-(scroll-bar-mode -1)                    ;; hide the scroll bars
+  (ido-mode 1)                           ;; better autocomplation
+  (blink-cursor-mode 0)                  ;; disable binking cursor
+  (show-paren-mode 1)                    ;; show matching parens or failure to match
+  (global-auto-revert-mode 1)            ;; reload files that chage on disk
+  (column-number-mode 1)                 ;; show column numbers in mode line
+  (global-hl-line-mode 1)                ;; change the color of the line the cursor is on
+  (setq visible-bell 1)                  ;; disable sounds
+  (setq-default truncate-lines t)         ;; default to NOT wrapping long lines in display
+  (tool-bar-mode 0)                       ;; hide the tool bar
+  (menu-bar-mode 0)                       ;; hide the "File Edit..." menu
+  (scroll-bar-mode -1)                    ;; hide the scroll bars
 
-(setq inhibit-startup-screen t)         ;; don't show the "splash" screen
-(setq initial-scratch-message           ;; put this text in the scratch buffer
-      ";; Hello Moamen :)\n")
+  (setq inhibit-startup-screen t)         ;; don't show the "splash" screen
+  (setq initial-scratch-message           ;; put this text in the scratch buffer
+	";; Hello Moamen :)\n")
 
-;; activate nyan mode
-(nyan-mode 1)
+  ;; activate nyan mode
+  (nyan-mode 1)
 
 
-;; mode line customization
-(use-package doom-modeline
-  :ensure t)
-(doom-modeline-init)
+  ;; mode line customization
+  (use-package doom-modeline
+    :ensure t)
+  (doom-modeline-init)
 
-;; line numbers
-(display-line-numbers-mode 1 )
+  ;; line numbers
+  (display-line-numbers-mode 1 )
+
+  ;; disable backup files
+  (setq make-backup-files nil)
 #+END_SRC
 
 * themes

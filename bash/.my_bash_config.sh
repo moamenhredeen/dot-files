@@ -10,68 +10,209 @@
 
 
 ############### colors ##################
-prefix='\033['
-sufix='m'
-black="${prefix}0;30${sufix}"
-white="${prefix}1;37${sufix}"
-red="${prefix}0;31${sufix}"
-green="${prefix}0;32${sufix}"
-blue="${prefix}0;34${sufix}"
-cyan="${prefix}0;36${sufix}"
-yellow="${prefix}1;33${sufix}"
-lred="${prefix}1;31${sufix}"
-lgreen="${prefix}1;32${sufix}"
-lblue="${prefix}1;34${sufix}"
-lcyan="${prefix}1;36${sufix}"
-nocolor="${prefix}0${sufix}"
 
-################ customizations ###############
-# enable vim mode in bash 
+### customizations 
 set -o vi
 EDITOR=vim
 
 
+###################################################################
+#......................MY UTILITY.................................#
+###################################################################
+
+################### formated output functions #############################
+
+function symbol(){
+    
+    case $1 in
+        x)
+            echo -e "\U274C"
+            ;;
+        done)
+            echo -e "\U2713"
+            ;;
+        circle)
+            echo -e "\U25CF"
+            ;;
+        rfinger)
+            echo -e "\U1F449"
+            ;;
+        rarrow)
+            echo -e "\U1F87A"
+            ;;
+        rarrow2)
+            echo -e "\U27A4"
+            ;;
+        rarrow3)
+            echo -e "\U27F6"
+            ;;
+        hline)
+            echo -e "\U2500"
+            ;;
+        *) 
+            echo -e ""
+        ;;
+    esac
+    
+}
+
+function cprint(){
+    prefix='\033['
+    sufix='m'
+    black="${prefix}0;30${sufix}"
+    white="${prefix}1;37${sufix}"
+    red="${prefix}0;31${sufix}"
+    green="${prefix}0;32${sufix}"
+    blue="${prefix}0;34${sufix}"
+    cyan="${prefix}0;36${sufix}"
+    yellow="${prefix}1;33${sufix}"
+    red_light="${prefix}1;31${sufix}"
+    green_light="${prefix}1;32${sufix}"
+    blue_light="${prefix}1;34${sufix}"
+    cyan_light="${prefix}1;36${sufix}"
+    nocolor="${prefix}0${sufix}"
+    case $1 in 
+        -w | --white)
+            echo -e "${white}$2${nocolor}"
+            ;;
+        -r | --red)
+            echo -e "${red}$2${nocolor}"
+            ;;
+        -g | --green) 
+            echo -e "${green}$2${nocolor}"
+            ;;
+        -b | --blue) 
+            echo -e "${blue}$2${nocolor}"
+            ;;
+        -y | --yellow) 
+            echo -e "${yellow}$2${nocolor}"
+            ;;
+        -c | --cyan) 
+            echo -e "${cyan}$2${nocolor}"
+            ;;
+        -rl | --red-light)
+            echo -e "${red}$2${nocolor}"
+            ;;
+        -gl | --green-light) 
+            echo -e "${green}$2${nocolor}"
+            ;;
+        -bl | --blue-light) 
+            echo -e "${blue}$2${nocolor}"
+            ;;
+        -cl | --cyan-light) 
+            echo -e "${cyan}$2${nocolor}"
+            ;;
+    esac
+}
 
 
+function command_not_found(){
+    echo -e "$(cprint -r $(symbol x)) sorry entered subcommand or option can not be found "
+    echo -e "$(symbol rfinger)  use -h or --help to get help"
+}
 
-################# aliases ######################
-# navigation 
+function option_not_found(){
+    echo -e "$(cprint -r $(symbol x)) sorry option can be not found "
+}
+
+function draw_hline(){
+    temp=""
+    for (( i=0; i<50; i++ ));
+    do
+        temp="$temp$(symbol hline)" 
+    done
+    echo -e "$temp"
+}
+
+function print_section(){
+    # Parameters : 
+    # $1 : section name 
+    echo -e "$(cprint -cl "$1")"
+}
+
+function print_command(){
+    # Parameters : 
+    # $1 : command name 
+    # $2 : command discription
+    echo -e "$(cprint -cl "$(symbol rarrow2) "$1"")\t$(cprint -w "$2")"
+}
+
+function print_subcommand(){
+    # Paramters 
+    # $1 : subcommand name 
+    # $2 : subcommand discription
+    echo -e "$(cprint -gl "$(symbol rarrow2)  "$1"")\t$(cprint -w "$2")"
+}
+
+function print_option(){
+    # Parameters 
+    # $1 : option name 
+    # $2 : option description 
+    echo -e "  $(cprint -y "$1")\t$(cprint -w "$2")"
+}
+
+function print_alias(){
+    # Parameters : 
+    # $1 : alias 
+    # $2 : command 
+    echo -e "$(cprint -gl "$1")\t$(cprint -gl $(symbol rarrow3))\t$(cprint -w "$2")"
+}
+
+
+################### utility functions #############################
+function edit_config_file(){
+    vim ~/.my_bash_config.sh
+}
+
+function reload_config_file(){
+    . ~/.bashrc
+    echo -e "$(cprint -gl $(symbol done)) file reloaded"
+}
+
+####################### aliases ##################################
+### navigation 
 alias ..='cd ..'
-alias ...='cd ../../'
-alias ....='cd ../../../'
-alias ex='xdg-open'
+alias ...='cd ../..'
+alias ....='cd ../../..'
 
-# python 
+### python 
 alias py='python'
 alias venv='python -m venv'
 alias pyd='source ~/.python-envs/default/bin/activate'
 alias pyls='ls -l ~/.python-envs/'
 
-# windows style 
+### windows style 
 alias cls='clear'
 
 
-function print_aliases(){
-
-# print aliases 
-echo -e "${cyan}Navigation${nocolor}"
-echo -e "${lgreen}\tex\t->\t${white}open file manager${nocolor}"
-echo -e "${lgreen}\t..\t->\t${white}cd ..${nocolor}"
-echo -e "${lgreen}\t...\t->\t${white}cd ../..${nocolor}"
-echo -e "${lgreen}\t....\t->\t${white}cd ../../..${nocolor}"
-
-echo -e "${cyan}python${nocolor}"
-echo -e "${lgreen}\tpy\t->\t${white}python${nocolor}"
-echo -e "${lgreen}\tvenv\t->\t${white}python -m venv${nocolor}"
-echo -e "${lgreen}\tpyd\t->\t${white}activate python default environment${nocolor}"
-echo -e "${lgreen}\tpyls\t->\t${white}list environment varaibles${nocolor}"
-
-echo -e "${cyan}windows-style${nocolor}"
-echo -e "${lgreen}\tcls\t->\t${white}clear${nocolor}"
+function aliases_help(){
+    clear
+    print_section "NAVIGATION"
+    print_alias "ex" "open file manager"
+    print_alias ".." "cd ../"
+    print_alias "..." "cd ../../"
+    print_alias "...." "cd ../../../"
+    draw_hline
+    print_section "PYTHON" 
+    print_alias "py" "python"
+    print_alias "venv" "python -m venv"
+    print_alias "pyd" "source ~/.python-envs/default/bin/activate # activate default python environment"
+    print_alias "pyls" "ls ~/.python-envs/ # list python environments"
+    draw_hline
+    print_section "WINDOWS-STYLE"
+    print_alias "cls" "clear # clear console"
 }
 
-################# maven ######################
-function create_maven_project(){
+
+
+####################### maven  ##################################
+function my_maven_help(){
+    print_subcommand "mvn | maven OPTION" "create maven projects"
+    print_option "-q | --quick" "create maven project using maven-archetype-quickstart"
+}
+
+
+function my_maven(){
     case $1 in
         -q | --quick)
             echo "maven-archetype-quickstart was selected"
@@ -82,36 +223,19 @@ function create_maven_project(){
                 -DarchetypeArtifactId="maven-archetype-quickstart" \
                 -DarchetypeVersion="1.4"
             ;;
+        -h | --help)
+            my_maven_help
+            ;;
         *)
-            echo "template does not exist"
+            option_not_found
+            echo -e "\n"
+            my_maven_help
         ;;
     esac
     
 }
 
-
-################# help ######################
-function my_help(){
-    
-    # print header 
-    echo -e '\n'
-    echo -e "${yellow}===========================================${nocolor}"
-    echo -e "${yellow}.......my bash configuration...............${nocolor}"
-    echo -e "${yellow}===========================================${nocolor}"
-    echo -e '\n'
-
-    echo -e "${cyan}Options: "
-    echo -e "\t${lgreen}-h, --help\t\t${nocolor}help"
-    echo -e "\t${lgreen}-r, --reload\t\t${nocolor}reload .bashrc"
-    echo -e "\t${lgreen}-a, --alias\t\t${nocolor}aliases"
-    echo -e '\n'
-
-    echo -e "${cyan}Subcommands: "
-    echo -e "${yellow}mvn, maven\t\t${nocolor}help"
-    echo -e "\t${lgreen}-q, --quick\t\t${nocolor}create maven project using maven-archetype-quickstart"
-}
-
-################# my ######################
+####################### my  ##################################
 function my(){
 
     case $1 in
@@ -120,24 +244,41 @@ function my(){
             my_help
             ;;
         -a | --alias) 
-            print_aliases
+            aliases_help
             ;;
         -r | --reload) 
-            echo "reload .bashrc file ..."
-            source ~/.bashrc
+            reload_config_file
             ;;
         -e | --edit)
-            code ~/new-git/configurations/bash/.my_bash_config.sh
+            edit_config_file 
             ;;
     ## subcommands
         mvn | maven)
-            create_maven_project $2
+            my_maven $2
             ;;
     ## other cases 
         *) 
-            echo "command not found"
-            echo "help >> my -h or my --help"
+            command_not_found
             ;;
     esac
     
 }
+
+
+function my_help(){
+    clear 
+    print_section "COMMAND"
+    echo -e "my SUBCOMMAND [OPTION]"
+    echo -e "  my command description"
+    draw_hline
+
+    print_section "OPTIONS"
+    print_option "-h, --help"       "help"
+    print_option "-r, --reload"     "reload .bashrc"
+    print_option '-a, -aliases'     'list user defined aliases'
+    draw_hline
+
+    print_section "SUBCOMMANDS"
+    my_maven_help
+}
+###################################################################
