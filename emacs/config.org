@@ -42,6 +42,9 @@
 
   ;; disable backup files
   (setq make-backup-files nil)
+
+  ;; diable lockfiles
+  (setq create-lockfiles nil)
 #+END_SRC
 
 * themes

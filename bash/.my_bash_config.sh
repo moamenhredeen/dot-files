@@ -127,14 +127,15 @@ function print_command(){
     # Parameters : 
     # $1 : command name 
     # $2 : command discription
-    echo -e "$(cprint -cl "$(symbol rarrow2) "$1"")\t$(cprint -w "$2")"
+    echo -e "$(cprint -cl "$1")"
+    echo -e "  $2"
 }
 
 function print_subcommand(){
     # Paramters 
     # $1 : subcommand name 
     # $2 : subcommand discription
-    echo -e "$(cprint -gl "$(symbol rarrow2)  "$1"")\t$(cprint -w "$2")"
+    echo -e "$(cprint -gl $(symbol rarrow2)) $(cprint -gl "$1")\t$(cprint -w "$2")"
 }
 
 function print_option(){
@@ -261,8 +262,8 @@ function my(){
 function my_help(){
     clear 
     print_section "COMMAND"
-    echo -e "my SUBCOMMAND [OPTION]"
-    echo -e "  my command description"
+    print_command "my SUBCOMMAND [OPTION]" \
+        "my command description"
     draw_hline
 
     print_section "OPTIONS"
