@@ -28,6 +28,9 @@ filetype plugin on
 " Load an indent file for the detected file type.
 filetype indent on
 
+" vim fuzzy finder :) 
+set path+=**
+
 " Turn syntax highlighting on.
 syntax on
 
@@ -92,6 +95,8 @@ set wildignore=*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx
 nnoremap Y 0y$
 
 let mapleader = " "
+set notimeout nottimeout
+nnoremap <leader><leader> :echo "leader pressed twice"<CR>
 nnoremap <leader>h :nohlsearch<CR>
 nnoremap <leader>x :x<CR>
 nnoremap <leader>w :w<CR>
@@ -152,7 +157,7 @@ vnoremap <leader>c :call ToggleComment()<cr>
 set clipboard=unnamedplus
 
 " windows and navigation
-nnoremap <leader>vs :vsplit<CR>
+nnoremap <leader>sv :vsplit<CR>
 nnoremap <leader>s :split<CR>
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
@@ -176,6 +181,7 @@ set statusline+=\ ascii:\ %b\ hex:\ 0x%B\ row:\ %l\ col:\ %c\ percent:\ %p%%
 " Show the status on the second to last line.
 set laststatus=2
 
+
 " reload .vimrc
 nnoremap <leader>r :source ~/.vimrc<CR>
 
@@ -185,4 +191,10 @@ set completeopt=menuone,longest,preview
 set shortmess+=c " hide messages about the autocompletion
 
 " snippets 
+" cpp 
+nnoremap <leader>vmain :read $HOME/.vim/snippets/cpp/main.cpp<CR>
+" maven 
+nnoremap <leader>vcompiler :read $HOME/.vim/snippets/maven/compiler.xml<CR>
 
+" relative numbers 
+set relativenumber

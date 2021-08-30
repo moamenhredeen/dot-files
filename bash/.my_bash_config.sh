@@ -7,6 +7,9 @@
 #..............................................#
 ################################################
 
+# TODO : 
+# - function : CRUD aliases
+# - function : alias to open file explorer
 
 ### customizations 
 set -o vi
@@ -228,6 +231,7 @@ function my_maven(){
     esac
     
 }
+
 
 ####################### my  ##################################
 function my(){
