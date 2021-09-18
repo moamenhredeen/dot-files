@@ -3,52 +3,70 @@ set ignorecase
 set smartcase
 set scrolloff=3 " 3 lines above/below cursor when scrolling
 set relativenumber
-
 " Emulated Plugins
 set surround
-
 " Copy to system clipboard as well
-set clipboard+=unnamed
-
+set clipboard+=unnamedplus
 " Use Idea to join lines smartly
 set ideajoin
-
 " Multiple cursors support
 set multiple-cursors
+
+set visualbell
+set showmode
+set showcmd
+set ideavimsupport
+set highlightedyank
+" autocmd FocusLost * call feedkeys("\<esc>")
 
 " IdeaVim uses 'a' for alt instead of Vim's 'm'
 nmap <a-j> 15gj
 nmap <a-k> 15gk
 
+" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" key binding 
+" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " set leader key
 let mapleader = " "
 
+" faster 
+nmap <leader>q :action CloseEditor<cr>
+nmap <leader>Q :action CloseAllEditors<cr>
+nmap <leader>w :action SaveAll<cr>
+nmap <leader>x :wq<cr>
+nmap <leader>X :wQ<cr>
 
-" Closing tabs
-nmap <leader>q :action CloseContent<cr>
-nmap <leader>Q :action ReopenClosedTab<cr>
 
-" Navigation
-nmap <leader>p  :action Back<cr> 
-"nmap <leader>n :action Forward<cr>
-nmap <leader>l :action RecentLocations<cr>
-nmap <leader>e :action RecentFiles<cr>
+" Windows and Navigation
+nmap <leader>b :action RecentFiles<cr>
 nmap <leader>a :action RecentChangedFiles<cr>
+nmap <leader>nf :action GotoFile<cr>
+nmap <leader>nc :action GotoClass<cr>
+nmap <leader>ns :action GotoSymbol<cr>
+nmap <leader>no :action SelectIn<cr>
+nmap <leader>nb :action ShowBookmarks<cr>
+nmap <leader>nl :action RecentLocations<cr>
+nmap <leader>m :action HideAllWindows<cr>
+nmap <leader>sv :action SplitVertically<cr>
+nmap <leader>ss :action SplitHorizontally<cr>
+nmap <leader>sn :action NextSplitter<cr>
+nmap <leader>sp :action PrevSplitter<cr>
+nmap <leader>su :action Unsplit<cr>
+nmap <leader>sq :action UnsplitAll<cr>
 
-nmap <leader>d :action GotoDeclaration<cr>
-nmap <leader>i :action GotoImplementation<cr>
-nmap <leader>u :action FindUsages<cr>
+" code actions
+nmap <leader>f :action ReformatCode<cr>
+nmap <leader>gd :action GotoDeclaration<cr>
+nmap <leader>gi :action GotoImplementation<cr>
+nmap <leader>gu :action FindUsages<cr>
+nmap <leader>gp  :action Back<cr> 
+nmap <leader>gn :action Forward<cr>
 
-nmap <leader>ff :action GotoFile<cr>
-nmap <leader>fc :action GotoClass<cr>
-nmap <leader>fs :action GotoSymbol<cr>
-nmap <leader>fo :action SelectIn<cr>
-nmap <leader>fb :action ShowBookmarks<cr>
 
 " Errors
-nmap <leader>h :action ShowErrorDescription<cr>
-nmap <leader>x :action GotoNextError<cr>
-nmap <leader>X :action GotoPreviousError<cr>
+nmap <leader>eh :action ShowErrorDescription<cr>
+nmap <leader>ep :action GotoPreviousError<cr>
+nmap <leader>en :action GotoNextError<cr>
 
 " Refactorings
 vmap T :action Refactorings.QuickListPopupAction<cr>
@@ -58,8 +76,7 @@ nmap <leader>ri :action OptimizeImports<cr>
 
 
 " Search
-nmap <leader>/ :action Find<cr>
-nmap <leader>s :action Find<cr>
+nmap / :action Find<cr>
 nmap <leader>\ :action FindInPath<cr>
 
 " comments
@@ -75,54 +92,3 @@ nmap <leader>ya :action Annotate<cr>
 nmap <leader>yl :action Vcs.Show.Log<cr>
 nmap <leader>yd :action Compare.LastVersion<cr>
 nmap <leader>yr :action Git.ResolveConflicts<cr>
-
-" Moving lines
-"nmap <leader>k :action MoveLineUp<cr>
-"nmap <leader>j :action MoveLineDown<cr>
-
-" Moving statements
-"nmap <leader>K :action MoveStatementUp<cr>
-"nmap <leader>J :action MoveStatementDown<cr>
-
-" Tabs
-" nnoremap [b :action PreviousTab<cr>
-" nnoremap ]b :action NextTab<cr>
-
-" Use Q for formatting the current paragraph (or visual selection)
-" vmap Q gq
-" nmap Q gqap
-
-" These create newlines like o and O but stay in normal mode
-" nmap zj o<Esc>k
-" nmap zk O<Esc>j
-
-" To navigate between split panes
-" nmap <leader>wo :action NextSplitter<cr>
-" nmap <leader>wp :action PrevSplitter<cr>
-" nmap <leader>j :action PrevSplitter<cr>
-
-" key bindings for quickly moving between windows
-" nmap <leader>h <c-w>h
-" nmap <leader>l <c-w>l
-" nmap <leader>k <c-w>k
-" nmap <leader>j <c-w>j
-
-" Splits manipulation
-"nmap <leader>ws :action SplitHorizontally<cr>
-"nmap <leader>wv :action SplitVertically<cr>
-"nmap <leader>wc :action Unsplit<cr>
-"nmap <leader>wC :action UnsplitAll<cr>
-"nmap <leader>wd :action OpenEditorInOppositeTabGroup<cr>
-"nmap <leader><leader> :action VimFilePrevious<cr>
-"nmap <leader>ww :action JumpToLastWindow<cr>
-
-"" Building, Running and Debugging
-" nmap ,c :action CompileDirty<cr>
-" nmap ,r :action Run<cr>
-" nmap ,R :action RunAnything<cr>
-" nmap ,b :action Debug<cr>
-" nmap ,c :action RunClass<cr>
-" nmap ,d :action DebugClass<cr>
-" nmap ,t :action RerunTests<cr>
-" nmap ,T :action RerunFailedTests<cr>
-

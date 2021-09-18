@@ -13,7 +13,7 @@
 
 ### customizations 
 set -o vi
-EDITOR=vim
+EDITOR=nvim
 
 
 ################### formated output functions #############################
@@ -158,7 +158,7 @@ function print_alias(){
 
 ################### utility functions #############################
 function edit_config_file(){
-    vim ~/.my_bash_config.sh
+    nvim ~/.my_bash_config.sh
 }
 
 function reload_config_file(){
@@ -168,6 +168,8 @@ function reload_config_file(){
 
 ####################### aliases ##################################
 ### navigation 
+alias v='nvim'
+alias fm='xdg-open'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
@@ -185,7 +187,8 @@ alias cls='clear'
 function aliases_help(){
     clear
     print_section "NAVIGATION"
-    print_alias "ex" "open file manager"
+    print_alias "v" "nvim"
+    print_aulias "fm" "xdg-open"
     print_alias ".." "cd ../"
     print_alias "..." "cd ../../"
     print_alias "...." "cd ../../../"
