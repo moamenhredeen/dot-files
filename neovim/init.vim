@@ -15,6 +15,8 @@ Plug 'morhetz/gruvbox'
 Plug 'Olical/conjure', {'tag': 'v4.23.0'}
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
+Plug 'yamatsum/nvim-cursorline'
+Plug 'lervag/vimtex'
 
 call plug#end()
 
@@ -27,6 +29,11 @@ filetype plugin on
 set number
 set relativenumber
 colorscheme gruvbox
+" cursorline
+set cursorline
+hi cursorline guibg=234 ctermbg=234
+set cursorcolumn
+hi cursorcolumn guibg=234 ctermbg=234
 
 " clipboard settings
 set clipboard=unnamedplus
@@ -111,3 +118,16 @@ inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 
 " launch programm using make 
 nnoremap <leader>l :w<CR>:make<CR>
+
+
+" Use <C-l> for trigger snippet expand.
+imap <C-l> <Plug>(coc-snippets-expand)
+
+" Use <C-j> for select text for visual placeholder of snippet.
+vmap <C-j> <Plug>(coc-snippets-select)
+
+" Use <C-j> for jump to next placeholder, it's default of coc.nvim
+let g:coc_snippet_next = '<c-j>'
+
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+let g:coc_snippet_prev = '<c-k>'

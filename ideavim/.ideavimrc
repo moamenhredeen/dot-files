@@ -2,7 +2,7 @@
 set ignorecase
 set smartcase
 set scrolloff=3 " 3 lines above/below cursor when scrolling
-set relativenumber
+" set relativenumber
 " Emulated Plugins
 set surround
 " Copy to system clipboard as well
@@ -26,6 +26,10 @@ nmap <a-k> 15gk
 " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " key binding 
 " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+nmap K :action MethodUp<cr>
+nmap J :action MethodDown<cr>
+
 " set leader key
 let mapleader = " "
 
