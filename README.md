@@ -1,5 +1,8 @@
 # My dotfiles
 
+# TODO 
+- installation file for windows
+
 ## Emacs
 
 files :
