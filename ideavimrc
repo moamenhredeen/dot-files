@@ -27,8 +27,8 @@ nmap <a-k> 15gk
 " key binding 
 " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-nmap K :action MethodUp<cr>
-nmap J :action MethodDown<cr>
+"nmap K :action MethodUp<cr>
+"nmap J :action MethodDown<cr>
 
 " set leader key
 let mapleader = " "

@@ -21,20 +21,25 @@
       '(hl-line  ((t (  :background "#1D1D00"))))
       '(line-number  ((t ( :inherit default :background "#3c3836" :foreground "#C6DE41"))))
       '(line-number-current-line ((t (   :inherit default :background "#1D1D00" :foreground "#C6DE41" :inverse-video t :weight ultra-bold))))
-      ;;'(org-checkbox ((t (   :background "#565D47" :foreground "#81B214" :weight extra-bold))))
-      ;;'(org-hide ((t (   :foreground "#282828"))))
-      ;;'(org-level-1  ((t (:foreground "#4ECCA3" :weight extra-bold :height 1.2))))
-      ;;'(org-level-8 ((t (:foreground "#fe8019"))))
+      '(org-checkbox ((t (  :foreground "#fe8019" :weight extra-bold))))
+      '(org-hide ((t (   :foreground "#282828"))))
+      '(org-level-1  ((t (:foreground "#fb4934" :weight extra-bold :height 1.4))))
+      '(org-level-2  ((t (:foreground "#b8bb26" :weight extra-bold :height 1.2))))
+      '(org-level-3  ((t (:foreground "#fabd2f" :weight bold))))
+      '(org-level-4  ((t (:foreground "#d3869b"))))
+      '(org-level-5  ((t (:foreground "#83a598"))))
       '(org-tag ((t (:foreground "#7CBD1E" :weight bold))))
       '(doom-modeline-bar ((t (:inherit highlight :background "black")))))
+
+     ;; no need to start the server on startup 
      ;;(server-start)
      ;; Let's get a backtrace when errors are
      (setq debug-on-error t)
-
      ;; Display byte-compiler warnings on error
      (setq byte-compile-debug t)
 
-     ;; The default is to wait 1 second, which I find a bit long
+
+     ;;The default is to wait 1 second, which I find a bit long
      (setq echo-keystrokes 0.1)
 
      ;; Stop polluting the directory with auto-saved files and backup
@@ -52,7 +57,7 @@
      ;; Scrolling done right
      (setq scroll-step 1 scroll-conservatively 10000)
      ;;(setq scroll-error-top-bottom t)
-																						      ;;;;;;;;;;;;;;;;;;(setq focus-follows-mouse t)
+																							   ;;;;;;;;;;;;;;;;;;(setq focus-follows-mouse t)
      ;;(setq recenter-positions '(top bottom middle))
 
      ;; Number of lines of continuity when scrolling by screenfulls
@@ -63,7 +68,6 @@
      (flyspell-mode t)
      (setq fill-column 72)
      (setq spell-command "aspell")
-     ;;(setq tab-always-indent 'always)
      ;;(setq text-mode-hook '(turn-on-auto-fill text-mode-hook-identify))
      (setq max-lisp-eval-depth 10000)
 
@@ -80,7 +84,7 @@
      (setq-default truncate-lines t)         ;; default to NOT wrapping long lines in display
      (tool-bar-mode 0)                       ;; hide the tool bar
      (menu-bar-mode 0)                       ;; hide the "File Edit..." menu
-     (scroll-bar-mode -1)                    ;; hide the scroll bars
+     (scroll-bar-mode 1)                    ;; hide the scroll bars
 
      (setq inhibit-startup-screen t)         ;; don't show the "splash" screen
 
@@ -89,7 +93,7 @@
 
      ;; line numbers
      (global-display-line-numbers-mode t)
-     (setq display-line-numbers-type 'relative)
+     ;;(setq display-line-numbers-type 'relative)
 
      ;; Default Frame
      (setq initial-frame-alist
@@ -153,27 +157,10 @@
 
      ;; Treat clipboard input as UTF-8 string first; compound text next, etc.
      (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
-
-
-     (setq org-bullets-face-name 'org-bullet-face)
-     (setq org-clock-in-resume t)
-     (setq org-clock-in-switch-to-state "INPROGRESS")
-     (setq org-clock-out-remove-zero-time-clocks t)
-     (setq org-clock-persist t)
-     (setq org-clock-persist-query-resume nil)
-     (setq org-clock-report-include-clocking-task t)
-     ;;(setq org-ellipsis "⸻")
-     (setq org-log-done 'time)
-     (setq org-log-note-clock-out t)
-     (setq org-log-redeadline 'time)
-     (setq org-log-repeat t)
-     (setq org-log-reschedule 'time)
-     (setq org-log-states-order-reversed nil)
-     (setq org-pretty-entities t)
    #+END_SRC
-
+   
    #+RESULTS:
-   : t
+   | UTF8_STRING | COMPOUND_TEXT | TEXT | STRING |
 
 ** minor modes
    #+BEGIN_SRC emacs-lisp
@@ -263,7 +250,6 @@
    #+BEGIN_SRC emacs-lisp
      (require 'yasnippet)
      (yas/load-directory "~/.emacs.d/elpa/yasnippet-snippets-0.24")
-     (setq yas/indent-line nil)
      (yas-global-mode 1)
    #+END_SRC
 ** auto completion
@@ -301,81 +287,70 @@
    #+end_src
 * org-mode
   #+BEGIN_SRC emacs-lisp
-    (require 'org-tempo)
-    (require 'org-bullets)
-    (require 'ol-gnus)
+	;;(require 'org-tempo)
+	(require 'org-bullets)
+	;;(require 'ol-gnus)
 
-    ;; make available "org-bullet-face" such that I can control the font size individually
-    (setq org-bullets-face-name (quote org-bullet-face))
-    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-
-
-    ;;other symbols :  ➪🡺▤▶☯⚡⤵
-    (setq org-bullets-bullet-list '("❯" "⟶" "⮚" "➜"))
-    (setq org-ellipsis "⸻")
-    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+	;; make available "org-bullet-face" such that I can control the font size individually
+	(setq org-bullets-face-name (quote org-bullet-face))
+	(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
 
-    (setq org-todo-keywords '((sequence "TODO" "NEXT" "INPROGRESS" "|" "DONE" "BLOCKED")))
-    (setq org-todo-keyword-faces
-	  '(("TODO" . (:foreground "#FFB385" :weight bold :inverse-video t))
-	    ("NEXT" . (:foreground "#FF7272" :weight bold :inverse-video t))
-	    ("INPROGRESS" . (:foreground "#FFD31D" :weight bold :inverse-video t))
-	    ("DONE" . (:foreground "#28FFBF" :weight bold :inverse-video t))
-	    ("BLOCKED" . (:foreground "#A19882" :weight bold :inverse-video t))))
+	;;other symbols :  ➪🡺☯⸻❯🔥⟶▶
+	(setq org-bullets-bullet-list '("▤" "⸻" "➜" "⟶" "➪" "❯"))
+	(setq org-ellipsis "⤵")
+	(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
-    (setq org-link-abbrev-alist
-	  '(("ggle" . "http://www.google.com/search?q=%s")
-	    ("gmap" . "http://maps.google.com/maps?q=%s")
-	    ("omap" . "http://nominatim.openstreetmap.org/search?q=%s&polygon=1")))
 
-    ;; read agenda files form directory : ~/.agenda
-    (setq  org-agenda-files  (append (file-expand-wildcards "~/.agenda/*.org")))
+	(setq org-todo-keywords '((sequence "🔥TODO" "🕘NEXT" "❯❯❯INPROGRESS" "|" "DONE" "BLOCKED")))
+	(setq org-todo-keyword-faces
+	      '(("🔥TODO" . (:foreground "#cc241d" :weight bold :inverse-video t))
+		("🕘NEXT" . (:foreground "#cc241d" :weight bold :inverse-video t))
+		("❯❯❯INPROGRESS" . (:foreground "#d65d0e" :weight bold :inverse-video t))
+		("DONE" . (:foreground "#98971a" :weight bold :inverse-video t))
+		("BLOCKED" . (:foreground "#ebdbb2" :weight bold :inverse-video t))))
 
-    (setq org-log-done 'time)
-    (org-clock-persistence-insinuate)
-    ;; Resume clocking task when emacs is restarted
-    (org-clock-persistence-insinuate)
-    ;; Save the running clock and all clock history when exiting Emacs, load it on startup
-    (setq org-clock-persist t)
-    ;; Resume clocking task on clock-in if the clock is open
-    (setq org-clock-in-resume t)
-    ;; Do not prompt to resume an active clock, just resume it
-    (setq org-clock-persist-query-resume nil)
-    ;; Change tasks to whatever when clocking in
-    (setq org-clock-in-switch-to-state "INPROGRESS")
-    ;; Save clock data and state changes and notes in the LOGBOOK drawer
-    (setq org-clock-into-drawer t)
-    ;; Sometimes I change tasks I'm clocking quickly - this removes clocked tasks
-    ;; with 0:00 duration
-    (setq org-clock-out-remove-zero-time-clocks t)
-    ;; Clock out when moving task to a done state
-    (setq org-clock-out-when-done t)
-    ;; Enable auto clock resolution for finding open clocks
-    (setq org-clock-auto-clock-resolution (quote when-no-clock-is-running))
-    ;; Include current clocking task in clock reports
-    (setq org-clock-report-include-clocking-task t)
-    ;; use pretty things for the clocktable
-    (setq org-pretty-entities t)
-    (setq org-log-repeat t)
-    (setq org-clock-in-resume t)
-    (setq org-clock-in-switch-to-state "INPROGRESS")
-    (setq org-clock-out-remove-zero-time-clocks t)
-    (setq org-clock-persist t)
-    (setq org-clock-persist-query-resume nil)
-    (setq org-clock-report-include-clocking-task t)
-    (setq org-level-color-stars-only t)
-    (setq org-log-done 'time)
-    (setq org-log-note-clock-out t)
-    (setq org-log-redeadline 'time)
-    (setq org-log-repeat t)
-    (setq org-log-reschedule 'time)
-    (setq org-log-states-order-reversed nil)
-    (setq org-pretty-entities t)
-    (setq org-startup-folded t)
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-     '((gnuplot . t)))
+	(setq org-link-abbrev-alist
+	      '(("ggle" . "http://www.google.com/search?q=%s")
+		("gmap" . "http://maps.google.com/maps?q=%s")
+		("omap" . "http://nominatim.openstreetmap.org/search?q=%s&polygon=1")))
+
+	;; read agenda files form directory : ~/.agenda
+	(setq  org-agenda-files  (append (file-expand-wildcards "~/.agenda/*.org")))
+
+	;; Resume clocking task when emacs is restarted
+	(org-clock-persistence-insinuate)
+	;; Save the running clock and all clock history when exiting Emacs, load it on startup
+	(setq org-clock-persist t)
+	;; Resume clocking task on clock-in if the clock is open
+	(setq org-clock-in-resume t)
+	;; Do not prompt to resume an active clock, just resume it
+	(setq org-clock-persist-query-resume nil)
+	;; Change tasks to whatever when clocking in
+	(setq org-clock-in-switch-to-state "❯❯❯INPROGRESS")
+	;; Save clock data and state changes and notes in the LOGBOOK drawer
+	(setq org-clock-into-drawer t)
+	;; Sometimes I change tasks I'm clocking quickly - this removes clocked tasks
+	;; with 0:00 duration
+	(setq org-clock-out-remove-zero-time-clocks t)
+	;; Clock out when moving task to a done state
+	(setq org-clock-out-when-done t)
+	;; Enable auto clock resolution for finding open clocks
+	(setq org-clock-auto-clock-resolution (quote when-no-clock-is-running))
+	;; Include current clocking task in clock reports
+	(setq org-clock-report-include-clocking-task t)
+	;; use pretty things for the clocktable
+	(setq org-pretty-entities t)
+
+	(setq org-startup-folded t)
+
+	(setq org-log-note-clock-out t)
+	(setq org-log-redeadline 'time)
+	(setq org-log-repeat t)
+	(setq org-log-reschedule 'time)
+	(setq org-log-states-order-reversed nil)
+	(setq org-log-done 'time)
+
   #+END_SRC
 
   #+RESULTS:
@@ -494,3 +469,4 @@
   #+end_src
 
   #+RESULTS:
+

@@ -16,7 +16,9 @@ set -o vi
 EDITOR=nvim
 
 
-################### formated output functions #############################
+##########################################################
+# Helper Functions
+##########################################################
 
 function symbol(){
     
@@ -156,31 +158,39 @@ function print_alias(){
 }
 
 
-################### utility functions #############################
 function edit_config_file(){
     nvim ~/.my_bash_config.sh
 }
 
 function reload_config_file(){
-    . ~/.bashrc
-    echo -e "$(cprint -gl $(symbol done)) file reloaded"
+	case $SHELL in 
+		*bash*) 
+			source ~/.bashrc
+			;;
+		*zsh*)
+			source ~/.zshrc
+			;;
+	esac
+	echo -e "$(cprint -gl $(symbol done)) file reloaded"
 }
 
-####################### aliases ##################################
-### navigation 
+##########################################################
+# ALIASES
+##########################################################
+# default aliases 
 alias v='nvim'
 alias fm='xdg-open'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 
-### python 
+# python 
 alias py='python'
 alias venv='python -m venv'
 alias pyd='source ~/.python-envs/default/bin/activate'
 alias pyls='ls -l ~/.python-envs/'
 
-### windows style 
+# windows style 
 alias cls='clear'
 
 
@@ -203,9 +213,150 @@ function aliases_help(){
     print_alias "cls" "clear # clear console"
 }
 
+# define aliases at runtime 
+_list() {
+
+	if [ -s ~/.aliasme/cmd ];then
+		while read name
+		do
+			read value
+			echo "$name : $value"
+		done < ~/.aliasme/cmd
+	fi
+}
+
+_add() {
+	#read name
+	name=$1
+	if [ -z $1 ]; then
+		read -ep "Input name to add:" name
+	fi
+
+	#read path
+	cmd="$2"
+	if [ -z "$2" ]; then
+		read -ep "Input cmd to add:" cmd
+	fi
+
+	echo $name >> ~/.aliasme/cmd
+	echo $cmd >> ~/.aliasme/cmd
+    echo "add: $name -> $cmd"
+
+	_autocomplete
+}
+
+_remove() {
+	#read name
+	name=$1
+	if [ -z $1 ]; then
+		read -pr "Input name to remove:" name
+	fi
+
+	# read and replace file
+    if [ -s ~/.aliasme/cmd ];then
+        touch ~/.aliasme/cmdtemp
+    	while read line
+    	do
+    		if [ "$line" = "$name" ]; then
+    			read line #skip one more line
+                echo "remove $name"
+    		else
+    			echo $line >> ~/.aliasme/cmdtemp
+    		fi
+    	done < ~/.aliasme/cmd
+    	mv ~/.aliasme/cmdtemp ~/.aliasme/cmd
+    fi
+	_autocomplete
+}
+
+_excute() {
+    if [ -s ~/.aliasme/cmd ];then
+        while read -u9 line; do
+            if [ "$1" = "$line" ]; then
+                read -u9 line
+    			eval $line
+    			return 0
+            fi
+        done 9< ~/.aliasme/cmd
+    fi
+	return 1
+}
+
+_bashauto()
+{
+	local cur opts
+	COMPREPLY=()
+	cur="${COMP_WORDS[COMP_CWORD]}"
+
+	opts=""
+    if [ -s ~/.aliasme/cmd ];then
+    	while read line
+    	do
+    		opts+=" $line"
+    		read line
+    	done < ~/.aliasme/cmd
+    fi
+	COMPREPLY=( $(compgen -W "${opts}" ${cur}) )
+	return 0
+}
+
+_autocomplete()
+{
+	if [ $ZSH_VERSION ]; then
+		# zsh
+		opts=""
+        if [ -s ~/.aliasme/cmd ];then
+    		while read line
+    		do
+    			opts+="$line "
+    			read line
+    		done < ~/.aliasme/cmd
+        fi
+		compctl -k "($opts)" al
+	else
+		# bash
+		complete -F _bashauto al
+	fi
+}
+
+# TODO : configure auto completion
+#_autocomplete
+
+# TODO : add al as subcommand to my command
+al(){
+	if [ ! -z $1 ]; then
+		if [ $1 = "ls" ]; then
+			_list
+		elif [ $1 = "add" ]; then
+			_add $2 "$3"
+		elif [ $1 = "rm" ]; then
+			_remove $2
+		elif [ $1 = "-h" ]; then
+			echo "Usage:"
+			echo "al add [name] [command]      # add alias command with name"
+			echo "al rm [name]                 # remove alias by name"
+			echo "al ls                        # alias list"
+			echo "al [name]                    # execute alias associate with [name]"
+			echo "al -v                        # version information"
+			echo "al -h                        # help"
+		elif [ $1 = "-v" ]; then
+			echo "aliasme 3.0.0"
+			echo "visit https://github.com/Jintin/aliasme for more information"
+		else
+			if ! _excute $1 ; then
+				echo "not found"
+			fi
+		fi
+	fi
+}
 
 
-####################### maven  ##################################
+
+
+##########################################################
+# maven
+##########################################################
+
 function my_maven_help(){
     print_subcommand "mvn | maven OPTION" "create maven projects"
     print_option "-q | --quick" "create maven project using maven-archetype-quickstart"
@@ -236,7 +387,9 @@ function my_maven(){
 }
 
 
-####################### my  ##################################
+##########################################################
+# Entry Point
+##########################################################
 function my(){
 
     case $1 in
@@ -282,4 +435,19 @@ function my_help(){
     print_section "SUBCOMMANDS"
     my_maven_help
 }
-###################################################################
+
+##########################################################
+# tests
+##########################################################
+# TODO : implement function to parse and format user defined alises
+function get_argument(){
+	while read line; 
+	do 
+		if [[ $line == alias* ]]
+		then
+			echo $line 
+		fi
+	done < ~/.my_bash_config.sh
+}
+
+
