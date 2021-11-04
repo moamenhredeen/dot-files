@@ -8,3 +8,5 @@
 	st = status -s -b --show-stash
 	co = commit -m
 	a = add 
+[core]
+	pager = 
