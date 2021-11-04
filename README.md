@@ -6,14 +6,10 @@ files :
 - init.el
 - config.org
 
----
-
 ## Neovim
 
 files :
 - init.el
-
----
 
 ## vim [DEPRECATED]
 
@@ -25,14 +21,10 @@ files:
 files :
 - ideavimrc
 
----
-
 ## tmux
 
 files :
 - tmux.conf
-
----
 
 ## bash
 
