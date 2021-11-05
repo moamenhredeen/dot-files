@@ -6,7 +6,7 @@
     (require 'package)
     (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
     ;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-    (add-to-list 'load-path "~/.emacs.d/site-lisp")
+    ;;(add-to-list 'load-path "~/.emacs.d/site-lisp")
     (package-initialize)
 
 
@@ -15,6 +15,8 @@
 ** basics
    #+BEGIN_SRC emacs-lisp
      (load-theme 'gruvbox 1)
+(require 'unicode-fonts)
+(unicode-fonts-setup)
      (custom-set-faces
       '(region ((t ( :background "#44000D" :weight bold))))
       '(cursor ((t (:background "#C6DE41" :foreground "black"))))
@@ -57,7 +59,7 @@
      ;; Scrolling done right
      (setq scroll-step 1 scroll-conservatively 10000)
      ;;(setq scroll-error-top-bottom t)
-																							   ;;;;;;;;;;;;;;;;;;(setq focus-follows-mouse t)
+																								;;;;;;;;;;;;;;;;;;(setq focus-follows-mouse t)
      ;;(setq recenter-positions '(top bottom middle))
 
      ;; Number of lines of continuity when scrolling by screenfulls
@@ -119,8 +121,7 @@
 
 
 
-     (set-fontset-font "fontset-default" nil 
-		       (font-spec :size 28 :name "Cascadia Code PL"))
+     (set-fontset-font "fontset-default" nil (font-spec :size 28 :name "Cascadia Code PL"))
 
      ;; Setting English Font
      (set-face-attribute
@@ -135,8 +136,8 @@
       :underline nil
       :slant 'normal
       :weight 'normal
-      :foundry "outline"
-      :family "DejaVu Sans Mono for Powerline")
+      :foundry "outline")
+     ;;:family "DejaVu Sans Mono for Powerline")
      ;; disable CJK coding/encoding (Chinese/Japanese/Korean characters)
      (setq utf-translate-cjk-mode nil)
 
@@ -248,20 +249,20 @@
    #+END_SRC
 ** yasnippet
    #+BEGIN_SRC emacs-lisp
-     (require 'yasnippet)
-     (yas/load-directory "~/.emacs.d/elpa/yasnippet-snippets-0.24")
-     (yas-global-mode 1)
+     ;;(require 'yasnippet)
+     ;;(yas/load-directory "~/.emacs.d/elpa/yasnippet-snippets-0.24")
+     ;;(yas-global-mode 1)
    #+END_SRC
 ** auto completion
    #+BEGIN_SRC emacs-lisp
-      (require 'auto-complete)
-      (setq ac-dwim t)
-      (ac-config-default)
-      (setq ac-sources '(ac-source-yasnippet
-      		   ac-source-abbrev
-      		   ac-source-words-in-same-mode-buffers))
+      ;;(require 'auto-complete)
+      ;;(setq ac-dwim t)
+      ;;(ac-config-default)
+      ;;(setq ac-sources '(ac-source-yasnippet
+      ;;		   ac-source-abbrev
+      ;;		   ac-source-words-in-same-mode-buffers))
       ;;(setq ac-auto-start nil)
-     (ac-set-trigger-key "TAB")
+     ;;(ac-set-trigger-key "TAB")
    #+END_SRC
 ** restclient
    #+begin_src emacs-lisp
@@ -296,8 +297,8 @@
 	(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
 
-	;;other symbols :  ➪🡺☯⸻❯🔥⟶▶
-	(setq org-bullets-bullet-list '("▤" "⸻" "➜" "⟶" "➪" "❯"))
+	;;other symbols :  🡺☯⸻❯🔥⟶▶
+	(setq org-bullets-bullet-list '("▤" "➪" "➜" "⟶" "➪" "❯"))
 	(setq org-ellipsis "⤵")
 	(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
@@ -316,7 +317,7 @@
 		("omap" . "http://nominatim.openstreetmap.org/search?q=%s&polygon=1")))
 
 	;; read agenda files form directory : ~/.agenda
-	(setq  org-agenda-files  (append (file-expand-wildcards "~/.agenda/*.org")))
+	;;(setq  org-agenda-files  (append (file-expand-wildcards "~/.agenda/*.org")))
 
 	;; Resume clocking task when emacs is restarted
 	(org-clock-persistence-insinuate)
@@ -402,11 +403,11 @@
 	 (comint-send-input)))                                 ; signal the shell that a command has been sent
 
      ;; Easily jump to my main org file
-     (defun open-mytasks-file nil
-       "Find the bzg.org file."
-       (interactive)
-       (find-file "~/.org-files/tasks.org")
-       (delete-other-windows))
+     ;;(defun open-mytasks-file nil
+       ;;"Find the bzg.org file."
+       ;;(interactive)
+       ;;(find-file "~/.org-files/tasks.org")
+       ;;(delete-other-windows))
 
    #+END_SRC
 ** key-binding
@@ -437,7 +438,7 @@
      (evil-define-key 'normal 'global (kbd "<leader>h") 'split-window-vertically)
      (evil-define-key 'normal 'global (kbd "<leader>t") 'open-mytasks-file)
      (evil-define-key 'normal 'global (kbd "<leader>x") 'evil-save-modified-and-close)
-     (evil-define-key 'normal 'global (kbd "<leader>r") '(lambda () (interactive) (load-file "~/.emacs.d/init.el")))
+     ;;(evil-define-key 'normal 'global (kbd "<leader>r") '(lambda () (interactive) (load-file "~/AppData/Roaming/.emacs.d/init.el")))
      (evil-define-key 'normal 'global (kbd "<leader>a") '(lambda () (interactive) (org-agenda)))
 
 
