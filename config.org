@@ -6,7 +6,7 @@
     (require 'package)
     (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
     ;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-    (add-to-list 'load-path "~/.emacs.d/site-lisp")
+    ;;(add-to-list 'load-path "~/.emacs.d/site-lisp")
     (package-initialize)
 
 
@@ -249,7 +249,7 @@
 ** yasnippet
    #+BEGIN_SRC emacs-lisp
      (require 'yasnippet)
-     (yas/load-directory "~/.emacs.d/elpa/yasnippet-snippets-0.24")
+     ;;(yas/load-directory "~/.emacs.d/elpa/yasnippet-snippets-0.24")
      (yas-global-mode 1)
    #+END_SRC
 ** auto completion

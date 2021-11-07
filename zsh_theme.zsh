@@ -343,25 +343,7 @@ ZSH_THEME_RUBY_PROMPT_SUFFIX=")"
 
 
 
-# settings
-typeset +H return_code="%(?..%{$fg[red]%}%? ↵%{$reset_color%})"
-typeset +H my_gray="$FG[237]"
-typeset +H my_orange="$FG[214]"
-
-# separator dashes size
-function afmagic_dashes {
-	local PYTHON_ENV="$VIRTUAL_ENV"
-	[[ -z "$PYTHON_ENV" ]] && PYTHON_ENV="$CONDA_DEFAULT_ENV"
-
-	if [[ -n "$PYTHON_ENV" && "$PS1" = \(* ]]; then
-		echo $(( COLUMNS - ${#PYTHON_ENV} - 3 ))
-	else
-		echo $COLUMNS
-	fi
-}
-
-PROMPT="$FG[239]${(l.$(afmagic_dashes)..-.)}%{$reset_color%}
-%(?:%{$fg_bold[green]%}➜ :%{$fg_bold[red]%}➜ )"
+PROMPT="%(?:%{$fg_bold[green]%}➜ :%{$fg_bold[red]%}➜ )"
 PROMPT+=' %{$fg[cyan]%}%c%{$reset_color%} $(git_prompt_info)'
 
 

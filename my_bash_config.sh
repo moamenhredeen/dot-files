@@ -179,6 +179,7 @@ function reload_config_file(){
 ##########################################################
 # default aliases 
 alias v='nvim'
+alias vim='nvim'
 alias fm='xdg-open'
 alias ..='cd ..'
 alias ...='cd ../..'
