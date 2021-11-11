@@ -182,6 +182,7 @@ function reload_config_file() {
 #TODO: fix first match not precessed correctly
 #+ALIAS_SECTION GENERAL
 alias v='nvim'
+alias vim='nvim'
 alias fm='xdg-open'
 alias ..='cd ..'
 alias ...='cd ../..'

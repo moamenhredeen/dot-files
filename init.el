@@ -8,12 +8,14 @@
 
 ;; import configs from config.org file
 (require 'org)
-(org-babel-load-file (expand-file-name "/home/moamenhraden/.emacs.d/config.org"))
+(org-babel-load-file (expand-file-name "/home/moamenhredeen/.emacs.d/config.org"))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(flycheck yasnippet-snippets use-package undo-tree restclient-test org-bullets gruvbox-theme evil doom-modeline counsel company-auctex auto-complete))
  '(warning-suppress-log-types '((comp) (comp)))
  '(warning-suppress-types '((comp))))
 (custom-set-faces
