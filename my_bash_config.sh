@@ -16,6 +16,10 @@
 #........_\/////////////____\///________\///____\///////////_____\///________\///__#
 ####################################################################################
 
+# constants (  )
+ALIASES_FILE="/home/moamenhraden/new-git/dotfiles/aliases.sh"
+
+
 ### customizations
 set -o vi
 EDITOR=nvim
@@ -110,31 +114,37 @@ function edit_config_file() {
 }
 
 function reload_config_file() {
-        case $SHELL in
-                *bash*) source ~/.bashrc ;;
-                *zsh*) source ~/.zshrc ;;
-        esac
-        echo -e "$(cprint -gl $(symbol done)) file reloaded"
+        # case $SHELL in
+        #         *bash*) source ~/.bashrc ;;
+        #         *zsh*) source ~/.zshrc ;;
+        # esac
+        source ~/.zshrc
+        echo -e "$(cprint lg $(symbol done)) file reloaded"
 }
 
 ####################################################################################
 # ALIASES MANAGER
 ####################################################################################
-source ~/.aliases.sh
+source $ALIASES_FILE 
 
 function _aliasmgr_add_alias(){
-        echo "alias $2" > ~/.aliases.sh
-        reload_config_file
+        echo "alias $1='${@:2}'\n" >> $ALIASES_FILE
+        alias $1=${@:2}
 }
 
 function _aliasmgr_remove_alias(){
-        echo "add alias"
-        echo $1
+	awk -i inplace -v pattern="$1" '$0 !~ pattern'  $ALIASES_FILE
+        unalias $1
+}
+
+function _aliasmgr_clear_aliases(){
+        eval "$(awk 'BEGIN {start=0} /MANAGED/ {start=1; next}  /alias/ { FS = "="; if (start == 1) print "un"$1";" }' aliases.sh)"
+        awk -i inplace '/MANAGED/ {print; exit} {print}' $ALIASES_FILE
 }
 
 function _aliasmgr_list() {
         clear
-        cat ~/.aliases.sh |
+        cat $ALIASES_FILE |
                 awk ' /#\+ALIAS_SECTION/ { print "\n\033[36;1m ❯❯❯  " substr($0, 17) "\033[0m"} 
 /^alias/ { FS = "="; print "\t\033[32;1m ⟶  " substr($1, 6) "\033[0m"  "\t\033[37m" $2 "\033[0m"}'
 
@@ -142,8 +152,9 @@ function _aliasmgr_list() {
 
 function _aliasmgr_help(){
         print_section   "Usage:"
-        print_option    "als -a, --add-alias [name]=[command]"  "add alias command with name"
-        print_option    "als -d, --remove-alias  [name]"        "remove alias by name"
+        print_option    "als -a, --add [name] [command]"        "add alias command with name"
+        print_option    "als -d, --remove  [name]"              "remove alias by name"
+        print_option    "als -c, --clear"                       "remove managed aliases"
         print_option    "als -l, --list"                        "alias list"
         print_option    "als -h, --help"                        "get help"        
 }
@@ -152,8 +163,8 @@ function _aliasmgr_help(){
 
 function _aliasmgr() {
         case $1 in 
-                -a | --add-alias)       _aliasmgr_add_alias $2          ;;
-                -d | --remove-alias)    _aliasmgr_remove_alias $2       ;;
+                -a | --add)             _aliasmgr_add_alias "${@:2}"    ;;
+                -d | --remove)          _aliasmgr_remove_alias $2 	;;
                 -c | --clear)           _aliasmgr_clear_aliases         ;;
                 -l | --list)            _aliasmgr_list                  ;;
                 -h | --help)            _aliasmgr_help                  ;;
@@ -194,7 +205,7 @@ function my() {
                 -t | --task)            _print_tasks                    ;;
 
                 ######## subcommands 
-                als | aliasmgr)         _aliasmgr $2 $3                 ;;
+                als | aliasmgr)         _aliasmgr "${@:2}"              ;;
 
                 ######## other cases 
                 *)                      command_not_found               ;;

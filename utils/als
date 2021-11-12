@@ -2,7 +2,23 @@
 
 ## libraries 
 import sys
+import os
+from pathlib import Path
 import argparse
+
+ALIASES_FILE=os.path.join(Path.home(), '.aliases.sh')
+colors = {
+    'white'     : '\033[1;37m$2\033[0m',
+    'red'       : '\033[0;31m$2\033[0m',
+    'green'     : '\033[0;32m$2\033[0m',
+    'blue'      : '\033[0;34m$2\033[0m',
+    'yellow'    : '\033[1;33m$2\033[0m',
+    'cyan'      : '\033[0;36m$2\033[0m',
+    'lightred'  : '\033[1;31m$2\033[0m',
+    'lightgreen': '\033[1;32m$2\033[0m',
+    'lightblue' : '\033[1;34m$2\033[0m',
+    'lightcyan' : '\033[1;36m$2\033[0m'
+}
 
 
 def not_fount(): 
@@ -17,12 +33,25 @@ def add_alias(alias_name, alias_command):
 def remove_alias(aliases):
     print(aliases)
 
+def list_aliases(): 
+    print(os.path.join(Path.home(), ALIASES_FILE))
+    with open(ALIASES_FILE, 'r', encoding='utf-8') as aliases_file : 
+        for line in aliases_file.readlines():
+            if line.startswith('alias'):
+                alias = line.split(' ')
+                alias_name = alias[1].split('=')[0]
+                alias_action=alias[1].split('=')[1] + ' '.join(alias[2:])
+                print('\t' + alias_name + '\t\t' + alias_action, end='')
+
+
 
 ### entry point 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-a', '--add-alias', nargs='*',help='add new alias')
-    parser.add_argument('-d', '--remove-alias', nargs='+',  help='add new alias')
+    parser.add_argument( '-a', '--add-alias', nargs='*' )
+    parser.add_argument('-d', '--remove-alias', nargs='+')
+    parser.add_argument('-c', '--clear-aliases', nargs='+')
+    parser.add_argument( '-l', '--list-aliases', action='store_true')
     args = parser.parse_args()
 
     if args.add_alias:
@@ -31,6 +60,8 @@ def main():
         add_alias(args.add_alias[0], args.add_alias[1:])
     elif args.remove_alias: 
         remove_alias(args.remove_alias)
+    elif args.list_aliases: 
+        list_aliases()
 
 if __name__ == '__main__':
     main()

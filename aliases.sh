@@ -55,4 +55,5 @@ alias mvnt='mvn test'
 #+ALIAS_SECTION WINDOWS STYLE
 alias cls='clear'
 
-#+MANAGED
+############################################################################
+#+ALIAS_SECTION MANAGED
