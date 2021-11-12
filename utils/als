@@ -1,0 +1,36 @@
+#! /bin/python
+
+## libraries 
+import sys
+import argparse
+
+
+def not_fount(): 
+    print('no such a command')
+    print('use -h to get help')
+
+def add_alias(alias_name, alias_command):
+    print(alias_name)
+    print(alias_command)
+
+
+def remove_alias(aliases):
+    print(aliases)
+
+
+### entry point 
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-a', '--add-alias', nargs='*',help='add new alias')
+    parser.add_argument('-d', '--remove-alias', nargs='+',  help='add new alias')
+    args = parser.parse_args()
+
+    if args.add_alias:
+        if len(args.add_alias) < 2 :
+            parser.error("you have to provide alias command")
+        add_alias(args.add_alias[0], args.add_alias[1:])
+    elif args.remove_alias: 
+        remove_alias(args.remove_alias)
+
+if __name__ == '__main__':
+    main()
