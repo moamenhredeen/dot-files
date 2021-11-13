@@ -16,6 +16,10 @@
 #........_\/////////////____\///________\///____\///////////_____\///________\///__#
 ####################################################################################
 
+# TASKS : 
+# TODO : aliases manager validate user input 
+# TODO : aliases manager validate deleted aliases
+
 # constants (  )
 ALIASES_FILE="/home/moamenhraden/new-git/dotfiles/aliases.sh"
 
@@ -155,12 +159,13 @@ function _aliasmgr_list() {
 }
 
 function _aliasmgr_help(){
-        print_section   "Usage:"
-        print_option    "als -a, --add [name] [command]"        "add alias command with name"
-        print_option    "als -d, --remove  [name]"              "remove alias by name"
-        print_option    "als -c, --clear"                       "remove managed aliases"
-        print_option    "als -l, --list"                        "alias list"
-        print_option    "als -h, --help"                        "get help"        
+        print_command 	"my als [OPTIONS]" "aliases manager"
+        print_section "OPTIONS"
+        print_option    "-a, --add [name] [command]"        "add alias command with name"
+        print_option    "-d, --remove  [name]"              "remove alias by name"
+        print_option    "-c, --clear"                       "remove managed aliases"
+        print_option    "-l, --list"                        "alias list"
+        print_option    "-h, --help"                        "get help"        
 }
 
 
@@ -186,16 +191,12 @@ function _print_tasks() {
 }
 
 function my_help() {
-        clear
-        print_section "COMMAND"
-        print_command "my SUBCOMMAND [OPTION]" \
-                "my command description"
-        draw_hline
-
+        print_command "my [OPTIONS] [SUBCOMMAND]" "my command description"
+        print_section "SUBCOMMANDS"
+	print_subcommand "als" "aliases manager"
         print_section "OPTIONS"
         print_option "-h, --help" "help"
         print_option "-r, --reload" "reload .bashrc"
-        print_option '-a, --alias' 'list user defined aliases'
         print_option '-t, --task' 'list tasks'
 }
 
