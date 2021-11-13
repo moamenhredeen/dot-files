@@ -129,16 +129,20 @@ source $ALIASES_FILE
 
 function _aliasmgr_add_alias(){
         echo "alias $1='${@:2}'\n" >> $ALIASES_FILE
-        alias $1=${@:2}
+        reload_config_file
 }
 
 function _aliasmgr_remove_alias(){
-	awk -i inplace -v pattern="$1" '$0 !~ pattern'  $ALIASES_FILE
+        awk -v pattern="$1" -i inplace\
+                'BEGIN {start=0} 
+                /MANAGED/ {start=1}  
+                {if (!((start == 1) && ($0 ~ "alias +"pattern"="))) print}' \
+                $ALIASES_FILE
         unalias $1
 }
 
 function _aliasmgr_clear_aliases(){
-        eval "$(awk 'BEGIN {start=0} /MANAGED/ {start=1; next}  /alias/ { FS = "="; if (start == 1) print "un"$1";" }' aliases.sh)"
+        eval "$(awk 'BEGIN {start=0} /MANAGED/ {start=1; next}  /alias/ { FS = "="; if (start == 1) print "un"$1";" }' $ALIASES_FILE)"
         awk -i inplace '/MANAGED/ {print; exit} {print}' $ALIASES_FILE
 }
 
@@ -163,7 +167,7 @@ function _aliasmgr_help(){
 
 function _aliasmgr() {
         case $1 in 
-                -a | --add)             _aliasmgr_add_alias "${@:2}"    ;;
+                -a | --add)             _aliasmgr_add_alias ${@:2}    	;;
                 -d | --remove)          _aliasmgr_remove_alias $2 	;;
                 -c | --clear)           _aliasmgr_clear_aliases         ;;
                 -l | --list)            _aliasmgr_list                  ;;
