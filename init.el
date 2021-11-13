@@ -8,7 +8,7 @@
 
 ;; import configs from config.org file
 (require 'org)
-(org-babel-load-file (expand-file-name "/home/moamenhredeen/.emacs.d/config.org"))
+(org-babel-load-file (expand-file-name "~/.emacs.d/config.org"))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

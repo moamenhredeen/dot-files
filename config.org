@@ -80,7 +80,7 @@
      (global-auto-revert-mode 1)            ;; reload files that chage on disk
      (column-number-mode 1)                 ;; show column numbers in mode line
      (global-hl-line-mode 1)                ;; change the color of the line the cursor is on
-     (setq visible-bell 1)                  ;; disable sounds
+     (setq visible-bell nil)                  ;; disable sounds
      (setq-default truncate-lines t)         ;; default to NOT wrapping long lines in display
      (tool-bar-mode 0)                       ;; hide the tool bar
      (menu-bar-mode 0)                       ;; hide the "File Edit..." menu
@@ -111,7 +111,6 @@
      (setq use-dialog-box nil)
      (setq default-frame-alist initial-frame-alist)
      (setq line-move-visual nil)
-     (setq visible-bell t)
      (setq tab-bar-show nil)
 
      ;; change the selection color 
@@ -179,28 +178,19 @@
 ** packages
    #+BEGIN_SRC emacs-lisp
 
-     ;;  doom-modeline 
-     (use-package doom-modeline
-       :ensure t)
-     :init (doom-modeline-mode 1)
-     (setq doom-modeline-height 50)
-     (setq doom-modeline-bar-with 4)
-     (setq doom-modeline-buffer-state-icon t)
-     (setq doom-modeline-enable-word-count t)
-     (setq doom-modeline-modal-icon t)
+     (use-package all-the-icons
+       :if (display-graphic-p))
+	  ;;  doom-modeline 
+	  (use-package doom-modeline
+	    :ensure t)
+	  :init (doom-modeline-mode 1)
+	  (setq doom-modeline-height 50)
+	  (setq doom-modeline-bar-with 4)
+	  (setq doom-modeline-buffer-state-icon t)
+	  (setq doom-modeline-enable-word-count t)
+	  (setq doom-modeline-modal-icon t)
    #+END_SRC
 * packages 
-** org pomodoro
-   #+BEGIN_SRC emacs-lisp
-     (setq org-pomodoro-keep-killed-pomodoro-time t)
-     (setq org-pomodoro-length 120)
-     (setq org-pomodoro-long-break-frequency 2)
-     (setq org-pomodoro-long-break-length 15)
-   #+END_SRC
-
-   #+RESULTS:
-   : 15
-
 ** undo-tree
    #+BEGIN_SRC emacs-lisp
 
@@ -263,11 +253,6 @@
       ;;(setq ac-auto-start nil)
      (ac-set-trigger-key "TAB")
    #+END_SRC
-** restclient
-   #+begin_src emacs-lisp
-     (require 'restclient)
-     (add-to-list 'auto-mode-alist '("\\.http\\'" . restclient-mode))
-   #+end_src
 ** company 
    #+begin_src emacs-lisp
      (use-package company
@@ -355,19 +340,6 @@
 
   #+RESULTS:
 
-* programming languages
-** cpp
-   #+BEGIN_SRC emacs-lisp
-     (use-package flycheck
-       :config
-       (progn
-	 (global-flycheck-mode)))
-     (add-hook 'c++-mode-hook 'irony-mode)
-     (add-hook 'c-mode-hook 'irony-mode)
-     (add-hook 'objc-mode-hook 'irony-mode)
-     (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-   #+END_SRC
-
 * customizing key binding
 ** packages
    #+BEGIN_SRC emacs-lisp
@@ -453,11 +425,6 @@
    #+RESULTS:
    : org-pomodoro
 
-* registers
-  #+BEGIN_SRC emacs-lisp
-    (set-register ?e (cons 'file "~/.emacs.d/config.org"))
-  #+END_SRC
-
 * latex
   #+begin_src emacs-lisp
     (load "auctex.el" nil t t)
@@ -465,7 +432,6 @@
     (setq TeX-auto-save t)
     (setq TeX-parse-self t)
     (setq-default TeX-master nil)
-
   #+end_src
 
   #+RESULTS:
