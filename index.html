@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-11-14 Sun 15:30 -->
+<!-- 2021-11-14 Sun 15:37 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>my emacs configurations</title>
@@ -192,29 +192,12 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
-<link rel="stylesheet" type="text/css" href="emacs/orgmode-export-themes/solarized/solarized-light.min.css" />
-
-<script type="text/javascript" src="http://thomasf.github.io/solarized-css/org-info.min.js">
-// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
-// @license-end
-</script>
-
-<script type="text/javascript">
-// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
-<!--/*--><![CDATA[/*><!--*/
-org_html_manager.set("TOC_DEPTH", "3");
-org_html_manager.set("LINK_HOME", "");
-org_html_manager.set("LINK_UP", "");
-org_html_manager.set("LOCAL_TOC", "1");
-org_html_manager.set("VIEW_BUTTONS", "0");
-org_html_manager.set("MOUSE_HINT", "underline");
-org_html_manager.set("FIXED_TOC", "0");
-org_html_manager.set("TOC", "1");
-org_html_manager.set("VIEW", "1");
-org_html_manager.setup();  // activate after the parameters are set
-/*]]>*///-->
-// @license-end
-</script>
+<link rel="stylesheet" type="text/css" href="emacs/orgmode-export-themes/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="emacs/orgmode-export-themes/readtheorg_theme/css/readtheorg.css"/>
+<script type="text/javascript" src="emacs/orgmode-export-themes/readtheorg_theme/lib/js/jquery.min.js"></script>
+<script type="text/javascript" src="emacs/orgmode-export-themes/readtheorg_theme/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="emacs/orgmode-export-themes/readtheorg_theme/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="emacs/orgmode-export-themes/readtheorg_theme/js/readtheorg.js"></script>
 <script type="text/javascript">
 // @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
 <!--/*--><![CDATA[/*><!--*/
@@ -245,57 +228,54 @@ org_html_manager.setup();  // activate after the parameters are set
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgca88df2">1. package-repos</a></li>
-<li><a href="#org73df1a7">2. customization</a>
+<li><a href="#orge4461a4">1. package-repos</a></li>
+<li><a href="#org625ba1d">2. customization</a>
 <ul>
-<li><a href="#orge5d430b">2.1. basics</a></li>
-<li><a href="#orgfa5e619">2.2. minor modes</a></li>
-<li><a href="#org828f832">2.3. packages</a></li>
+<li><a href="#org1052e46">2.1. basics</a></li>
+<li><a href="#orgce2a610">2.2. minor modes</a></li>
+<li><a href="#orgba80d5c">2.3. packages</a></li>
 </ul>
 </li>
-<li><a href="#org183d3d0">3. packages</a>
+<li><a href="#orge4214ef">3. packages</a>
 <ul>
-<li><a href="#orgf6df512">3.1. undo-tree</a></li>
-<li><a href="#orge6266dc">3.2. swiper/ivy/counsel</a></li>
-<li><a href="#org9f0db2c">3.3. yasnippet</a></li>
-<li><a href="#orgcbb12f6">3.4. auto completion</a></li>
-<li><a href="#org14c3f0d">3.5. company</a></li>
+<li><a href="#orgc9845d9">3.1. undo-tree</a></li>
+<li><a href="#org7b0d182">3.2. swiper/ivy/counsel</a></li>
+<li><a href="#org067fc92">3.3. yasnippet</a></li>
+<li><a href="#org9fc1ca9">3.4. auto completion</a></li>
+<li><a href="#org999d9d4">3.5. company</a></li>
 </ul>
 </li>
-<li><a href="#orga02f4a2">4. org-mode</a>
+<li><a href="#org72dd4d2">4. org-mode</a>
 <ul>
-<li><a href="#org64e53ea">4.1. basics</a></li>
-<li><a href="#org580c8fe">4.2. overwrite default orgmode translator</a>
+<li><a href="#org8cdf2e6">4.1. basics</a></li>
+<li><a href="#orgc305876">4.2. overwrite default orgmode translator</a>
 <ul>
-<li><a href="#orgd40f559">4.2.1. org html src block</a></li>
+<li><a href="#org643d3fc">4.2.1. org html src block</a></li>
 </ul>
 </li>
-<li><a href="#orgc03eb25">4.3. export</a>
+<li><a href="#org6ee77dc">4.3. export</a>
 <ul>
-<li><a href="#org547d12d">4.3.1. src blocks</a></li>
-<li><a href="#orga2343b9">4.3.2. ox-twbs</a></li>
-<li><a href="#orgd02746b">4.3.3. solarized</a></li>
+<li><a href="#org4d08eca">4.3.1. src blocks</a></li>
+<li><a href="#org3c3b4aa">4.3.2. ox-twbs</a></li>
+<li><a href="#org138288b">4.3.3. solarized</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#org85bb5d5">5. customizing key binding</a>
+<li><a href="#org7f72b73">5. customizing key binding</a>
 <ul>
-<li><a href="#org4a9cc1b">5.1. packages</a></li>
-<li><a href="#orgb348459">5.2. functions</a></li>
-<li><a href="#org2cb5e39">5.3. key-binding</a></li>
+<li><a href="#org8f840dc">5.1. packages</a></li>
+<li><a href="#org33a875b">5.2. functions</a></li>
+<li><a href="#org42820d2">5.3. key-binding</a></li>
 </ul>
 </li>
-<li><a href="#org987256b">6. latex</a></li>
+<li><a href="#orgf5f5694">6. latex</a></li>
 </ul>
 </div>
 </div>
-<p>
-<del>#+SETUPFILE: /home/moamen/new-git/dot-files/emacs/orgmode-export-themes/readtheorg<sub>theme</sub>/theme-readtheorg-local.setup</del>
-</p>
 
-<div id="outline-container-orgca88df2" class="outline-2">
-<h2 id="orgca88df2"><span class="section-number-2">1</span> package-repos</h2>
+<div id="outline-container-orge4461a4" class="outline-2">
+<h2 id="orge4461a4"><span class="section-number-2">1</span> package-repos</h2>
 <div class="outline-text-2" id="text-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">
@@ -310,12 +290,12 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 </div>
 </div>
-<div id="outline-container-org73df1a7" class="outline-2">
-<h2 id="org73df1a7"><span class="section-number-2">2</span> customization</h2>
+<div id="outline-container-org625ba1d" class="outline-2">
+<h2 id="org625ba1d"><span class="section-number-2">2</span> customization</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-orge5d430b" class="outline-3">
-<h3 id="orge5d430b"><span class="section-number-3">2.1</span> basics</h3>
+<div id="outline-container-org1052e46" class="outline-3">
+<h3 id="org1052e46"><span class="section-number-3">2.1</span> basics</h3>
 <div class="outline-text-3" id="text-2-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(load-theme 'gruvbox 1)
@@ -465,8 +445,8 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 </div>
 
-<div id="outline-container-orgfa5e619" class="outline-3">
-<h3 id="orgfa5e619"><span class="section-number-3">2.2</span> minor modes</h3>
+<div id="outline-container-orgce2a610" class="outline-3">
+<h3 id="orgce2a610"><span class="section-number-3">2.2</span> minor modes</h3>
 <div class="outline-text-3" id="text-2-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7c6f64;">;; </span><span style="color: #7c6f64;">Enabling and disabling some modes</span>
@@ -484,8 +464,8 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 </div>
 </div>
-<div id="outline-container-org828f832" class="outline-3">
-<h3 id="org828f832"><span class="section-number-3">2.3</span> packages</h3>
+<div id="outline-container-orgba80d5c" class="outline-3">
+<h3 id="orgba80d5c"><span class="section-number-3">2.3</span> packages</h3>
 <div class="outline-text-3" id="text-2-3">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">
@@ -505,12 +485,12 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 </div>
 </div>
-<div id="outline-container-org183d3d0" class="outline-2">
-<h2 id="org183d3d0"><span class="section-number-2">3</span> packages</h2>
+<div id="outline-container-orge4214ef" class="outline-2">
+<h2 id="orge4214ef"><span class="section-number-2">3</span> packages</h2>
 <div class="outline-text-2" id="text-3">
 </div>
-<div id="outline-container-orgf6df512" class="outline-3">
-<h3 id="orgf6df512"><span class="section-number-3">3.1</span> undo-tree</h3>
+<div id="outline-container-orgc9845d9" class="outline-3">
+<h3 id="orgc9845d9"><span class="section-number-3">3.1</span> undo-tree</h3>
 <div class="outline-text-3" id="text-3-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">
@@ -523,8 +503,8 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 </div>
 
-<div id="outline-container-orge6266dc" class="outline-3">
-<h3 id="orge6266dc"><span class="section-number-3">3.2</span> swiper/ivy/counsel</h3>
+<div id="outline-container-org7b0d182" class="outline-3">
+<h3 id="org7b0d182"><span class="section-number-3">3.2</span> swiper/ivy/counsel</h3>
 <div class="outline-text-3" id="text-3-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #fb4933;">use-package</span> <span style="color: #d3869b;">counsel</span>
@@ -564,8 +544,8 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 </div>
 </div>
-<div id="outline-container-org9f0db2c" class="outline-3">
-<h3 id="org9f0db2c"><span class="section-number-3">3.3</span> yasnippet</h3>
+<div id="outline-container-org067fc92" class="outline-3">
+<h3 id="org067fc92"><span class="section-number-3">3.3</span> yasnippet</h3>
 <div class="outline-text-3" id="text-3-3">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #fb4933;">require</span> '<span style="color: #d3869b;">yasnippet</span>)
@@ -575,8 +555,8 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 </div>
 </div>
-<div id="outline-container-orgcbb12f6" class="outline-3">
-<h3 id="orgcbb12f6"><span class="section-number-3">3.4</span> auto completion</h3>
+<div id="outline-container-org9fc1ca9" class="outline-3">
+<h3 id="org9fc1ca9"><span class="section-number-3">3.4</span> auto completion</h3>
 <div class="outline-text-3" id="text-3-4">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7c6f64;">;;  </span><span style="color: #7c6f64;">(require 'auto-complete)</span>
@@ -591,8 +571,8 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 </div>
 </div>
-<div id="outline-container-org14c3f0d" class="outline-3">
-<h3 id="org14c3f0d"><span class="section-number-3">3.5</span> company</h3>
+<div id="outline-container-org999d9d4" class="outline-3">
+<h3 id="org999d9d4"><span class="section-number-3">3.5</span> company</h3>
 <div class="outline-text-3" id="text-3-5">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #fb4933;">use-package</span> <span style="color: #d3869b;">company</span>
@@ -614,12 +594,12 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 </div>
 </div>
-<div id="outline-container-orga02f4a2" class="outline-2">
-<h2 id="orga02f4a2"><span class="section-number-2">4</span> org-mode</h2>
+<div id="outline-container-org72dd4d2" class="outline-2">
+<h2 id="org72dd4d2"><span class="section-number-2">4</span> org-mode</h2>
 <div class="outline-text-2" id="text-4">
 </div>
-<div id="outline-container-org64e53ea" class="outline-3">
-<h3 id="org64e53ea"><span class="section-number-3">4.1</span> basics</h3>
+<div id="outline-container-org8cdf2e6" class="outline-3">
+<h3 id="org8cdf2e6"><span class="section-number-3">4.1</span> basics</h3>
 <div class="outline-text-3" id="text-4-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #fb4933;">require</span> '<span style="color: #d3869b;">org-tempo</span>) <span style="color: #7c6f64;">;; </span><span style="color: #7c6f64;">snippets and autocomplation</span>
@@ -690,12 +670,12 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 </div>
 </div>
-<div id="outline-container-org580c8fe" class="outline-3">
-<h3 id="org580c8fe"><span class="section-number-3">4.2</span> overwrite default orgmode translator</h3>
+<div id="outline-container-orgc305876" class="outline-3">
+<h3 id="orgc305876"><span class="section-number-3">4.2</span> overwrite default orgmode translator</h3>
 <div class="outline-text-3" id="text-4-2">
 </div>
-<div id="outline-container-orgd40f559" class="outline-4">
-<h4 id="orgd40f559"><span class="section-number-4">4.2.1</span> org html src block</h4>
+<div id="outline-container-org643d3fc" class="outline-4">
+<h4 id="org643d3fc"><span class="section-number-4">4.2.1</span> org html src block</h4>
 <div class="outline-text-4" id="text-4-2-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7c6f64;">;; </span><span style="color: #7c6f64;">(defun org-html-src-block (src-block _contents info)</span>
@@ -734,12 +714,12 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 </div>
 </div>
-<div id="outline-container-orgc03eb25" class="outline-3">
-<h3 id="orgc03eb25"><span class="section-number-3">4.3</span> export</h3>
+<div id="outline-container-org6ee77dc" class="outline-3">
+<h3 id="org6ee77dc"><span class="section-number-3">4.3</span> export</h3>
 <div class="outline-text-3" id="text-4-3">
 </div>
-<div id="outline-container-org547d12d" class="outline-4">
-<h4 id="org547d12d"><span class="section-number-4">4.3.1</span> src blocks</h4>
+<div id="outline-container-org4d08eca" class="outline-4">
+<h4 id="org4d08eca"><span class="section-number-4">4.3.1</span> src blocks</h4>
 <div class="outline-text-4" id="text-4-3-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #fb4933;">use-package</span> <span style="color: #d3869b;">htmlize</span>
@@ -748,8 +728,8 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 </div>
 </div>
-<div id="outline-container-orga2343b9" class="outline-4">
-<h4 id="orga2343b9"><span class="section-number-4">4.3.2</span> ox-twbs</h4>
+<div id="outline-container-org3c3b4aa" class="outline-4">
+<h4 id="org3c3b4aa"><span class="section-number-4">4.3.2</span> ox-twbs</h4>
 <div class="outline-text-4" id="text-4-3-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7c6f64;">;; </span><span style="color: #7c6f64;">html exporter</span>
@@ -768,8 +748,8 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 </div>
 
-<div id="outline-container-orgd02746b" class="outline-4">
-<h4 id="orgd02746b"><span class="section-number-4">4.3.3</span> solarized</h4>
+<div id="outline-container-org138288b" class="outline-4">
+<h4 id="org138288b"><span class="section-number-4">4.3.3</span> solarized</h4>
 <div class="outline-text-4" id="text-4-3-3">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">
@@ -780,12 +760,12 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 </div>
 
-<div id="outline-container-org85bb5d5" class="outline-2">
-<h2 id="org85bb5d5"><span class="section-number-2">5</span> customizing key binding</h2>
+<div id="outline-container-org7f72b73" class="outline-2">
+<h2 id="org7f72b73"><span class="section-number-2">5</span> customizing key binding</h2>
 <div class="outline-text-2" id="text-5">
 </div>
-<div id="outline-container-org4a9cc1b" class="outline-3">
-<h3 id="org4a9cc1b"><span class="section-number-3">5.1</span> packages</h3>
+<div id="outline-container-org8f840dc" class="outline-3">
+<h3 id="org8f840dc"><span class="section-number-3">5.1</span> packages</h3>
 <div class="outline-text-3" id="text-5-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7c6f64;">;; </span><span style="color: #7c6f64;">evil mode </span>
@@ -794,8 +774,8 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 </div>
 </div>
-<div id="outline-container-orgb348459" class="outline-3">
-<h3 id="orgb348459"><span class="section-number-3">5.2</span> functions</h3>
+<div id="outline-container-org33a875b" class="outline-3">
+<h3 id="org33a875b"><span class="section-number-3">5.2</span> functions</h3>
 <div class="outline-text-3" id="text-5-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">
@@ -834,8 +814,8 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 </div>
 </div>
-<div id="outline-container-org2cb5e39" class="outline-3">
-<h3 id="org2cb5e39"><span class="section-number-3">5.3</span> key-binding</h3>
+<div id="outline-container-org42820d2" class="outline-3">
+<h3 id="org42820d2"><span class="section-number-3">5.3</span> key-binding</h3>
 <div class="outline-text-3" id="text-5-3">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #7c6f64;">;; </span><span style="color: #7c6f64;">emacs key-binding</span>
@@ -879,8 +859,8 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 </div>
 
-<div id="outline-container-org987256b" class="outline-2">
-<h2 id="org987256b"><span class="section-number-2">6</span> latex</h2>
+<div id="outline-container-orgf5f5694" class="outline-2">
+<h2 id="orgf5f5694"><span class="section-number-2">6</span> latex</h2>
 <div class="outline-text-2" id="text-6">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">
@@ -957,7 +937,7 @@ org_html_manager.setup();  // activate after the parameters are set
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2021-11-14 Sun 15:30</p>
+<p class="date">Created: 2021-11-14 Sun 15:37</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
