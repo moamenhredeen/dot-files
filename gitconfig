@@ -13,3 +13,4 @@
 	b = branch 
 [core]
 	pager = 
+	editor = nvim

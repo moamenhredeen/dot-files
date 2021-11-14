@@ -21,7 +21,7 @@
 # TODO : aliases manager validate deleted aliases
 
 # constants (  )
-ALIASES_FILE="/home/moamenhraden/new-git/dotfiles/aliases.sh"
+ALIASES_FILE="/home/moamen/new-git/dot-files/aliases.sh"
 
 
 ### customizations
@@ -96,7 +96,7 @@ function print_subcommand() {
         # Paramters
         # $1 : subcommand name
         # $2 : subcommand discription
-        echo -e "$(cprint lg $(symbol rarrow2)) $(cprint -gl "$1")\t$(cprint w "$2")"
+        echo -e "$(cprint lg $(symbol rarrow2)) $(cprint lg "$1")\t$(cprint w "$2")"
 }
 
 function print_option() {
@@ -158,6 +158,10 @@ function _aliasmgr_list() {
 
 }
 
+function _aliasmgr_edit() {
+	nvim ~/new-git/dot-files/aliases.sh
+}
+
 function _aliasmgr_help(){
         print_command 	"my als [OPTIONS]" "aliases manager"
         print_section "OPTIONS"
@@ -165,6 +169,7 @@ function _aliasmgr_help(){
         print_option    "-d, --remove  [name]"              "remove alias by name"
         print_option    "-c, --clear"                       "remove managed aliases"
         print_option    "-l, --list"                        "alias list"
+        print_option    "-e, --edit"                        "edit aliases"
         print_option    "-h, --help"                        "get help"        
 }
 
@@ -176,6 +181,7 @@ function _aliasmgr() {
                 -d | --remove)          _aliasmgr_remove_alias $2 	;;
                 -c | --clear)           _aliasmgr_clear_aliases         ;;
                 -l | --list)            _aliasmgr_list                  ;;
+                -e | --edit)            _aliasmgr_edit                  ;;
                 -h | --help)            _aliasmgr_help                  ;;
                 ######## other cases 
                 *)                      command_not_found               ;;
@@ -198,6 +204,7 @@ function my_help() {
         print_option "-h, --help" "help"
         print_option "-r, --reload" "reload .bashrc"
         print_option '-t, --task' 'list tasks'
+        print_option '-e, --edit' 'edit configuration file'
 }
 
 function my() {

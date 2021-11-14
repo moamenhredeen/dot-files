@@ -7,6 +7,7 @@ alias fm='xdg-open'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
+alias tlmgr='/usr/share/texmf-dist/scripts/texlive/tlmgr.pl --usermode'
 
 #+ALIAS_SECTION PYTHON
 alias py='python'
@@ -57,3 +58,9 @@ alias cls='clear'
 
 ############################################################################
 #+ALIAS_SECTION MANAGED
+
+
+alias tarf='tar -xzvf'
+
+
+

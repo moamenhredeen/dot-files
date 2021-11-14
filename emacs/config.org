@@ -1,4 +1,6 @@
 #+TITLE: my emacs configurations
+#+SETUPFILE: /home/moamen/new-git/dot-files/emacs/orgmode-export-themes/readtheorg_theme/theme-readtheorg-local.setup
+
 
 * package-repos
   #+BEGIN_SRC emacs-lisp
@@ -244,14 +246,14 @@
    #+END_SRC
 ** auto completion
    #+BEGIN_SRC emacs-lisp
-      (require 'auto-complete)
-      (setq ac-dwim t)
-      (ac-config-default)
-      (setq ac-sources '(ac-source-yasnippet
-      		   ac-source-abbrev
-      		   ac-source-words-in-same-mode-buffers))
-      ;;(setq ac-auto-start nil)
-     (ac-set-trigger-key "TAB")
+     ;;  (require 'auto-complete)
+     ;;  (setq ac-dwim t)
+     ;;  (ac-config-default)
+     ;;  (setq ac-sources '(ac-source-yasnippet
+     ;;       	      ac-source-abbrev
+     ;;       	      ac-source-words-in-same-mode-buffers))
+     ;;  ;;(setq ac-auto-start nil)
+     ;; (ac-set-trigger-key "TAB")
    #+END_SRC
 ** company 
    #+begin_src emacs-lisp
@@ -271,74 +273,133 @@
      ;; (setq company-show-numbers t)
    #+end_src
 * org-mode
+** basics 
   #+BEGIN_SRC emacs-lisp
-	;;(require 'org-tempo)
-	(require 'org-bullets)
-	;;(require 'ol-gnus)
+    (require 'org-tempo) ;; snippets and autocomplation
+    (require 'org-bullets) ;; customize org mode 
+    ;;(require 'ol-gnus)
 
-	;; make available "org-bullet-face" such that I can control the font size individually
-	(setq org-bullets-face-name (quote org-bullet-face))
-	(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-
-
-	;;other symbols :  ➪🡺☯⸻❯🔥⟶▶
-	(setq org-bullets-bullet-list '("▤" "⸻" "➜" "⟶" "➪" "❯"))
-	(setq org-ellipsis "⤵")
-	(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+    ;; make available "org-bullet-face" such that I can control the font size individually
+    (setq org-bullets-face-name (quote org-bullet-face))
+    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
 
-	(setq org-todo-keywords '((sequence "🔥TODO" "🕘NEXT" "❯❯❯INPROGRESS" "|" "DONE" "BLOCKED")))
-	(setq org-todo-keyword-faces
-	      '(("🔥TODO" . (:foreground "#cc241d" :weight bold :inverse-video t))
-		("🕘NEXT" . (:foreground "#cc241d" :weight bold :inverse-video t))
-		("❯❯❯INPROGRESS" . (:foreground "#d65d0e" :weight bold :inverse-video t))
-		("DONE" . (:foreground "#98971a" :weight bold :inverse-video t))
-		("BLOCKED" . (:foreground "#ebdbb2" :weight bold :inverse-video t))))
+    ;;other symbols :  ➪☯⸻❯⟶▶
+    (setq org-bullets-bullet-list '("▤" "⸻" "➜" "⟶" "➪" "❯"))
+    (setq org-ellipsis "⤵")
+    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
-	(setq org-link-abbrev-alist
-	      '(("ggle" . "http://www.google.com/search?q=%s")
-		("gmap" . "http://maps.google.com/maps?q=%s")
-		("omap" . "http://nominatim.openstreetmap.org/search?q=%s&polygon=1")))
 
-	;; read agenda files form directory : ~/.agenda
-	(setq  org-agenda-files  (append (file-expand-wildcards "~/.agenda/*.org")))
+    (setq org-todo-keywords '((sequence "🔥TODO" "🕘NEXT" "❯❯❯INPROGRESS" "|" "DONE" "BLOCKED")))
+    (setq org-todo-keyword-faces
+	  '(("🔥TODO" . (:foreground "#cc241d" :weight bold :inverse-video t))
+	    ("🕘NEXT" . (:foreground "#cc241d" :weight bold :inverse-video t))
+	    ("❯❯❯INPROGRESS" . (:foreground "#d65d0e" :weight bold :inverse-video t))
+	    ("DONE" . (:foreground "#98971a" :weight bold :inverse-video t))
+	    ("BLOCKED" . (:foreground "#ebdbb2" :weight bold :inverse-video t))))
 
-	;; Resume clocking task when emacs is restarted
-	(org-clock-persistence-insinuate)
-	;; Save the running clock and all clock history when exiting Emacs, load it on startup
-	(setq org-clock-persist t)
-	;; Resume clocking task on clock-in if the clock is open
-	(setq org-clock-in-resume t)
-	;; Do not prompt to resume an active clock, just resume it
-	(setq org-clock-persist-query-resume nil)
-	;; Change tasks to whatever when clocking in
-	(setq org-clock-in-switch-to-state "❯❯❯INPROGRESS")
-	;; Save clock data and state changes and notes in the LOGBOOK drawer
-	(setq org-clock-into-drawer t)
-	;; Sometimes I change tasks I'm clocking quickly - this removes clocked tasks
-	;; with 0:00 duration
-	(setq org-clock-out-remove-zero-time-clocks t)
-	;; Clock out when moving task to a done state
-	(setq org-clock-out-when-done t)
-	;; Enable auto clock resolution for finding open clocks
-	(setq org-clock-auto-clock-resolution (quote when-no-clock-is-running))
-	;; Include current clocking task in clock reports
-	(setq org-clock-report-include-clocking-task t)
-	;; use pretty things for the clocktable
-	(setq org-pretty-entities t)
+    (setq org-link-abbrev-alist
+	  '(("ggle" . "http://www.google.com/search?q=%s")
+	    ("gmap" . "http://maps.google.com/maps?q=%s")
+	    ("omap" . "http://nominatim.openstreetmap.org/search?q=%s&polygon=1")))
 
-	(setq org-startup-folded t)
+    ;; read agenda files form directory : ~/.agenda
+    (setq  org-agenda-files  (append (file-expand-wildcards "~/.agenda/*.org")))
 
-	(setq org-log-note-clock-out t)
-	(setq org-log-redeadline 'time)
-	(setq org-log-repeat t)
-	(setq org-log-reschedule 'time)
-	(setq org-log-states-order-reversed nil)
-	(setq org-log-done 'time)
+    ;; Resume clocking task when emacs is restarted
+    (org-clock-persistence-insinuate)
+    ;; Save the running clock and all clock history when exiting Emacs, load it on startup
+    (setq org-clock-persist t)
+    ;; Resume clocking task on clock-in if the clock is open
+    (setq org-clock-in-resume t)
+    ;; Do not prompt to resume an active clock, just resume it
+    (setq org-clock-persist-query-resume nil)
+    ;; Change tasks to whatever when clocking in
+    (setq org-clock-in-switch-to-state "❯❯❯INPROGRESS")
+    ;; Save clock data and state changes and notes in the LOGBOOK drawer
+    (setq org-clock-into-drawer t)
+    ;; Sometimes I change tasks I'm clocking quickly - this removes clocked tasks
+    ;; with 0:00 duration
+    (setq org-clock-out-remove-zero-time-clocks t)
+    ;; Clock out when moving task to a done state
+    (setq org-clock-out-when-done t)
+    ;; Enable auto clock resolution for finding open clocks
+    (setq org-clock-auto-clock-resolution (quote when-no-clock-is-running))
+    ;; Include current clocking task in clock reports
+    (setq org-clock-report-include-clocking-task t)
+    ;; use pretty things for the clocktable
+    (setq org-pretty-entities t)
+
+    (setq org-startup-folded t)
+
+    (setq org-log-note-clock-out t)
+    (setq org-log-redeadline 'time)
+    (setq org-log-repeat t)
+    (setq org-log-reschedule 'time)
+    (setq org-log-states-order-reversed nil)
+    (setq org-log-done 'time)
 
   #+END_SRC
+** overwrite default orgmode translator
+*** org html src block 
+   #+begin_src emacs-lisp
+     ;; (defun org-html-src-block (src-block _contents info)
+     ;;   "Transcode a SRC-BLOCK element from Org to HTML.
+     ;; CONTENTS holds the contents of the item.  INFO is a plist holding
+     ;; contextual information."
+     ;;   (if (org-export-read-attribute :attr_html src-block :textarea)
+     ;;       (org-html--textarea-block src-block)
+     ;;     (let* ((lang (org-element-property :language src-block))
+     ;; 	   (code (org-html-format-code src-block info))
+     ;; 	   (label (let ((lbl (org-html--reference src-block info t)))
+     ;; 		    (if lbl (format " id=\"%s\"" lbl) "")))
+     ;; 	   (klipsify  (and  (plist-get info :html-klipsify-src)
+     ;; 			    (member lang '("javascript" "js"
+     ;; 					   "ruby" "scheme" "clojure" "php" "html")))))
+     ;;       (if (lang) (format "<pre class=\"example\"%s>\n%s</pre>" label code)
+     ;; 	  (format "<div class=\"org-src-container\">\n%s%s\n</div>"
+     ;; 		;; Build caption.
+     ;; 		(let ((caption (org-export-get-caption src-block)))
+     ;; 		  (if (not caption) ""
+     ;; 		    (let ((listing-number
+     ;; 			   (format
+     ;; 			    "<span class=\"listing-number\">%s </span>"
+     ;; 			    (format
+     ;; 			     (org-html--translate "Listing %d:" info)
+     ;; 			     (org-export-get-ordinal
+     ;; 			      src-block info nil #'org-html--has-caption-p)))))
+     ;; 		      (format "<label class=\"org-src-name\">%s%s</label>"
+     ;; 			      listing-number
+     ;; 			      (org-trim (org-export-data caption info))))))
+     ;; 		;; Contents.
+     ;; 		(format "<pre><code class=\"language-%s\" %s>%s</code></pre>" lang label code)
+     ;; 		)))))
+   #+end_src
+** export 
+*** src blocks
+    #+begin_src emacs-lisp
+      (use-package htmlize
+:ensure t)
+    #+end_src
+*** ox-twbs 
+#+begin_src emacs-lisp
+    ;; html exporter
+    (use-package ox-twbs
+      :ensure t
+      :config
+      (setq org-publish-project-alist
+	    '(("org-notes"
+	       :base-directory "~/org/"
+	       :publishing-directory "~/public_html/"
+	       :publishing-function org-twbs-publish-to-html
+	       :with-sub-superscript nil
+	       ))))
+#+end_src
 
-  #+RESULTS:
+*** solarized
+    #+begin_src emacs-lisp
+
+    #+end_src
 
 * customizing key binding
 ** packages
@@ -393,7 +454,6 @@
      (global-set-key "\C-xg" 'magit-status)        ; emacs interface to git called 'Magit'
      (global-set-key "\C-ck" 'browse-kill-ring)    ; examine the "cut" text newest to oldest
      (global-set-key "\C-cv" 'find-file-at-point)  ; treat text at point as a file name and open it
-     (define-key key-translation-map (kbd "ESC") (kbd "C-g"))
 
      ;; evil keybinding
      (evil-set-leader 'normal (kbd "SPC"))
@@ -411,14 +471,13 @@
      (evil-define-key 'normal 'global (kbd "<leader>x") 'evil-save-modified-and-close)
      (evil-define-key 'normal 'global (kbd "<leader>r") '(lambda () (interactive) (load-file "~/.emacs.d/init.el")))
      (evil-define-key 'normal 'global (kbd "<leader>a") '(lambda () (interactive) (org-agenda)))
-
+     (define-key key-translation-map (kbd "ESC") (kbd "C-g"))
 
 
      ;; orgmode keybinding
      (define-key global-map "\C-cl" 'org-store-link)
      (define-key global-map "\C-ca" 'org-agenda)
      (define-key global-map "\C-cc" 'org-capture)
-     (define-key global-map "\C-k" 'org-pomodoro)
 
      #+END_SRC
 
@@ -427,12 +486,76 @@
 
 * latex
   #+begin_src emacs-lisp
-    (load "auctex.el" nil t t)
-    ;;(load "preview-latex.el" nil t t)
-    (setq TeX-auto-save t)
-    (setq TeX-parse-self t)
-    (setq-default TeX-master nil)
+
+    ;; enable ouline minor mode 
+    (add-hook 'LaTeX-mode-hook #'outline-minor-mode)
+(add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+
+
+
+
+    (use-package latex-extra
+      :ensure t
+      :config
+      (add-hook 'LaTeX-mode-hook #'latex-extra-mode))
+
+
+    (use-package pdf-tools
+      :ensure t
+      :config
+      (pdf-tools-install)
+      (setq-default pdf-view-display-size 'fit-page)
+      (setq pdf-annot-activate-created-annotations t)
+      (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
+      (define-key pdf-view-mode-map (kbd "C-r") 'isearch-backward)
+      (add-hook 'pdf-view-mode-hook (lambda ()
+				      (bms/pdf-midnite-amber))) ; automatically turns on midnight-mode for pdfs
+      )
+
+    (use-package auctex-latexmk
+      :ensure t
+      :config
+      (auctex-latexmk-setup)
+      (setq auctex-latexmk-inherit-TeX-PDF-mode t))
+
+    (use-package reftex
+      :ensure t
+      :defer t
+      :config
+      (setq reftex-cite-prompt-optional-args t)) ;; Prompt for empty optional arguments in cite
+
+    ;; (use-package auto-dictionary
+    ;;   :ensure t
+    ;;   :init(add-hook 'flyspell-mode-hook (lambda () (auto-dictionary-mode 1))))
+
+    (use-package company-auctex
+      :ensure t
+      :init (company-auctex-init))
+
+    (use-package tex
+      :ensure auctex
+      :mode ("\\.tex\\'" . latex-mode)
+      :config (progn
+		(setq TeX-source-correlate-mode t)
+		(setq TeX-source-correlate-method 'synctex)
+		(setq TeX-auto-save t)
+		(setq TeX-parse-self t)
+		(setq-default TeX-master "paper.tex")
+		(setq reftex-plug-into-AUCTeX t)
+		(pdf-tools-install)
+		(setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+		      TeX-source-correlate-start-server t)
+		;; Update PDF buffers after successful LaTeX runs
+		(add-hook 'TeX-after-compilation-finished-functions
+			  #'TeX-revert-document-buffer)
+		(add-hook 'LaTeX-mode-hook
+			  (lambda ()
+			    (reftex-mode t)
+			    (flyspell-mode t)))
+		))
+
   #+end_src
 
   #+RESULTS:
 
+  
