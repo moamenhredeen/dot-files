@@ -6,7 +6,7 @@
 
     (require 'package)
     (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-    ;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+    (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
     ;;(add-to-list 'load-path "~/.emacs.d/site-lisp")
     (package-initialize)
 
@@ -400,11 +400,44 @@
 
     #+end_src
 
+* programming
+** emacs-lisp
+   #+begin_src emacs-lisp
+(defun electric-indent-mode-configure ()
+  "Delete newline (?\n) from `electric-indent-chars'."
+  (setq electric-indent-chars (delq 10 electric-indent-chars)))
+
+(add-hook 'emacs-lisp-mode-hook #'electric-indent-mode-configure)
+   #+end_src
+* magit
+  #+begin_src emacs-lisp
+    (use-package magit
+      :ensure t
+      :config 
+      (global-set-key (kbd "C-c g") 'magit-file-dispatch))
+  #+end_src
+
+  #+RESULTS:
+  : t
+
 * customizing key binding
 ** packages
    #+BEGIN_SRC emacs-lisp
-     ;; evil mode 
-     (evil-mode 1)
+	  ;; evil mode 
+     (use-package evil
+       :ensure t
+       :init
+       (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+       (setq evil-want-keybinding nil)
+       :config
+       (evil-mode 1))
+
+
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :config
+  (evil-collection-init))
    #+END_SRC
 ** functions
    #+BEGIN_SRC emacs-lisp
@@ -470,6 +503,8 @@
      (evil-define-key 'normal 'global (kbd "<leader>x") 'evil-save-modified-and-close)
      (evil-define-key 'normal 'global (kbd "<leader>r") '(lambda () (interactive) (load-file "~/.emacs.d/init.el")))
      (evil-define-key 'normal 'global (kbd "<leader>a") '(lambda () (interactive) (org-agenda)))
+     ;; magit short cuts 
+     (evil-define-key 'normal 'global (kbd "<leader>g") '(lambda () (interactive) (magit-status)))
      (define-key key-translation-map (kbd "ESC") (kbd "C-g"))
 
 
@@ -481,7 +516,7 @@
    #+END_SRC
 
    #+RESULTS:
-   : org-pomodoro
+   : org-capture
 
 * latex
   #+begin_src emacs-lisp
