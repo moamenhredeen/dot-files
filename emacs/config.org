@@ -1,4 +1,4 @@
-#+TITLE: my emacs configurations
+#+TITLE: 
 #+SETUPFILE: /home/moamen/new-git/dot-files/emacs/orgmode-export-themes/readtheorg_theme/theme-readtheorg-local.setup
 
 * package-repos
