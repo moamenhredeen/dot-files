@@ -21,7 +21,7 @@
 # TODO : aliases manager validate deleted aliases
 
 # constants (  )
-ALIASES_FILE="/home/moamen/new-git/dot-files/aliases.sh"
+ALIASES_FILE="/home/moamenhraden/new-git/dotfiles/aliases.sh"
 
 
 ### customizations

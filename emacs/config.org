@@ -410,6 +410,17 @@
 
     #+end_src
 
+** org babel 
+   #+begin_src emacs-lisp
+(org-babel-do-load-languages 'org-babel-load-languages
+    '(
+        (shell . t)
+    )
+)
+   #+end_src
+
+   #+RESULTS:
+
 * programming
 ** 🔥TODO multiple cursor  
    - setup multiple cursor package
@@ -659,7 +670,6 @@
 
   #+RESULTS:
 
-  
 * FUN :) 
 ** wittrin 
    #+begin_src emacs-lisp
