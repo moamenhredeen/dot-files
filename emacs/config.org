@@ -190,14 +190,24 @@
      (setq doom-modeline-buffer-state-icon t)
      (setq doom-modeline-enable-word-count t)
      (setq doom-modeline-modal-icon t)
+
+     (use-package rainbow-delimiters
+       :ensure t 
+       :config 
+       (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+
    #+END_SRC
+
+   #+RESULTS:
+   : t
+
 * packages 
 ** undo-tree
    #+BEGIN_SRC emacs-lisp
 
-     (use-package undo-tree
-       :ensure t)
-     (undo-tree-mode 1)
+     ;; (use-package undo-tree
+     ;;   :ensure t)
+     ;; (undo-tree-mode 1)
 
    #+END_SRC
 
@@ -401,20 +411,72 @@
     #+end_src
 
 * programming
+** 🔥TODO multiple cursor  
+   - setup multiple cursor package
+     #+begin_src emacs-lisp
+       ;; (use-package multiple-cursors
+       ;; :ensure t 
+       ;; :config
+       ;; (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+       ;; (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+       ;; (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+       ;; (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this))
+
+
+     #+end_src 
+
+     #+RESULTS:
+     : t
+
+** indent highlight
+   #+begin_src emacs-lisp
+     (use-package highlight-indent-guides
+       :ensure t 
+       :config 
+       (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
+
+
+   #+end_src
+
+   #+RESULTS:
+   : t
+
+** undo 
+   #+begin_src emacs-lisp
+     (use-package undo-fu
+       :ensure t
+       :config
+       (global-unset-key (kbd "C-z"))
+       (global-set-key (kbd "C-z")   'undo-fu-only-undo)
+       (global-set-key (kbd "C-S-z") 'undo-fu-only-redo))
+
+   #+end_src
+
+   #+RESULTS:
+   : t
+
 ** emacs-lisp
    #+begin_src emacs-lisp
-(defun electric-indent-mode-configure ()
-  "Delete newline (?\n) from `electric-indent-chars'."
-  (setq electric-indent-chars (delq 10 electric-indent-chars)))
+     (defun electric-indent-mode-configure ()
+       "Delete newline (?\n) from `electric-indent-chars'."
+       (setq electric-indent-chars (delq 10 electric-indent-chars)))
 
-(add-hook 'emacs-lisp-mode-hook #'electric-indent-mode-configure)
+     (add-hook 'emacs-lisp-mode-hook #'electric-indent-mode-configure)
    #+end_src
+** 🔥TODO autocomplete
+** 🔥TODO flycheck 
 * magit
   #+begin_src emacs-lisp
     (use-package magit
       :ensure t
       :config 
       (global-set-key (kbd "C-c g") 'magit-file-dispatch))
+
+    (use-package git-gutter 
+      :ensure t 
+      :config 
+      (global-git-gutter-mode +1))
+
   #+end_src
 
   #+RESULTS:
@@ -423,22 +485,27 @@
 * customizing key binding
 ** packages
    #+BEGIN_SRC emacs-lisp
-	  ;; evil mode 
+     ;; evil mode 
      (use-package evil
        :ensure t
        :init
        (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
        (setq evil-want-keybinding nil)
+       (setq evil-undo-system 'undo-fu)
        :config
        (evil-mode 1))
 
 
-(use-package evil-collection
-  :after evil
-  :ensure t
-  :config
-  (evil-collection-init))
+     (use-package evil-collection
+       :after evil
+       :ensure t
+       :config
+       (evil-collection-init))
    #+END_SRC
+
+   #+RESULTS:
+   : t
+
 ** functions
    #+BEGIN_SRC emacs-lisp
 
@@ -593,3 +660,16 @@
   #+RESULTS:
 
   
+* FUN :) 
+** wittrin 
+   #+begin_src emacs-lisp
+     (use-package wttrin
+       :ensure t 
+       :config 
+       (setq wttrin-default-cities '("Taipei" "Tainan"))
+       (setq wttrin-default-accept-language '("Accept-Language" . "zh-TW")))
+
+   #+end_src
+
+   #+RESULTS:
+   : t

@@ -17,7 +17,7 @@
  '(custom-safe-themes
    '("79586dc4eb374231af28bbc36ba0880ed8e270249b07f814b0e6555bdcb71fab" default))
  '(package-selected-packages
-   '(evil-magit htmlize darcula-theme flycheck yasnippet-snippets use-package undo-tree restclient-test org-bullets gruvbox-theme evil doom-modeline counsel company-auctex auto-complete))
+   '(wttrin highlight-indent-guides undo-fu multiple-cursors rainbow-delimiters git-gutter evil-magit htmlize darcula-theme flycheck yasnippet-snippets use-package undo-tree restclient-test org-bullets gruvbox-theme evil doom-modeline counsel company-auctex auto-complete))
  '(warning-suppress-log-types '((comp) (comp)))
  '(warning-suppress-types '((comp))))
 (custom-set-faces
