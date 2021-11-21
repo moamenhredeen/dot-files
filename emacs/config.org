@@ -15,25 +15,27 @@
 * customization
 ** basics
    #+BEGIN_SRC emacs-lisp
-     (load-theme 'gruvbox 1)
+     (load-theme 'monokai-pro 1)
      (custom-set-faces
       '(region ((t ( :background "#44000D" :weight bold))))
       '(cursor ((t (:background "#C6DE41" :foreground "black"))))
       '(hl-line  ((t (  :background "#1D1D00"))))
-      '(line-number  ((t ( :inherit default :background "#3c3836" :foreground "#C6DE41"))))
-      '(line-number-current-line ((t (   :inherit default :background "#1D1D00" :foreground "#C6DE41" :inverse-video t :weight ultra-bold))))
-      '(org-checkbox ((t (  :foreground "#fe8019" :weight extra-bold))))
+      ;;'(line-number  ((t ( :inherit default :background "#3c3836" :foreground "#C6DE41"))))
+      ;;'(line-number-current-line ((t (   :inherit default :background "#1D1D00" :foreground "#C6DE41" :inverse-video t))))
+      ;;'(org-checkbox ((t (  :foreground "#fe8019" :weight extra-bold))))
       '(org-hide ((t (   :foreground "#282828"))))
-      '(org-level-1  ((t (:foreground "#fb4934" :weight extra-bold :height 1.4))))
-      '(org-level-2  ((t (:foreground "#b8bb26" :weight extra-bold :height 1.2))))
-      '(org-level-3  ((t (:foreground "#fabd2f" :weight bold))))
-      '(org-level-4  ((t (:foreground "#d3869b"))))
-      '(org-level-5  ((t (:foreground "#83a598"))))
-      '(org-tag ((t (:foreground "#7CBD1E" :weight bold))))
+      ;;'(org-level-1  ((t (:foreground "#fb4934" :weight extra-bold :height 1.4))))
+      '(org-level-1  ((t (:weight extra-bold :height 1.4))))
+      ;;'(org-level-2  ((t (:foreground "#b8bb26" :weight extra-bold :height 1.2))))
+      '(org-level-2  ((t (:weight extra-bold :height 1.2))))
+      ;;'(org-level-3  ((t (:foreground "#fabd2f" :weight bold))))
+      ;;'(org-level-4  ((t (:foreground "#d3869b"))))
+      ;;'(org-level-5  ((t (:foreground "#83a598"))))
+      ;;'(org-tag ((t (:foreground "#7CBD1E" :weight bold))))
       '(doom-modeline-bar ((t (:inherit highlight :background "black")))))
 
-     ;; no need to start the server on startup 
-     ;;(server-start)
+     ;; ;; no need to start the server on startup 
+     ;; ;;(server-start)
      ;; Let's get a backtrace when errors are
      (setq debug-on-error t)
      ;; Display byte-compiler warnings on error
@@ -57,19 +59,10 @@
 
      ;; Scrolling done right
      (setq scroll-step 1 scroll-conservatively 10000)
-     ;;(setq scroll-error-top-bottom t)
-																							   ;;;;;;;;;;;;;;;;;;(setq focus-follows-mouse t)
-     ;;(setq recenter-positions '(top bottom middle))
-
-     ;; Number of lines of continuity when scrolling by screenfulls
-     ;;(setq next-screen-context-lines 0)
 
      ;; Always use "y" for "yes"
      (fset 'yes-or-no-p 'y-or-n-p)
-     (flyspell-mode t)
      (setq fill-column 72)
-     (setq spell-command "aspell")
-     ;;(setq text-mode-hook '(turn-on-auto-fill text-mode-hook-identify))
      (setq max-lisp-eval-depth 10000)
 
 
@@ -89,8 +82,6 @@
 
      (setq inhibit-startup-screen t)         ;; don't show the "splash" screen
 
-     ;; activate nyan mode
-     ;;(nyan-mode 1)
 
      ;; line numbers
      (global-display-line-numbers-mode t)
@@ -249,251 +240,33 @@
    #+END_SRC
 ** yasnippet
    #+BEGIN_SRC emacs-lisp
-     (require 'yasnippet)
-     ;;(yas/load-directory "~/.emacs.d/elpa/yasnippet-snippets-0.24")
-     (yas-global-mode 1)
-   #+END_SRC
-** auto completion
-   #+BEGIN_SRC emacs-lisp
-     ;;  (require 'auto-complete)
-     ;;  (setq ac-dwim t)
-     ;;  (ac-config-default)
-     ;;  (setq ac-sources '(ac-source-yasnippet
-     ;;       	      ac-source-abbrev
-     ;;       	      ac-source-words-in-same-mode-buffers))
-     ;;  ;;(setq ac-auto-start nil)
-     ;; (ac-set-trigger-key "TAB")
-   #+END_SRC
-** company 
-   #+begin_src emacs-lisp
-     (use-package company
-       :config
-       (progn
-	 (add-hook 'after-init-hook 'global-company-mode)
-	 (global-set-key (kbd "M-/") 'company-complete-common-or-cycle)
-	 (setq company-idle-delay 0)))
-     (use-package company-auctex :ensure t)
-     (add-to-list 'company-backends #'company-auctex)
-     ;; (use-package company-tabnine :ensure t)
-     ;; ;; Trigger completion immediately.
-     ;; (setq company-idle-delay 0)
-
-     ;; ;; Number the candidates (use M-1, M-2 etc to select completions).
-     ;; (setq company-show-numbers t)
-   #+end_src
-* org-mode
-** basics 
-   #+BEGIN_SRC emacs-lisp
-     (require 'org-tempo) ;; snippets and autocomplation
-     (require 'org-bullets) ;; customize org mode 
-     ;;(require 'ol-gnus)
-
-     ;; make available "org-bullet-face" such that I can control the font size individually
-     (setq org-bullets-face-name (quote org-bullet-face))
-     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-
-
-     ;;other symbols :  ➪☯⸻❯⟶▶
-     (setq org-bullets-bullet-list '("▤" "⸻" "➜" "⟶" "➪" "❯"))
-     (setq org-ellipsis "⤵")
-     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-
-
-     (setq org-todo-keywords '((sequence "🔥TODO" "🕘NEXT" "❯❯❯INPROGRESS" "|" "DONE" "BLOCKED")))
-     (setq org-todo-keyword-faces
-	   '(("🔥TODO" . (:foreground "#cc241d" :weight bold :inverse-video t))
-	     ("🕘NEXT" . (:foreground "#cc241d" :weight bold :inverse-video t))
-	     ("❯❯❯INPROGRESS" . (:foreground "#d65d0e" :weight bold :inverse-video t))
-	     ("DONE" . (:foreground "#98971a" :weight bold :inverse-video t))
-	     ("BLOCKED" . (:foreground "#ebdbb2" :weight bold :inverse-video t))))
-
-     (setq org-link-abbrev-alist
-	   '(("ggle" . "http://www.google.com/search?q=%s")
-	     ("gmap" . "http://maps.google.com/maps?q=%s")
-	     ("omap" . "http://nominatim.openstreetmap.org/search?q=%s&polygon=1")))
-
-     ;; read agenda files form directory : ~/.agenda
-     (setq  org-agenda-files  (append (file-expand-wildcards "~/.agenda/*.org")))
-
-     ;; Resume clocking task when emacs is restarted
-     (org-clock-persistence-insinuate)
-     ;; Save the running clock and all clock history when exiting Emacs, load it on startup
-     (setq org-clock-persist t)
-     ;; Resume clocking task on clock-in if the clock is open
-     (setq org-clock-in-resume t)
-     ;; Do not prompt to resume an active clock, just resume it
-     (setq org-clock-persist-query-resume nil)
-     ;; Change tasks to whatever when clocking in
-     (setq org-clock-in-switch-to-state "❯❯❯INPROGRESS")
-     ;; Save clock data and state changes and notes in the LOGBOOK drawer
-     (setq org-clock-into-drawer t)
-     ;; Sometimes I change tasks I'm clocking quickly - this removes clocked tasks
-     ;; with 0:00 duration
-     (setq org-clock-out-remove-zero-time-clocks t)
-     ;; Clock out when moving task to a done state
-     (setq org-clock-out-when-done t)
-     ;; Enable auto clock resolution for finding open clocks
-     (setq org-clock-auto-clock-resolution (quote when-no-clock-is-running))
-     ;; Include current clocking task in clock reports
-     (setq org-clock-report-include-clocking-task t)
-     ;; use pretty things for the clocktable
-     (setq org-pretty-entities t)
-
-     (setq org-startup-folded t)
-
-     (setq org-log-note-clock-out t)
-     (setq org-log-redeadline 'time)
-     (setq org-log-repeat t)
-     (setq org-log-reschedule 'time)
-     (setq org-log-states-order-reversed nil)
-     (setq org-log-done 'time)
-
-   #+END_SRC
-** overwrite default orgmode translator
-*** org html src block 
-    #+begin_src emacs-lisp
-      ;; (defun org-html-src-block (src-block _contents info)
-      ;;   "Transcode a SRC-BLOCK element from Org to HTML.
-      ;; CONTENTS holds the contents of the item.  INFO is a plist holding
-      ;; contextual information."
-      ;;   (if (org-export-read-attribute :attr_html src-block :textarea)
-      ;;       (org-html--textarea-block src-block)
-      ;;     (let* ((lang (org-element-property :language src-block))
-      ;; 	   (code (org-html-format-code src-block info))
-      ;; 	   (label (let ((lbl (org-html--reference src-block info t)))
-      ;; 		    (if lbl (format " id=\"%s\"" lbl) "")))
-      ;; 	   (klipsify  (and  (plist-get info :html-klipsify-src)
-      ;; 			    (member lang '("javascript" "js"
-      ;; 					   "ruby" "scheme" "clojure" "php" "html")))))
-      ;;       (if (lang) (format "<pre class=\"example\"%s>\n%s</pre>" label code)
-      ;; 	  (format "<div class=\"org-src-container\">\n%s%s\n</div>"
-      ;; 		;; Build caption.
-      ;; 		(let ((caption (org-export-get-caption src-block)))
-      ;; 		  (if (not caption) ""
-      ;; 		    (let ((listing-number
-      ;; 			   (format
-      ;; 			    "<span class=\"listing-number\">%s </span>"
-      ;; 			    (format
-      ;; 			     (org-html--translate "Listing %d:" info)
-      ;; 			     (org-export-get-ordinal
-      ;; 			      src-block info nil #'org-html--has-caption-p)))))
-      ;; 		      (format "<label class=\"org-src-name\">%s%s</label>"
-      ;; 			      listing-number
-      ;; 			      (org-trim (org-export-data caption info))))))
-      ;; 		;; Contents.
-      ;; 		(format "<pre><code class=\"language-%s\" %s>%s</code></pre>" lang label code)
-      ;; 		)))))
-    #+end_src
-** export 
-*** src blocks
-    #+begin_src emacs-lisp
-      (use-package htmlize
-	:ensure t)
-    #+end_src
-*** ox-twbs 
-    #+begin_src emacs-lisp
-      ;; html exporter
-      (use-package ox-twbs
-	:ensure t
-	:config
-	(setq org-publish-project-alist
-	      '(("org-notes"
-		 :base-directory "~/org/"
-		 :publishing-directory "~/public_html/"
-		 :publishing-function org-twbs-publish-to-html
-		 :with-sub-superscript nil
-		 ))))
-    #+end_src
-
-*** solarized
-    #+begin_src emacs-lisp
-
-    #+end_src
-
-** org babel 
-   #+begin_src emacs-lisp
-(org-babel-do-load-languages 'org-babel-load-languages
-    '(
-        (shell . t)
-    )
-)
-   #+end_src
-
-   #+RESULTS:
-
-* programming
-** 🔥TODO multiple cursor  
-   - setup multiple cursor package
-     #+begin_src emacs-lisp
-       ;; (use-package multiple-cursors
-       ;; :ensure t 
-       ;; :config
-       ;; (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-       ;; (global-set-key (kbd "C->") 'mc/mark-next-like-this)
-       ;; (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-       ;; (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this))
-
-
-     #+end_src 
-
-     #+RESULTS:
-     : t
-
-** indent highlight
-   #+begin_src emacs-lisp
-     (use-package highlight-indent-guides
+     (use-package yasnippet
        :ensure t 
        :config 
-       (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
-
-
-   #+end_src
-
-   #+RESULTS:
-   : t
-
-** undo 
+       (yas-global-mode 1))
+   #+END_SRC
+**  TODO company 
    #+begin_src emacs-lisp
-     (use-package undo-fu
-       :ensure t
+     (use-package company
+       :ensure t 
+       :hook (after-init . global-company-mode)
+       :bind 
+       ("<S-return>" . company-complete-common-or-cycle)
        :config
-       (global-unset-key (kbd "C-z"))
-       (global-set-key (kbd "C-z")   'undo-fu-only-undo)
-       (global-set-key (kbd "C-S-z") 'undo-fu-only-redo))
-
+       (setq company-idle-delay 0))
    #+end_src
 
    #+RESULTS:
-   : t
+   : company-complete-common-or-cycle
 
-** emacs-lisp
+** ispell 
    #+begin_src emacs-lisp
-     (defun electric-indent-mode-configure ()
-       "Delete newline (?\n) from `electric-indent-chars'."
-       (setq electric-indent-chars (delq 10 electric-indent-chars)))
-
-     (add-hook 'emacs-lisp-mode-hook #'electric-indent-mode-configure)
+     (setq ispell-program-name "hunspell")
+     (setq ispell-local-dictionary "de_DE_frami")
+     ;;(setq ispell-local-dictionary-alist '(("de_DE" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil nil nil utf-8)))
    #+end_src
-** 🔥TODO autocomplete
-** 🔥TODO flycheck 
-* magit
-  #+begin_src emacs-lisp
-    (use-package magit
-      :ensure t
-      :config 
-      (global-set-key (kbd "C-c g") 'magit-file-dispatch))
-
-    (use-package git-gutter 
-      :ensure t 
-      :config 
-      (global-git-gutter-mode +1))
-
-  #+end_src
-
-  #+RESULTS:
-  : t
-
-* customizing key binding
+   
+* key binding
 ** packages
    #+BEGIN_SRC emacs-lisp
      ;; evil mode 
@@ -503,6 +276,8 @@
        (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
        (setq evil-want-keybinding nil)
        (setq evil-undo-system 'undo-fu)
+       ;; solve the tab conflict
+       (setq evil-want-C-i-jump nil)
        :config
        (evil-mode 1))
 
@@ -552,24 +327,19 @@
        (delete-other-windows))
 
    #+END_SRC
-** key-binding
+** global key-binding
    #+BEGIN_SRC emacs-lisp
      ;; emacs key-binding
      (global-set-key "\C-cj" 'shell-jump-to-current-directory)
      (global-set-key "\M-o"  'other-window)        ; change quickly between windows, default C-x o
      (global-set-key "\C-cc" (quote compile))      ; compile in buffers directory, usually via 'make'
-     (global-set-key "\C-cl" 'auto-fill-mode)      ; toggle whether emacs wraps/newlines text or not
+     ;;(global-set-key "\C-cl" 'auto-fill-mode)      ; toggle whether emacs wraps/newlines text or not
      (global-set-key "\C-cp" 'replace-string)      ; query for find/replace and replace all
-     (global-set-key "\M-j"  'join-line)           ; join current line with line above
-     (global-set-key "\C-xg" 'magit-status)        ; emacs interface to git called 'Magit'
-     (global-set-key "\C-ck" 'browse-kill-ring)    ; examine the "cut" text newest to oldest
-     (global-set-key "\C-cv" 'find-file-at-point)  ; treat text at point as a file name and open it
 
      ;; evil keybinding
+     (define-key key-translation-map (kbd "ESC") (kbd "C-g"))
      (evil-set-leader 'normal (kbd "SPC"))
      (evil-define-key 'normal 'global (kbd "<leader>w") 'save-buffer)
-     (evil-define-key 'normal 'global (kbd "<leader>s") 'swiper-isearch)
-     (evil-define-key 'normal 'global (kbd "<leader>p") 'counsel-M-x)
      (evil-define-key 'normal 'global (kbd "<leader>f") 'counsel-find-file)
      (evil-define-key 'normal 'global (kbd "<leader>b") 'ivy-switch-buffer)
      (evil-define-key 'normal 'global (kbd "<leader>j") 'shell-jump-to-current-directory)
@@ -577,94 +347,534 @@
      (evil-define-key 'normal 'global (kbd "<leader>1") 'delete-other-windows)
      (evil-define-key 'normal 'global (kbd "<leader>v") 'split-window-horizontally)
      (evil-define-key 'normal 'global (kbd "<leader>h") 'split-window-vertically)
-     (evil-define-key 'normal 'global (kbd "<leader>t") 'open-mytasks-file)
      (evil-define-key 'normal 'global (kbd "<leader>x") 'evil-save-modified-and-close)
-     (evil-define-key 'normal 'global (kbd "<leader>r") '(lambda () (interactive) (load-file "~/.emacs.d/init.el")))
-     (evil-define-key 'normal 'global (kbd "<leader>a") '(lambda () (interactive) (org-agenda)))
-     ;; magit short cuts 
      (evil-define-key 'normal 'global (kbd "<leader>g") '(lambda () (interactive) (magit-status)))
-     (define-key key-translation-map (kbd "ESC") (kbd "C-g"))
+     ;; not nessesary 
+     ;;(evil-define-key 'normal 'global (kbd "<leader>s") 'swiper-isearch)
+     ;;(evil-define-key 'normal 'global (kbd "<leader>p") 'counsel-M-x)
+     ;;(evil-define-key 'normal 'global (kbd "<leader>r") '(lambda () (interactive) (load-file "~/.emacs.d/init.el")))
+     ;; what does this do ??? 
+     ;;(evil-define-key 'normal 'global (kbd "<leader>t") 'open-mytasks-file)
+   #+END_SRC
+
+   #+RESULTS:
+
+** lisp mode keybinding 
+   #+begin_src emacs-lisp
+     (evil-define-key 'normal emacs-lisp-mode-map 
+       (kbd "<leader>e") 'eval-last-sexp)
+   #+end_src
+
+   #+RESULTS:
+   
+* projectile 
+   #+begin_src emacs-lisp
+     (use-package projectile
+       :ensure t
+       :init
+       (projectile-mode +1)
+       :bind (:map projectile-mode-map
+		   ("C-c p" . projectile-command-map))
+       :config 
+       (setq projectile-completion-system 'ivy))   
+
+     ;; evil key binding
+     (evil-define-key 'normal projectile-mode-map
+       (kbd "<leader>p") 'projectile-command-map)
+#+end_src
+
+   #+RESULTS:
+* dired 
+  #+begin_src emacs-lisp
+    (add-hook 'dired-load-hook
+	      (lambda () (load "dired-x")))
+    (add-hook 'dired-mode-hook
+	      (lambda () (dired-omit-mode 1)))
+    ;; (setq dired-omit-files
+    ;;       (concat dired-omit-files "\\|^INDEX$\\|-t\\.tex$"))
+
+    (use-package dired-subtree :ensure t
+      :after dired
+      :config
+      (bind-key "<tab>" #'dired-subtree-toggle dired-mode-map)
+      (bind-key "<backtab>" #'dired-subtree-cycle dired-mode-map))
 
 
-     ;; orgmode keybinding
-     (define-key global-map "\C-cl" 'org-store-link)
-     (define-key global-map "\C-ca" 'org-agenda)
-     (define-key global-map "\C-cc" 'org-capture)
+  #+end_src
+
+  #+RESULTS:
+  : t
+  
+* org-mode
+** basics 
+   #+BEGIN_SRC emacs-lisp
+     (require 'org-tempo) ;; snippets and autocomplation
+     (require 'org-bullets) ;; customize org mode 
+     ;;(require 'ol-gnus)
+
+     ;; make available "org-bullet-face" such that I can control the font size individually
+     (setq org-bullets-face-name (quote org-bullet-face))
+     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+
+     ;;other symbols :  ➪☯⸻❯⟶▶
+     (setq org-bullets-bullet-list '("▤" "⸻" "➜" "⟶" "➪" "❯"))
+     (setq org-ellipsis "⤵")
+     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+
+     (setq org-todo-keywords '((sequence " TODO" " NEXT" "❯❯❯ INPROGRESS" "|" "DONE" "BLOCKED")))
+     (setq org-todo-keyword-faces
+	   '((" TODO" . (:foreground "#cc241d" :weight bold :inverse-video t))
+	     (" NEXT" . (:foreground "#cc241d" :weight bold :inverse-video t))
+	     ("❯❯❯ INPROGRESS" . (:foreground "#d65d0e" :weight bold :inverse-video t))
+	     ("DONE" . (:foreground "#98971a" :weight bold :inverse-video t))
+	     ("BLOCKED" . (:foreground "#ebdbb2" :weight bold :inverse-video t))))
+
+     (setq org-link-abbrev-alist
+	   '(("ggle" . "http://www.google.com/search?q=%s")
+	     ("gmap" . "http://maps.google.com/maps?q=%s")
+	     ("omap" . "http://nominatim.openstreetmap.org/search?q=%s&polygon=1")))
+
+     ;; read agenda files form directory : ~/.agenda
+     (setq  org-agenda-files  (append (file-expand-wildcards "~/.agenda/*.org")))
+
+     ;; Resume clocking task when emacs is restarted
+     (org-clock-persistence-insinuate)
+     ;; Save the running clock and all clock history when exiting Emacs, load it on startup
+     (setq org-clock-persist t)
+     ;; Resume clocking task on clock-in if the clock is open
+     (setq org-clock-in-resume t)
+     ;; Do not prompt to resume an active clock, just resume it
+     (setq org-clock-persist-query-resume nil)
+     ;; Change tasks to whatever when clocking in
+     (setq org-clock-in-switch-to-state "❯❯❯INPROGRESS")
+     ;; Save clock data and state changes and notes in the LOGBOOK drawer
+     (setq org-clock-into-drawer t)
+     ;; Sometimes I change tasks I'm clocking quickly - this removes clocked tasks
+     ;; with 0:00 duration
+     (setq org-clock-out-remove-zero-time-clocks t)
+     ;; Clock out when moving task to a done state
+     (setq org-clock-out-when-done t)
+     ;; Enable auto clock resolution for finding open clocks
+     (setq org-clock-auto-clock-resolution (quote when-no-clock-is-running))
+     ;; Include current clocking task in clock reports
+     (setq org-clock-report-include-clocking-task t)
+     ;; use pretty things for the clocktable
+     (setq org-pretty-entities t)
+
+     (setq org-startup-folded t)
+
+     (setq org-log-note-clock-out t)
+     (setq org-log-redeadline 'time)
+     (setq org-log-repeat t)
+     (setq org-log-reschedule 'time)
+     (setq org-log-states-order-reversed nil)
+     (setq org-log-done 'time)
 
    #+END_SRC
 
    #+RESULTS:
-   : org-capture
+   : time
 
-* latex
+** overwrite default orgmode translator
+*** org html src block 
+    #+begin_src emacs-lisp
+      ;; (defun org-html-src-block (src-block _contents info)
+      ;;   "Transcode a SRC-BLOCK element from Org to HTML.
+      ;; CONTENTS holds the contents of the item.  INFO is a plist holding
+      ;; contextual information."
+      ;;   (if (org-export-read-attribute :attr_html src-block :textarea)
+      ;;       (org-html--textarea-block src-block)
+      ;;     (let* ((lang (org-element-property :language src-block))
+      ;; 	   (code (org-html-format-code src-block info))
+      ;; 	   (label (let ((lbl (org-html--reference src-block info t)))
+      ;; 		    (if lbl (format " id=\"%s\"" lbl) "")))
+      ;; 	   (klipsify  (and  (plist-get info :html-klipsify-src)
+      ;; 			    (member lang '("javascript" "js"
+      ;; 					   "ruby" "scheme" "clojure" "php" "html")))))
+      ;;       (if (lang) (format "<pre class=\"example\"%s>\n%s</pre>" label code)
+      ;; 	  (format "<div class=\"org-src-container\">\n%s%s\n</div>"
+      ;; 		;; Build caption.
+      ;; 		(let ((caption (org-export-get-caption src-block)))
+      ;; 		  (if (not caption) ""
+      ;; 		    (let ((listing-number
+      ;; 			   (format
+      ;; 			    "<span class=\"listing-number\">%s </span>"
+      ;; 			    (format
+      ;; 			     (org-html--translate "Listing %d:" info)
+      ;; 			     (org-export-get-ordinal
+      ;; 			      src-block info nil #'org-html--has-caption-p)))))
+      ;; 		      (format "<label class=\"org-src-name\">%s%s</label>"
+      ;; 			      listing-number
+      ;; 			      (org-trim (org-export-data caption info))))))
+      ;; 		;; Contents.
+      ;; 		(format "<pre><code class=\"language-%s\" %s>%s</code></pre>" lang label code)
+      ;; 		)))))
+    #+end_src
+** export 
+***  TODO custom 
+    #+begin_src emacs-lisp
+
+      ;; (org-export-define-derived-backend 'pd-html 'html
+      ;;   :translate-alist '((inner-template . pd-html-inner-template)
+      ;;                      (template . pd-html-template)))
+
+      (defun pd-html-format-footnote-definition (fn)
+	"Format the footnote definition FN."
+	(let ((n (car fn)) (def (cdr fn)))
+	  (concat
+	   (format
+	    "<li id=\"fn.%s\">" n)
+	   def
+	   (format
+	    "<a href=\"#fnr.%s\">↩</a>" n)
+	   "</li>\n")))
+
+      (defun pd-html-footnote-section (info)
+	"Format the footnote section.
+      INFO is a plist used as a communication channel."
+	(let* ((fn-alist (org-export-collect-footnote-definitions
+			  (plist-get info :parse-tree) info))
+	       (fn-alist
+		(loop for (n type raw) in fn-alist collect
+		      (cons n (if (eq (org-element-type raw) 'org-data)
+				  (org-trim (org-export-data raw info))
+				(format "<p>%s</p>"
+					(org-trim (org-export-data raw info))))))))
+	  (when fn-alist
+	    (concat
+	     "<section class=\"footnotes\">\n"
+	     "<hr />\n"
+	     "<ol>\n"
+	     (mapconcat 'pd-html-format-footnote-definition fn-alist "\n")
+	     "</ol>\n"
+	     "</section>\n"))))
+
+      (defun pd-html-inner-template (contents info)
+	"Return body of document string after HTML conversion.
+      CONTENTS is the transcoded contents string.  INFO is a plist
+      holding export options."
+	(concat
+	 ;; Table of contents.
+	 (let ((depth (plist-get info :with-toc)))
+	   (when depth (org-html-toc depth info)))
+	 ;; Document contents.
+	 contents
+	 ;; Footnotes section.
+	 (pd-html-footnote-section info)))
+
+      (defun pd-html-template (contents info)
+	"Return complete document string after HTML conversion.
+      CONTENTS is the transcoded contents string.  INFO is a plist
+      holding export options."
+	(concat
+	 "<!DOCTYPE html>\n"
+	 (format "<html lang=\"%s\">\n" (plist-get info :language))
+	 "<head>\n"
+	 (format "<meta charset=\"%s\">\n"
+		 (coding-system-get org-html-coding-system 'mime-charset))
+	 (format "<title>%s</title>\n"
+		 (org-export-data (or (plist-get info :title) "") info))
+	 (format "<meta name=\"author\" content=\"%s\">\n"
+		 (org-export-data (plist-get info :author) info))
+	 (format "<meta name=\"generator\" content=\"Org-mode\">\n")
+	 "<link href=\"/css/style.css\" rel=\"stylesheet\" style=\"text/css\" />\n"
+	 "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n"
+	 "</head>\n"
+	 "<body>\n"
+	 ;; Preamble.
+	 "<header class=\"container\">\n"
+	 "<h1 href=\"/\">Phillip Dixon</h1>\n"
+	 "<nav>\n"
+	 "<ul>\n"
+	 "<li><a href=\"/\">Home</a></li>\n"
+	 "<li><a href=\"/posts/\">Posts</a></li>\n"
+	 "</ul>\n"
+	 "</nav>\n"
+	 "</header>\n"
+	 ;; Document contents.
+	 "<article class=\"container\">\n"
+	 ;; Document title.
+	 (format "<h1 class=\"title\">%s</h1>\n"
+		 (org-export-data (or (plist-get info :title) "") info))
+	 contents
+	 "</article>\n"
+	 ;; Postamble.
+	 "<footer>\n"
+	 "<div class=\"container\">\n"
+	 "<p>&#169; 2009&#8211;14 <a href=\"/\">Phillip Dixon</a> ( <a rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc-nd/3.0/nz/\">Some rights reserved</a> )</p>\n"
+	 (format "<p class=\"creator\">Generated with: %s</p>\n"
+		 (plist-get info :creator) info)
+	 "</div>\n"
+	 "</footer>\n"
+	 "</body>\n"
+	 "</html>\n"))
+
+    #+end_src
+
+    #+RESULTS:
+    : pd-html-template
+
+***  TODO inline css
+    #+begin_src emacs-lisp
+(defun my-org-inline-css-hook (exporter)
+  "Insert custom inline css"
+  (when (eq exporter 'html)
+    (let* ((dir (ignore-errors (file-name-directory (buffer-file-name))))
+           (path (concat dir "style.css"))
+           (homestyle (or (null dir) (null (file-exists-p path))))
+           (final (if homestyle "~/.emacs.d/org-style.css" path))) ;; <- set your own style file path
+      (setq org-html-head-include-default-style nil)
+      (setq org-html-head (concat
+                           "<style type=\"text/css\">\n"
+                           "<!--/*--><![CDATA[/*><!--*/\n"
+                           (with-temp-buffer
+                             (insert-file-contents final)
+                             (buffer-string))
+                           "/*]]>*/-->\n"
+                           "</style>\n")))))
+
+;;(add-hook 'org-export-before-processing-hook 'my-org-inline-css-hook)
+    #+end_src
+*** src blocks
+    #+begin_src emacs-lisp
+      (use-package htmlize
+	:ensure t)
+    #+end_src
+*** ox-twbs 
+    #+begin_src emacs-lisp
+      ;; html exporter
+      (use-package ox-twbs
+	:ensure t
+	:config
+	(setq org-publish-project-alist
+	      '(("org-notes"
+		 :base-directory "~/org/"
+		 :publishing-directory "~/public_html/"
+		 :publishing-function org-twbs-publish-to-html
+		 :with-sub-superscript nil
+		 ))))
+    #+end_src
+
+*** solarized
+    #+begin_src emacs-lisp
+
+    #+end_src
+    
+** org babel 
+   #+begin_src emacs-lisp
+(org-babel-do-load-languages 'org-babel-load-languages
+    '(
+        (shell . t)
+    )
+)
+   #+end_src
+** org mode specific key binding
+   #+begin_src emacs-lisp
+
+     ;; emacs key binding
+     (with-eval-after-load 'org
+       (define-key org-mode-map (kbd "C-c l") 'org-store-link)
+       (define-key org-mode-map (kbd "C-c a") 'org-agenda)
+       (define-key org-mode-map (kbd "C-c c") 'org-capture))
+
+     ;; evil key binding
+     (evil-define-key 'normal org-mode-map
+       (kbd "<leader>a") 'org-agenda)
+   #+end_src
+* programming
+** code formatter 
+   #+begin_src emacs-lisp
+(use-package apheleia
+:ensure t 
+:config 
+(apheleia-global-mode +1))
+
+   #+end_src
+
+   #+RESULTS:
+   : t
+
+**  TODO TODO evil-mc  
+   - configure key binding 
+     #+begin_src emacs-lisp
+       (use-package evil-mc
+       :ensure t 
+       :config (evil-mc-mode 1))
+     #+end_src 
+
+     #+RESULTS:
+     : t
+
+** indent highlight
+   #+begin_src emacs-lisp
+     (use-package highlight-indent-guides
+       :ensure t 
+       :config
+       (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
+
+
+   #+end_src
+
+   #+RESULTS:
+   : t
+
+** undo 
+   #+begin_src emacs-lisp
+     (use-package undo-fu
+       :ensure t
+       :config
+       (global-unset-key (kbd "C-z"))
+       (global-set-key (kbd "C-z")   'undo-fu-only-undo)
+       (global-set-key (kbd "C-S-z") 'undo-fu-only-redo))
+
+   #+end_src
+
+   #+RESULTS:
+   : t
+
+** emacs-lisp
+   #+begin_src emacs-lisp
+     (defun electric-indent-mode-configure ()
+       "Delete newline (?\n) from `electric-indent-chars'."
+       (setq electric-indent-chars (delq 10 electric-indent-chars)))
+
+     (add-hook 'emacs-lisp-mode-hook #'electric-indent-mode-configure)
+   #+end_src
+**  TODO autocomplete
+** flycheck 
+   #+begin_src emacs-lisp
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode))
+
+   #+end_src
+
+   #+RESULTS:
+
+** python 
+   #+begin_src emacs-lisp
+(use-package elpy
+  :ensure t
+  :init
+  (elpy-enable))
+
+   #+end_src
+* magit
   #+begin_src emacs-lisp
-
-    ;; enable ouline minor mode 
-    (add-hook 'LaTeX-mode-hook #'outline-minor-mode)
-    (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-
-
-
-
-    (use-package latex-extra
+    (use-package magit
       :ensure t
-      :config
-      (add-hook 'LaTeX-mode-hook #'latex-extra-mode))
+      :config 
+      (global-set-key (kbd "C-c g") 'magit-file-dispatch))
+
+    (use-package git-gutter 
+      :ensure t 
+      :config 
+      (global-git-gutter-mode +1))
+
+  #+end_src
+
+  #+RESULTS:
+  : t
+
+* latex 
+** basic configuration and packages setup
+   #+begin_src emacs-lisp
+     ;; enable spell checking in latex mode 
+     (add-hook 'LaTeX-mode-hook 'flyspell-mode)
+     ;;(add-hook 'prog-mode-hook 'flyspell-prog-mode)
+
+     (use-package pdf-tools
+       :ensure t
+       :config
+       (pdf-tools-install)
+       (setq-default pdf-view-display-size 'fit-page)
+       (setq pdf-annot-activate-created-annotations t)
+       (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
+       (define-key pdf-view-mode-map (kbd "C-r") 'isearch-backward)
+       (add-hook 'pdf-view-mode-hook (lambda ()
+				       (bms/pdf-midnite-amber))) ; automatically turns on midnight-mode for pdfs
+       )
+
+     (use-package tex
+       :ensure auctex
+       :mode ("\\.tex\\'" . latex-mode)
+       :config
+       (setq TeX-source-correlate-mode t)
+       (setq TeX-source-correlate-method 'synctex)
+       (setq TeX-auto-save t)
+       (setq TeX-parse-self t)
+       (setq reftex-plug-into-AUCTeX t)
+       ;;(setq-default TeX-master "paper.tex")
+       ;;(pdf-tools-install)
+       ;;(setq TeX-view-program-selection '((output-pdf "PDF Tools") TeX-source-correlate-start-server t)
+       ;; Update PDF buffers after successful LaTeX runs
+       ;;(add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
+       )
 
 
-    (use-package pdf-tools
-      :ensure t
-      :config
-      (pdf-tools-install)
-      (setq-default pdf-view-display-size 'fit-page)
-      (setq pdf-annot-activate-created-annotations t)
-      (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
-      (define-key pdf-view-mode-map (kbd "C-r") 'isearch-backward)
-      (add-hook 'pdf-view-mode-hook (lambda ()
-				      (bms/pdf-midnite-amber))) ; automatically turns on midnight-mode for pdfs
-      )
+     (use-package latex-extra
+       :ensure t
+       :hook (LaTeX-mode . latex-extra-mode)
+       :bind (:map latex-extra-mode-map ("C-c C-f" . nil)))
 
-    (use-package auctex-latexmk
-      :ensure t
-      :config
-      (auctex-latexmk-setup)
-      (setq auctex-latexmk-inherit-TeX-PDF-mode t))
 
-    (use-package reftex
-      :ensure t
-      :defer t
-      :config
-      (setq reftex-cite-prompt-optional-args t)) ;; Prompt for empty optional arguments in cite
+     ;; (use-package auctex-latexmk
+     ;;   :ensure t
+     ;;   :config
+     ;;   (auctex-latexmk-setup)
+     ;;   (setq auctex-latexmk-inherit-TeX-PDF-mode t))
 
-    ;; (use-package auto-dictionary
-    ;;   :ensure t
-    ;;   :init(add-hook 'flyspell-mode-hook (lambda () (auto-dictionary-mode 1))))
+     (use-package company-auctex
+       :ensure t
+       :init (company-auctex-init))
 
-    (use-package company-auctex
-      :ensure t
-      :init (company-auctex-init))
 
-    (use-package tex
-      :ensure auctex
-      :mode ("\\.tex\\'" . latex-mode)
-      :config (progn
-		(setq TeX-source-correlate-mode t)
-		(setq TeX-source-correlate-method 'synctex)
-		(setq TeX-auto-save t)
-		(setq TeX-parse-self t)
-		(setq-default TeX-master "paper.tex")
-		(setq reftex-plug-into-AUCTeX t)
-		(pdf-tools-install)
-		(setq TeX-view-program-selection '((output-pdf "PDF Tools"))
-		      TeX-source-correlate-start-server t)
-		;; Update PDF buffers after successful LaTeX runs
-		(add-hook 'TeX-after-compilation-finished-functions
-			  #'TeX-revert-document-buffer)
-		(add-hook 'LaTeX-mode-hook
-			  (lambda ()
-			    (reftex-mode t)
-			    (flyspell-mode t)))
-		))
+     (use-package company-math
+       :ensure t)
+
+
+
+     (use-package reftex
+       :ensure t
+       :hook (LaTeX-mode . turn-on-reftex)
+       :config
+       (setq reftex-cite-prompt-optional-args t)) ;; Prompt for empty optional arguments in cite
+
+     (use-package company-reftex 
+       :ensure t)
+
+     ;; local configuration for TeX modes
+     (defun my-latex-mode-setup ()
+       (setq-local company-backends
+		   (append '((company-math-symbols-latex company-math-symbols-unicode company-latex-commands company-auctex company-reftex))
+			   company-backends)))
+
+     (add-hook 'LaTeX-mode-hook 'my-latex-mode-setup)
+
+   #+end_src
+
+  #+RESULTS:
+  | preview-mode-setup | my-latex-mode-setup | turn-on-reftex | latex-extra-mode | flyspell-mode |
+** key binding
+     #+begin_src emacs-lisp
+       ;; (with-eval-after-load 'latex
+       ;; 	 (define-key LaTeX-mode-map (kbd "<S-return>") 'TeX-insert-macro))
+
+       (evil-define-key 'normal LaTeX-mode-map
+	 (kbd "TAB") nil
+	 (kbd "<leader>e") 'LaTeX-environment
+	 (kbd "<leader>s") 'LaTeX-section
+	 (kbd "<leader>m") 'TeX-insert-macro)
+     #+end_src
+*  TODO reveal.js
+- default configuration for reveal.js
+  #+begin_src emacs-lisp
+(use-package ox-reveal
+:ensure t 
+:config 
+(setq org-reveal-root "file:///home/moamen/software/reveal.js"))
 
   #+end_src
 
@@ -682,4 +892,11 @@
    #+end_src
 
    #+RESULTS:
-   : t
+   : t 
+* packages i should try 
+- avy : jump to word
+- straight : package manager
+- macrostop ( macro expander ) 
+  
+* Learning 
+** use-package 

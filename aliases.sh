@@ -58,9 +58,11 @@ alias cls='clear'
 
 ############################################################################
 #+ALIAS_SECTION MANAGED
-
-
 alias tarf='tar -xzvf'
-
+alias pacmani='sudo pacman -S'
+alias pacmans='sudo pacman -Ss'
+alias docker='sudo docker'
+alias syss='sudo systemctl status'
+alias sysr='sudo systemctl start'
 
 
