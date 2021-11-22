@@ -21,7 +21,7 @@
 # TODO : aliases manager validate deleted aliases
 
 # constants (  )
-ALIASES_FILE="/home/moamenhraden/new-git/dotfiles/aliases.sh"
+ALIASES_FILE="/home/moamen/new-git/dot-files/aliases.sh"
 
 
 ### customizations
@@ -126,6 +126,38 @@ function reload_config_file() {
         echo -e "$(cprint lg $(symbol done)) file reloaded"
 }
 
+
+####################################################################################
+# git  
+####################################################################################
+
+# TODO : help function for my git 
+
+# TODO : recursion level
+function _my_git_recursive_status(){
+    clear
+    for i in $(ls)
+    do 
+	cd $i 
+	if [ -d .git ] 
+	then 
+	    echo -e $(cprint lc "$(symbol rarrow) $(pwd)")
+	    git st 
+	    echo "\n"
+	fi
+	cd ..
+    done
+}
+
+function _my_git(){
+        case $1 in 
+            -rs | --recursive-status)            _my_git_recursive_status          ;;
+            -h | --help)                         _my_git_help                      ;;
+                ######## other cases 
+            *)                                   command_not_found                 ;;
+        esac
+}
+
 ####################################################################################
 # ALIASES MANAGER
 ####################################################################################
@@ -218,6 +250,7 @@ function my() {
 
                 ######## subcommands 
                 als | aliasmgr)         _aliasmgr "${@:2}"              ;;
+                g | git)         _my_git "${@:2}"              ;;
 
                 ######## other cases 
                 *)                      command_not_found               ;;
