@@ -15,7 +15,7 @@
 * customization
 ** basics
    #+BEGIN_SRC emacs-lisp
-     (load-theme 'monokai-pro 1)
+     (load-theme 'gruvbox 1)
      (custom-set-faces
       '(region ((t ( :background "#44000D" :weight bold))))
       '(cursor ((t (:background "#C6DE41" :foreground "black"))))
@@ -153,6 +153,20 @@
    #+RESULTS:
    | UTF8_STRING | COMPOUND_TEXT | TEXT | STRING |
 
+** icons 
+   #+begin_src emacs-lisp
+     (use-package all-the-icons-ivy
+  :disabled t
+       :ensure t 
+       :init (add-hook 'after-init-hook 'all-the-icons-ivy-setup)
+       :config 
+       (setq all-the-icons-ivy-file-commands
+	     '(counsel-find-file counsel-file-jump counsel-recentf counsel-projectile-find-file counsel-projectile-find-dir)))
+   #+end_src
+
+   #+RESULTS:
+   : t
+   
 ** minor modes
    #+BEGIN_SRC emacs-lisp
      ;; Enabling and disabling some modes
@@ -192,80 +206,13 @@
    #+RESULTS:
    : t
 
-* packages 
-** undo-tree
-   #+BEGIN_SRC emacs-lisp
-
-     ;; (use-package undo-tree
-     ;;   :ensure t)
-     ;; (undo-tree-mode 1)
-
-   #+END_SRC
-
-** swiper/ivy/counsel
-   #+BEGIN_SRC emacs-lisp
-     (use-package counsel
-       :ensure t
-       :bind
-       (("M-y" . counsel-yank-pop)
-	:map ivy-minibuffer-map
-	("M-y" . ivy-next-line)))
-
-     (use-package ivy
-       :ensure t
-       :diminish (ivy-mode)
-       :bind (("C-x b" . ivy-switch-buffer))
-       :config
-       (ivy-mode 1)
-       (setq ivy-use-virtual-buffers t)
-       (setq ivy-count-format "%d/%d ")
-       (setq ivy-display-style 'fancy))
-
-
-     (use-package swiper
-       :ensure t
-       :bind (("C-s" . swiper-isearch)
-	      ("C-r" . swiper-isearch)
-	      ("C-c C-r" . ivy-resume)
-	      ("M-x" . counsel-M-x)
-	      ("C-x C-f" . counsel-find-file))
-       :config
-       (progn
-	 (ivy-mode 1)
-	 (setq ivy-use-virtual-buffers t)
-	 (setq ivy-display-style 'fancy)
-	 (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
-	 ))
-
-   #+END_SRC
-** yasnippet
-   #+BEGIN_SRC emacs-lisp
-     (use-package yasnippet
-       :ensure t 
-       :config 
-       (yas-global-mode 1))
-   #+END_SRC
-**  TODO company 
+** performance tuning 
    #+begin_src emacs-lisp
-     (use-package company
-       :ensure t 
-       :hook (after-init . global-company-mode)
-       :bind 
-       ("<S-return>" . company-complete-common-or-cycle)
-       :config
-       (setq company-idle-delay 0))
+(setq gc-cons-threshold (* 100 1024 1024)
+      read-process-output-max (* 1024 1024)
+      company-idle-delay 0.0
+      company-minimum-prefix-length 1) ;; lock files will kill `npm start'
    #+end_src
-
-   #+RESULTS:
-   : company-complete-common-or-cycle
-
-** ispell 
-   #+begin_src emacs-lisp
-     (setq ispell-program-name "hunspell")
-     (setq ispell-local-dictionary "de_DE_frami")
-     ;;(setq ispell-local-dictionary-alist '(("de_DE" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil nil nil utf-8)))
-   #+end_src
-   
 * key binding
 ** packages
    #+BEGIN_SRC emacs-lisp
@@ -330,31 +277,35 @@
 ** global key-binding
    #+BEGIN_SRC emacs-lisp
      ;; emacs key-binding
-     (global-set-key "\C-cj" 'shell-jump-to-current-directory)
-     (global-set-key "\M-o"  'other-window)        ; change quickly between windows, default C-x o
-     (global-set-key "\C-cc" (quote compile))      ; compile in buffers directory, usually via 'make'
-     ;;(global-set-key "\C-cl" 'auto-fill-mode)      ; toggle whether emacs wraps/newlines text or not
-     (global-set-key "\C-cp" 'replace-string)      ; query for find/replace and replace all
+     (global-set-key (kbd "C-c j") 'shell-jump-to-current-directory)
+     (global-set-key (kbd "M-o")  'other-window)        ; change quickly between windows, default C-x o
+     (global-set-key (kbd "C-c c") (quote compile))      ; compile in buffers directory, usually via 'make'
+     ;;(global-set-key (kbd "C-c p") 'replace-string)      ; query for find/replace and replace all
+     (global-set-key (kbd "C-x C-b") 'ibuffer)      
+     ;;(global-set-key (kbd "C-c C-l") 'auto-fill-mode)      ; toggle whether emacs wraps/newlines text or not
 
      ;; evil keybinding
      (define-key key-translation-map (kbd "ESC") (kbd "C-g"))
      (evil-set-leader 'normal (kbd "SPC"))
-     (evil-define-key 'normal 'global (kbd "<leader>w") 'save-buffer)
-     (evil-define-key 'normal 'global (kbd "<leader>f") 'counsel-find-file)
-     (evil-define-key 'normal 'global (kbd "<leader>b") 'ivy-switch-buffer)
-     (evil-define-key 'normal 'global (kbd "<leader>j") 'shell-jump-to-current-directory)
+     ;; windows 
      (evil-define-key 'normal 'global (kbd "<leader>0") 'delete-window)
      (evil-define-key 'normal 'global (kbd "<leader>1") 'delete-other-windows)
+     (evil-define-key 'normal 'global (kbd "<leader>q") 'delete-window)
+     (evil-define-key 'normal 'global (kbd "<leader>w") 'save-buffer)
+     (evil-define-key 'normal 'global (kbd "<leader>x") 'evil-save-modified-and-close)
+     (evil-define-key 'normal 'global (kbd "<leader>b") 'ivy-switch-buffer)
+     (evil-define-key 'normal 'global (kbd "<leader>i") 'ibuffer)
      (evil-define-key 'normal 'global (kbd "<leader>v") 'split-window-horizontally)
      (evil-define-key 'normal 'global (kbd "<leader>h") 'split-window-vertically)
-     (evil-define-key 'normal 'global (kbd "<leader>x") 'evil-save-modified-and-close)
+     ;; file navigation
+     (evil-define-key 'normal 'global (kbd "<leader>f") 'counsel-find-file)
+     ;; magit
      (evil-define-key 'normal 'global (kbd "<leader>g") '(lambda () (interactive) (magit-status)))
+     ;; strings 
+     (evil-define-key 'normal 'global (kbd "<leader>r") 'replace-string)
+
      ;; not nessesary 
      ;;(evil-define-key 'normal 'global (kbd "<leader>s") 'swiper-isearch)
-     ;;(evil-define-key 'normal 'global (kbd "<leader>p") 'counsel-M-x)
-     ;;(evil-define-key 'normal 'global (kbd "<leader>r") '(lambda () (interactive) (load-file "~/.emacs.d/init.el")))
-     ;; what does this do ??? 
-     ;;(evil-define-key 'normal 'global (kbd "<leader>t") 'open-mytasks-file)
    #+END_SRC
 
    #+RESULTS:
@@ -367,7 +318,100 @@
 
    #+RESULTS:
    
-* projectile 
+* packages 
+** undo-tree
+   #+BEGIN_SRC emacs-lisp
+     (use-package undo-tree
+       :ensure t
+       :config
+       (undo-tree-mode 1))
+   #+END_SRC
+
+** undo 
+   #+begin_src emacs-lisp
+     ;; (use-package undo-fu
+     ;;   :ensure t
+     ;;   :config
+     ;;   (global-unset-key (kbd "C-z"))
+     ;;   (global-set-key (kbd "C-z")   'undo-fu-only-undo)
+     ;;   (global-set-key (kbd "C-S-z") 'undo-fu-only-redo))
+
+   #+end_src
+
+   #+RESULTS:
+   : t
+
+** swiper/ivy/counsel
+   #+BEGIN_SRC emacs-lisp
+     (use-package counsel
+       :ensure t
+       :bind
+       (("M-y" . counsel-yank-pop)
+	:map ivy-minibuffer-map
+	("M-y" . ivy-next-line)))
+
+     (use-package ivy
+       :ensure t
+       :diminish (ivy-mode)
+       :bind (("C-x b" . ivy-switch-buffer))
+       :config
+       (ivy-mode 1)
+       (setq ivy-use-virtual-buffers t)
+       (setq ivy-count-format "%d/%d ")
+       (setq ivy-display-style 'fancy))
+
+
+     (use-package swiper
+       :ensure t
+       :bind (("C-s" . swiper-isearch)
+	      ("C-r" . swiper-isearch)
+	      ("C-c C-r" . ivy-resume)
+	      ("M-x" . counsel-M-x)
+	      ("C-x C-f" . counsel-find-file))
+       :config
+       (progn
+	 (ivy-mode 1)
+	 (setq ivy-use-virtual-buffers t)
+	 (setq ivy-display-style 'fancy)
+	 (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
+	 ))
+
+   #+END_SRC
+** yasnippet
+   #+BEGIN_SRC emacs-lisp
+     (use-package yasnippet
+       :ensure t 
+       :config 
+       (yas-global-mode 1))
+   #+END_SRC
+**  TODO company 
+   #+begin_src emacs-lisp
+     (use-package company
+       :ensure t 
+       :hook (after-init . global-company-mode)
+       :bind 
+       ("<S-return>" . company-complete-common-or-cycle)
+       :config
+       (setq company-idle-delay 0))
+   #+end_src
+   #+RESULTS:
+   : company-complete-common-or-cycle
+
+** ispell 
+   #+begin_src emacs-lisp
+     (setq ispell-program-name "hunspell")
+     (setq ispell-local-dictionary "de_DE_frami")
+     ;;(setq ispell-local-dictionary-alist '(("de_DE" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil nil nil utf-8)))
+   #+end_src
+   
+** wich key 
+   #+begin_src emacs-lisp
+     (use-package which-key
+       :ensure
+       :config
+       (which-key-mode))
+   #+end_src
+** projectile 
    #+begin_src emacs-lisp
      (use-package projectile
        :ensure t
@@ -384,12 +428,30 @@
 #+end_src
 
    #+RESULTS:
-* dired 
+** magit
   #+begin_src emacs-lisp
-    (add-hook 'dired-load-hook
-	      (lambda () (load "dired-x")))
-    (add-hook 'dired-mode-hook
-	      (lambda () (dired-omit-mode 1)))
+    (use-package magit
+      :ensure t
+      :config 
+      (global-set-key (kbd "C-c g") 'magit-file-dispatch))
+
+    (use-package git-gutter 
+      :ensure t 
+      :config 
+      (global-git-gutter-mode +1))
+
+  #+end_src
+
+  #+RESULTS:
+  : t
+
+* Emacs Modes 
+** dired 
+  #+begin_src emacs-lisp
+    ;; (add-hook 'dired-load-hook
+    ;; 	  (lambda () (load "dired-x")))
+    ;; (add-hook 'dired-mode-hook
+    ;; 	  (lambda () (dired-omit-mode 1)))
     ;; (setq dired-omit-files
     ;;       (concat dired-omit-files "\\|^INDEX$\\|-t\\.tex$"))
 
@@ -405,7 +467,271 @@
   #+RESULTS:
   : t
   
-* org-mode
+** org-mode
+*** basics 
+#+begin_src emacs-lisp
+(require 'org-tempo) ;; snippets and autocomplation
+ (require 'org-bullets) ;; customize org mode 
+ ;;(require 'ol-gnus)
+
+ ;; make available "org-bullet-face" such that I can control the font size individually
+ (setq org-bullets-face-name (quote org-bullet-face))
+ (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+
+ ;;other symbols :  ➪☯⸻❯⟶▶
+ (setq org-bullets-bullet-list '("▤" "⸻" "➜" "⟶" "➪" "❯"))
+ (setq org-ellipsis "⤵")
+ (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+
+ (setq org-todo-keywords '((sequence " TODO" " NEXT" "❯❯❯ INPROGRESS" "|" "DONE" "BLOCKED")))
+ (setq org-todo-keyword-faces
+	   '((" TODO" . (:foreground "#cc241d" :weight bold :inverse-video t))
+	     (" NEXT" . (:foreground "#cc241d" :weight bold :inverse-video t))
+	     ("❯❯❯ INPROGRESS" . (:foreground "#d65d0e" :weight bold :inverse-video t))
+	     ("DONE" . (:foreground "#98971a" :weight bold :inverse-video t))
+	     ("BLOCKED" . (:foreground "#ebdbb2" :weight bold :inverse-video t))))
+
+ (setq org-link-abbrev-alist
+	   '(("ggle" . "http://www.google.com/search?q=%s")
+	     ("gmap" . "http://maps.google.com/maps?q=%s")
+	     ("omap" . "http://nominatim.openstreetmap.org/search?q=%s&polygon=1")))
+
+ ;; read agenda files form directory : ~/.agenda
+ (setq  org-agenda-files  (append (file-expand-wildcards "~/.agenda/*.org")))
+
+ ;; Resume clocking task when emacs is restarted
+ (org-clock-persistence-insinuate)
+ ;; Save the running clock and all clock history when exiting Emacs, load it on startup
+ (setq org-clock-persist t)
+ ;; Resume clocking task on clock-in if the clock is open
+ (setq org-clock-in-resume t)
+ ;; Do not prompt to resume an active clock, just resume it
+ (setq org-clock-persist-query-resume nil)
+ ;; Change tasks to whatever when clocking in
+ (setq org-clock-in-switch-to-state "❯❯❯INPROGRESS")
+ ;; Save clock data and state changes and notes in the LOGBOOK drawer
+ (setq org-clock-into-drawer t)
+ ;; Sometimes I change tasks I'm clocking quickly - this removes clocked tasks
+ ;; with 0:00 duration
+ (setq org-clock-out-remove-zero-time-clocks t)
+ ;; Clock out when moving task to a done state
+ (setq org-clock-out-when-done t)
+ ;; Enable auto clock resolution for finding open clocks
+ (setq org-clock-auto-clock-resolution (quote when-no-clock-is-running))
+ ;; Include current clocking task in clock reports
+ (setq org-clock-report-include-clocking-task t)
+ ;; use pretty things for the clocktable
+ (setq org-pretty-entities t)
+
+ (setq org-startup-folded t)
+
+ (setq org-log-note-clock-out t)
+ (setq org-log-redeadline 'time)
+ (setq org-log-repeat t)
+ (setq org-log-reschedule 'time)
+ (setq org-log-states-order-reversed nil)
+ (setq org-log-done 'time)
+#+end_src
+*** src blocks
+#+begin_src elisp
+     (use-package htmlize
+	:ensure t)
+
+#+end_src
+*** ox-twbs
+#+begin_src elisp
+    ;; html exporter
+     (use-package ox-twbs
+	:ensure t
+	:config
+	(setq org-publish-project-alist
+	      '(("org-notes"
+		 :base-directory "~/org/"
+		 :publishing-directory "~/public_html/"
+		 :publishing-function org-twbs-publish-to-html
+		 :with-sub-superscript nil
+		 ))))
+#+end_src 
+*** custom export
+**** org html src block
+#+begin_src emacs-lisp
+;; (defun org-html-src-block (src-block _contents info)
+;;   "Transcode a SRC-BLOCK element from Org to HTML.
+;; CONTENTS holds the contents of the item.  INFO is a plist holding
+;; contextual information."
+;;   (if (org-export-read-attribute :attr_html src-block :textarea)
+;;       (org-html--textarea-block src-block)
+;;     (let* ((lang (org-element-property :language src-block))
+;; 	   (code (org-html-format-code src-block info))
+;; 	   (label (let ((lbl (org-html--reference src-block info t)))
+;; 		    (if lbl (format " id=\"%s\"" lbl) "")))
+;; 	   (klipsify  (and  (plist-get info :html-klipsify-src)
+;; 			    (member lang '("javascript" "js"
+;; 					   "ruby" "scheme" "clojure" "php" "html")))))
+;;       (if (lang) (format "<pre class=\"example\"%s>\n%s</pre>" label code)
+;; 	  (format "<div class=\"org-src-container\">\n%s%s\n</div>"
+;; 		;; Build caption.
+;; 		(let ((caption (org-export-get-caption src-block)))
+;; 		  (if (not caption) ""
+;; 		    (let ((listing-number
+;; 			   (format
+;; 			    "<span class=\"listing-number\">%s </span>"
+;; 			    (format
+;; 			     (org-html--translate "Listing %d:" info)
+;; 			     (org-export-get-ordinal
+;; 			      src-block info nil #'org-html--has-caption-p)))))
+;; 		      (format "<label class=\"org-src-name\">%s%s</label>"
+;; 			      listing-number
+;; 			      (org-trim (org-export-data caption info))))))
+;; 		;; Contents.
+;; 		(format "<pre><code class=\"language-%s\" %s>%s</code></pre>" lang label code)
+;; 		)))))
+#+end_src
+**** inline css
+#+begin_src elisp
+(defun my-org-inline-css-hook (exporter)
+  "Insert custom inline css"
+  (when (eq exporter 'html)
+    (let* ((dir (ignore-errors (file-name-directory (buffer-file-name))))
+           (path (concat dir "style.css"))
+           (homestyle (or (null dir) (null (file-exists-p path))))
+           (final (if homestyle "~/.emacs.d/org-style.css" path))) ;; <- set your own style file path
+      (setq org-html-head-include-default-style nil)
+      (setq org-html-head (concat
+                           "<style type=\"text/css\">\n"
+                           "<!--/*--><![CDATA[/*><!--*/\n"
+                           (with-temp-buffer
+                             (insert-file-contents final)
+                             (buffer-string))
+                           "/*]]>*/-->\n"
+                           "</style>\n")))))
+
+;;(add-hook 'org-export-before-processing-hook 'my-org-inline-css-hook)
+
+#+end_src 
+**** others
+#+begin_src elisp
+  ;; (org-export-define-derived-backend 'pd-html 'html
+     ;;   :translate-alist '((inner-template . pd-html-inner-template)
+     ;;                      (template . pd-html-template)))
+
+     (defun pd-html-format-footnote-definition (fn)
+	"Format the footnote definition FN."
+	(let ((n (car fn)) (def (cdr fn)))
+	  (concat
+	   (format
+	    "<li id=\"fn.%s\">" n)
+	   def
+	   (format
+	    "<a href=\"#fnr.%s\">↩</a>" n)
+	   "</li>\n")))
+
+     (defun pd-html-footnote-section (info)
+	"Format the footnote section.
+     INFO is a plist used as a communication channel."
+	(let* ((fn-alist (org-export-collect-footnote-definitions
+			  (plist-get info :parse-tree) info))
+	       (fn-alist
+		(loop for (n type raw) in fn-alist collect
+		      (cons n (if (eq (org-element-type raw) 'org-data)
+				  (org-trim (org-export-data raw info))
+				(format "<p>%s</p>"
+					(org-trim (org-export-data raw info))))))))
+	  (when fn-alist
+	    (concat
+	     "<section class=\"footnotes\">\n"
+	     "<hr />\n"
+	     "<ol>\n"
+	     (mapconcat 'pd-html-format-footnote-definition fn-alist "\n")
+	     "</ol>\n"
+	     "</section>\n"))))
+
+     (defun pd-html-inner-template (contents info)
+	"Return body of document string after HTML conversion.
+     CONTENTS is the transcoded contents string.  INFO is a plist
+     holding export options."
+	(concat
+	 ;; Table of contents.
+	 (let ((depth (plist-get info :with-toc)))
+	   (when depth (org-html-toc depth info)))
+	 ;; Document contents.
+	 contents
+	 ;; Footnotes section.
+	 (pd-html-footnote-section info)))
+
+     (defun pd-html-template (contents info)
+	"Return complete document string after HTML conversion.
+     CONTENTS is the transcoded contents string.  INFO is a plist
+     holding export options."
+	(concat
+	 "<!DOCTYPE html>\n"
+	 (format "<html lang=\"%s\">\n" (plist-get info :language))
+	 "<head>\n"
+	 (format "<meta charset=\"%s\">\n"
+		 (coding-system-get org-html-coding-system 'mime-charset))
+	 (format "<title>%s</title>\n"
+		 (org-export-data (or (plist-get info :title) "") info))
+	 (format "<meta name=\"author\" content=\"%s\">\n"
+		 (org-export-data (plist-get info :author) info))
+	 (format "<meta name=\"generator\" content=\"Org-mode\">\n")
+	 "<link href=\"/css/style.css\" rel=\"stylesheet\" style=\"text/css\" />\n"
+	 "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n"
+	 "</head>\n"
+	 "<body>\n"
+	 ;; Preamble.
+	 "<header class=\"container\">\n"
+	 "<h1 href=\"/\">Phillip Dixon</h1>\n"
+	 "<nav>\n"
+	 "<ul>\n"
+	 "<li><a href=\"/\">Home</a></li>\n"
+	 "<li><a href=\"/posts/\">Posts</a></li>\n"
+	 "</ul>\n"
+	 "</nav>\n"
+	 "</header>\n"
+	 ;; Document contents.
+	 "<article class=\"container\">\n"
+	 ;; Document title.
+	 (format "<h1 class=\"title\">%s</h1>\n"
+		 (org-export-data (or (plist-get info :title) "") info))
+	 contents
+	 "</article>\n"
+	 ;; Postamble.
+	 "<footer>\n"
+	 "<div class=\"container\">\n"
+	 "<p>&#169; 2009&#8211;14 <a href=\"/\">Phillip Dixon</a> ( <a rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc-nd/3.0/nz/\">Some rights reserved</a> )</p>\n"
+	 (format "<p class=\"creator\">Generated with: %s</p>\n"
+		 (plist-get info :creator) info)
+	 "</div>\n"
+	 "</footer>\n"
+	 "</body>\n"
+	 "</html>\n"))
+#+end_src 
+*** org babel 
+   #+begin_src emacs-lisp
+     (org-babel-do-load-languages 'org-babel-load-languages
+	 '(
+	     (shell . t)
+	 )
+     )
+   #+end_src
+
+   #+RESULTS:
+
+*** org mode key binding 
+#+begin_src elisp
+;; emacs key binding
+(with-eval-after-load 'org
+  (define-key org-mode-map (kbd "C-c l") 'org-store-link)
+  (define-key org-mode-map (kbd "C-c a") 'org-agenda)
+  (define-key org-mode-map (kbd "C-c c") 'org-capture))
+
+;; evil key binding
+(evil-define-key 'normal org-mode-map
+  (kbd "<leader>a") 'org-agenda)
+#+end_src
+
 ** basics 
    #+BEGIN_SRC emacs-lisp
      (require 'org-tempo) ;; snippets and autocomplation
@@ -662,14 +988,6 @@
 
     #+end_src
     
-** org babel 
-   #+begin_src emacs-lisp
-(org-babel-do-load-languages 'org-babel-load-languages
-    '(
-        (shell . t)
-    )
-)
-   #+end_src
 ** org mode specific key binding
    #+begin_src emacs-lisp
 
@@ -684,28 +1002,16 @@
        (kbd "<leader>a") 'org-agenda)
    #+end_src
 * programming
-** code formatter 
-   #+begin_src emacs-lisp
-(use-package apheleia
-:ensure t 
-:config 
-(apheleia-global-mode +1))
-
-   #+end_src
-
-   #+RESULTS:
-   : t
-
-**  TODO TODO evil-mc  
+**  TODO evil-mc  
    - configure key binding 
      #+begin_src emacs-lisp
        (use-package evil-mc
+  :disabled t
        :ensure t 
        :config (evil-mc-mode 1))
      #+end_src 
 
      #+RESULTS:
-     : t
 
 ** indent highlight
    #+begin_src emacs-lisp
@@ -720,29 +1026,6 @@
    #+RESULTS:
    : t
 
-** undo 
-   #+begin_src emacs-lisp
-     (use-package undo-fu
-       :ensure t
-       :config
-       (global-unset-key (kbd "C-z"))
-       (global-set-key (kbd "C-z")   'undo-fu-only-undo)
-       (global-set-key (kbd "C-S-z") 'undo-fu-only-redo))
-
-   #+end_src
-
-   #+RESULTS:
-   : t
-
-** emacs-lisp
-   #+begin_src emacs-lisp
-     (defun electric-indent-mode-configure ()
-       "Delete newline (?\n) from `electric-indent-chars'."
-       (setq electric-indent-chars (delq 10 electric-indent-chars)))
-
-     (add-hook 'emacs-lisp-mode-hook #'electric-indent-mode-configure)
-   #+end_src
-**  TODO autocomplete
 ** flycheck 
    #+begin_src emacs-lisp
 (use-package flycheck
@@ -753,32 +1036,69 @@
 
    #+RESULTS:
 
-** python 
+** emacs-lisp
    #+begin_src emacs-lisp
-(use-package elpy
-  :ensure t
-  :init
-  (elpy-enable))
+     (defun electric-indent-mode-configure ()
+       "Delete newline (?\n) from `electric-indent-chars'."
+       (setq electric-indent-chars (delq 10 electric-indent-chars)))
+
+     (add-hook 'emacs-lisp-mode-hook #'electric-indent-mode-configure)
+   #+end_src
+** lsp mode
+   #+begin_src emacs-lisp
+     (use-package lsp-mode
+       :ensure t
+       :init
+       ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+       (setq lsp-keymap-prefix "C-c l")
+       :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+	      (python-mode . lsp)
+	      ;; if you want which-key integration
+	      (lsp-mode . lsp-enable-which-key-integration))
+       :commands (lsp lsp-deferred)
+       :config
+       (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
+
+
+     (use-package lsp-ivy 
+       :ensure t
+       :commands lsp-ivy-workspace-symbol)
+     (use-package dap-mode
+       :ensure t )
 
    #+end_src
-* magit
-  #+begin_src emacs-lisp
-    (use-package magit
-      :ensure t
-      :config 
-      (global-set-key (kbd "C-c g") 'magit-file-dispatch))
+** Languages 
+*** Javascript, React 
+    #+begin_src emacs-lisp
+ (with-eval-after-load 'js
+   (define-key js-mode-map (kbd "M-.") nil))
+    #+end_src
+*** java 
+    #+begin_src emacs-lisp
+ (require 'lsp-java)
+ (add-hook 'java-mode-hook #'lsp)
+    #+end_src
+*** bash 
+    #+begin_src emacs-lisp
+ (add-hook 'sh-mode-hook #'lsp)
+    #+end_src
+*** dockerfiles 
+    #+begin_src emacs-lisp
+ ;;(add-hook sh-mode-hook #'lsp)
+    #+end_src
+*** python 
+    #+begin_src emacs-lisp
 
-    (use-package git-gutter 
-      :ensure t 
-      :config 
-      (global-git-gutter-mode +1))
+      ;;(with-eval-after-load 'python
+      ;;(define-key python-mode-map (kbd "H-x") #'python-shell-send-region))
+      (evil-define-key 'normal python-mode-map
+	(kbd "<leader>e") 'python-shell-send-buffer)
+    #+end_src
 
-  #+end_src
+    #+RESULTS:
 
-  #+RESULTS:
-  : t
-
-* latex 
+* documenting
+** latex 
 ** basic configuration and packages setup
    #+begin_src emacs-lisp
      ;; enable spell checking in latex mode 
@@ -793,9 +1113,7 @@
        (setq pdf-annot-activate-created-annotations t)
        (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
        (define-key pdf-view-mode-map (kbd "C-r") 'isearch-backward)
-       (add-hook 'pdf-view-mode-hook (lambda ()
-				       (bms/pdf-midnite-amber))) ; automatically turns on midnight-mode for pdfs
-       )
+       (add-hook 'pdf-view-mode-hook (lambda () (bms/pdf-midnite-amber))))
 
      (use-package tex
        :ensure auctex
@@ -806,12 +1124,11 @@
        (setq TeX-auto-save t)
        (setq TeX-parse-self t)
        (setq reftex-plug-into-AUCTeX t)
-       ;;(setq-default TeX-master "paper.tex")
-       ;;(pdf-tools-install)
-       ;;(setq TeX-view-program-selection '((output-pdf "PDF Tools") TeX-source-correlate-start-server t)
+       (setq-default TeX-master "main.tex")
+       (pdf-tools-install)
+       (setq TeX-view-program-selection '((output-pdf "PDF Tools") TeX-source-correlate-start-server t))
        ;; Update PDF buffers after successful LaTeX runs
-       ;;(add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
-       )
+       (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer))
 
 
      (use-package latex-extra
@@ -825,6 +1142,7 @@
      ;;   :config
      ;;   (auctex-latexmk-setup)
      ;;   (setq auctex-latexmk-inherit-TeX-PDF-mode t))
+
 
      (use-package company-auctex
        :ensure t
@@ -853,6 +1171,11 @@
 
      (add-hook 'LaTeX-mode-hook 'my-latex-mode-setup)
 
+
+     (add-hook 'LaTeX-mode-hook #'lsp)
+
+     (setq lsp-latex-texlab-executable "/home/moamen/.cargo/bin/texlab")
+
    #+end_src
 
   #+RESULTS:
@@ -868,7 +1191,7 @@
 	 (kbd "<leader>s") 'LaTeX-section
 	 (kbd "<leader>m") 'TeX-insert-macro)
      #+end_src
-*  TODO reveal.js
+** reveal.js
 - default configuration for reveal.js
   #+begin_src emacs-lisp
 (use-package ox-reveal
@@ -893,10 +1216,3 @@
 
    #+RESULTS:
    : t 
-* packages i should try 
-- avy : jump to word
-- straight : package manager
-- macrostop ( macro expander ) 
-  
-* Learning 
-** use-package 

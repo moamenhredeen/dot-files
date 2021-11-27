@@ -66,3 +66,13 @@ alias syss='sudo systemctl status'
 alias sysr='sudo systemctl start'
 
 
+alias lg='lazygit'
+
+alias pacmanr='sudo pacman -R'
+
+alias pacmanq='sudo pacman -Q'
+
+alias pacmanu='sudo pacman -Qtdq'
+
+alias pacmanc='sudo pacman -R $(pacman -Qtdq)'
+
