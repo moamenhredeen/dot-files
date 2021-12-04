@@ -33,8 +33,13 @@ nmap <a-k> 15gk
 " set leader key
 let mapleader = " "
 
+" change font size
+nmap + :action EditorIncreaseFontSize<CR>
+nmap - :action EditorDecreaseFontSize<CR>
+nmap <leader>= :action EditorResetFontSize<CR>
+
 " faster 
-nmap <leader>q :action CloseEditor<cr>
+nmap <leader>q :q!<cr>
 nmap <leader>Q :action CloseAllEditors<cr>
 nmap <leader>w :action SaveAll<cr>
 nmap <leader>x :wq<cr>
@@ -45,6 +50,7 @@ nmap <leader>X :wQ<cr>
 nmap <leader>b :action RecentFiles<cr>
 nmap <leader>a :action RecentChangedFiles<cr>
 nmap <leader>nf :action GotoFile<cr>
+nmap <leader>f :action GotoFile<cr>
 nmap <leader>nc :action GotoClass<cr>
 nmap <leader>ns :action GotoSymbol<cr>
 nmap <leader>no :action SelectIn<cr>
@@ -59,7 +65,7 @@ nmap <leader>su :action Unsplit<cr>
 nmap <leader>sq :action UnsplitAll<cr>
 
 " code actions
-nmap <leader>f :action ReformatCode<cr>
+nmap <leader>i :action ReformatCode<cr>
 nmap <leader>gd :action GotoDeclaration<cr>
 nmap <leader>gi :action GotoImplementation<cr>
 nmap <leader>gu :action FindUsages<cr>
@@ -81,6 +87,7 @@ nmap <leader>ri :action OptimizeImports<cr>
 
 " Search
 nmap / :action Find<cr>
+vmap / :action Find<cr>
 nmap <leader>\ :action FindInPath<cr>
 
 " comments

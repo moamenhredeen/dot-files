@@ -11,6 +11,7 @@
 	s = switch 
 	sc = switch -c 
 	b = branch 
+	co = checkout 
 [core]
 	pager = 
 	editor = nvim

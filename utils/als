@@ -43,9 +43,7 @@ def list_aliases():
                 alias_action=alias[1].split('=')[1] + ' '.join(alias[2:])
                 print('\t' + alias_name + '\t\t' + alias_action, end='')
 
-
-
-### entry point 
+### entry point
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument( '-a', '--add-alias', nargs='*' )
@@ -62,6 +60,7 @@ def main():
         remove_alias(args.remove_alias)
     elif args.list_aliases: 
         list_aliases()
+
 
 if __name__ == '__main__':
     main()

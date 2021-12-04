@@ -7,16 +7,21 @@
     (require 'package)
     (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
     (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+    (add-to-list 'package-archives '("elpa" . "https://elpa.gnu.org/packages/") t)
     ;;(add-to-list 'load-path "~/.emacs.d/site-lisp")
     (package-initialize)
 
 
   #+END_SRC
+
+  #+RESULTS:
+
 * customization
 ** basics
    #+BEGIN_SRC emacs-lisp
-     (load-theme 'gruvbox 1)
+     (load-theme 'jetbrains-darcula 1)
      (custom-set-faces
+      '(default ((t (:height 98 :width normal :foundry "unknown" :family "Fira Code"))))
       '(region ((t ( :background "#44000D" :weight bold))))
       '(cursor ((t (:background "#C6DE41" :foreground "black"))))
       '(hl-line  ((t (  :background "#1D1D00"))))
@@ -88,15 +93,22 @@
      ;;(setq display-line-numbers-type 'relative)
 
      ;; Default Frame
-     (setq initial-frame-alist
-	   '((left-margin-width . 10)
-	     (menu-bar-lines . 0)
-	     (tool-bar-lines . 0)
-	     (horizontal-scroll-bars . nil)
-	     (vertical-scroll-bars . nil)))
+     (add-to-list 'initial-frame-alist '(fullscreen . maximized))
+     ;; (setq initial-frame-alist
+     ;; 	'((left-margin-width . 10)
+     ;; 	  (menu-bar-lines . 0)
+     ;; 	  (tool-bar-lines . 0)
+     ;; 	  (horizontal-scroll-bars . nil)
+     ;; 	  (vertical-scroll-bars . nil)))
 
      ;; Don't display initial messages
-     (setq initial-scratch-message (concat "Hi Moamen, Wie gehts dir heute ? \nHeute ist der "(format-time-string "%A %e %B" (current-time)) ))
+     (setq initial-scratch-message "
+	  ██╗  ██╗███████╗██╗     ██╗      ██████╗     ███╗   ███╗ ██████╗  █████╗ ███╗   ███╗███████╗███╗   ██╗
+	  ██║  ██║██╔════╝██║     ██║     ██╔═══██╗    ████╗ ████║██╔═══██╗██╔══██╗████╗ ████║██╔════╝████╗  ██║
+	  ███████║█████╗  ██║     ██║     ██║   ██║    ██╔████╔██║██║   ██║███████║██╔████╔██║█████╗  ██╔██╗ ██║
+	  ██╔══██║██╔══╝  ██║     ██║     ██║   ██║    ██║╚██╔╝██║██║   ██║██╔══██║██║╚██╔╝██║██╔══╝  ██║╚██╗██║
+	  ██║  ██║███████╗███████╗███████╗╚██████╔╝    ██║ ╚═╝ ██║╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗██║ ╚████║
+	  ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝ ╚═════╝     ╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚═╝  ╚═══╝")
      (setq initial-major-mode 'org-mode)
      (setq inhibit-startup-screen t)
      (setq inhibit-startup-echo-area-message "Hi Moamen :)")
@@ -278,21 +290,19 @@
    #+BEGIN_SRC emacs-lisp
      ;; emacs key-binding
      (global-set-key (kbd "C-c j") 'shell-jump-to-current-directory)
-     (global-set-key (kbd "M-o")  'other-window)        ; change quickly between windows, default C-x o
-     (global-set-key (kbd "C-c c") (quote compile))      ; compile in buffers directory, usually via 'make'
-     ;;(global-set-key (kbd "C-c p") 'replace-string)      ; query for find/replace and replace all
+     (global-set-key (kbd "M-o")  'ace-window)        ; change quickly between windows, default C-x o
      (global-set-key (kbd "C-x C-b") 'ibuffer)      
-     ;;(global-set-key (kbd "C-c C-l") 'auto-fill-mode)      ; toggle whether emacs wraps/newlines text or not
 
      ;; evil keybinding
-     (define-key key-translation-map (kbd "ESC") (kbd "C-g"))
+     (define-key key-translation-map (kbd "ESC") 'keyboard-quit)
      (evil-set-leader 'normal (kbd "SPC"))
-     ;; windows 
+     (evil-set-leader 'visual (kbd "SPC"))
+     ;; windows and buffers
      (evil-define-key 'normal 'global (kbd "<leader>0") 'delete-window)
      (evil-define-key 'normal 'global (kbd "<leader>1") 'delete-other-windows)
      (evil-define-key 'normal 'global (kbd "<leader>q") 'delete-window)
      (evil-define-key 'normal 'global (kbd "<leader>w") 'save-buffer)
-     (evil-define-key 'normal 'global (kbd "<leader>x") 'evil-save-modified-and-close)
+     ;;(evil-define-key 'normal 'global (kbd "<leader>x") 'evil-save-modified-and-close)
      (evil-define-key 'normal 'global (kbd "<leader>b") 'ivy-switch-buffer)
      (evil-define-key 'normal 'global (kbd "<leader>i") 'ibuffer)
      (evil-define-key 'normal 'global (kbd "<leader>v") 'split-window-horizontally)
@@ -301,7 +311,7 @@
      (evil-define-key 'normal 'global (kbd "<leader>f") 'counsel-find-file)
      ;; magit
      (evil-define-key 'normal 'global (kbd "<leader>g") '(lambda () (interactive) (magit-status)))
-     ;; strings 
+     ;; refactoring 
      (evil-define-key 'normal 'global (kbd "<leader>r") 'replace-string)
 
      ;; not nessesary 
@@ -348,7 +358,8 @@
        :bind
        (("M-y" . counsel-yank-pop)
 	:map ivy-minibuffer-map
-	("M-y" . ivy-next-line)))
+	("M-j" . ivy-next-line)
+	("M-k" . ivy-previous-line)))
 
      (use-package ivy
        :ensure t
@@ -371,12 +382,16 @@
        :config
        (progn
 	 (ivy-mode 1)
-	 (setq ivy-use-virtual-buffers t)
+	 (setq ivy-use-virtual-buffers t) ;; show recent buffers
 	 (setq ivy-display-style 'fancy)
 	 (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
 	 ))
 
    #+END_SRC
+
+   #+RESULTS:
+   : counsel-find-file
+
 ** yasnippet
    #+BEGIN_SRC emacs-lisp
      (use-package yasnippet
@@ -444,6 +459,19 @@
 
   #+RESULTS:
   : t
+
+** nerd commenter
+   #+begin_src emacs-lisp
+     (use-package evil-nerd-commenter
+       :ensure t )
+     ;; evil key binding
+     (evil-define-key nil 'global (kbd "<leader>ci") 'evilnc-comment-or-uncomment-lines)
+     (evil-define-key nil 'global (kbd "<leader>cc") 'evilnc-copy-and-comment-lines)
+     (evil-define-key nil 'global (kbd "<leader>cp") 'evilnc-comment-or-uncomment-paragraphs)
+     (evil-define-key nil 'global (kbd "<leader>cr") 'comment-or-uncomment-region)
+   #+end_src
+
+   #+RESULTS:
 
 * Emacs Modes 
 ** dired 
@@ -1099,7 +1127,7 @@
 
 * documenting
 ** latex 
-** basic configuration and packages setup
+*** basic configuration and packages setup
    #+begin_src emacs-lisp
      ;; enable spell checking in latex mode 
      (add-hook 'LaTeX-mode-hook 'flyspell-mode)
@@ -1161,7 +1189,8 @@
        (setq reftex-cite-prompt-optional-args t)) ;; Prompt for empty optional arguments in cite
 
      (use-package company-reftex 
-       :ensure t)
+       :ensure t
+       )
 
      ;; local configuration for TeX modes
      (defun my-latex-mode-setup ()
@@ -1172,25 +1201,36 @@
      (add-hook 'LaTeX-mode-hook 'my-latex-mode-setup)
 
 
-     (add-hook 'LaTeX-mode-hook #'lsp)
-
-     (setq lsp-latex-texlab-executable "/home/moamen/.cargo/bin/texlab")
+     ;;(add-hook 'LaTeX-mode-hook #'lsp)
+     ;;(setq lsp-latex-texlab-executable "/home/moamen/.cargo/bin/texlab")
 
    #+end_src
 
   #+RESULTS:
-  | preview-mode-setup | my-latex-mode-setup | turn-on-reftex | latex-extra-mode | flyspell-mode |
-** key binding
+  | preview-mode-setup | lsp | my-latex-mode-setup | turn-on-reftex | latex-extra-mode | flyspell-mode |
+*** key binding
      #+begin_src emacs-lisp
        ;; (with-eval-after-load 'latex
        ;; 	 (define-key LaTeX-mode-map (kbd "<S-return>") 'TeX-insert-macro))
 
        (evil-define-key 'normal LaTeX-mode-map
 	 (kbd "TAB") nil
-	 (kbd "<leader>e") 'LaTeX-environment
-	 (kbd "<leader>s") 'LaTeX-section
-	 (kbd "<leader>m") 'TeX-insert-macro)
+
+	 (kbd "<leader>W") 'TeX-save-document
+	 (kbd "<leader>m") 'TeX-home-buffer
+
+	 (kbd "<leader>t") 'reftex-toc
+	 (kbd "<leader>u") 'reftex-toc-Rescan
+
+	 (kbd "<leader>ac") 'reftex-citation
+	 (kbd "<leader>al") 'reftex-label
+	 (kbd "<leader>ar") 'reftex-reference
+
+	 (kbd "<leader>am") 'TeX-insert-macro)
      #+end_src
+
+     #+RESULTS:
+
 ** reveal.js
 - default configuration for reveal.js
   #+begin_src emacs-lisp
@@ -1202,7 +1242,7 @@
   #+end_src
 
   #+RESULTS:
-
+  
 * FUN :) 
 ** wittrin 
    #+begin_src emacs-lisp
@@ -1216,3 +1256,20 @@
 
    #+RESULTS:
    : t 
+
+* Keybinding docs 
+|---------+--------+------------------------------------------------|
+| *key*   | mode   | *action*                                       |
+|---------+--------+------------------------------------------------|
+| SPC     | global | (space) vim leader key                         |
+| SPC w   | global | save                                           |
+| SPC q   | global | close current window                           |
+| SPC i   | global | open interactive buffers                       |
+| SPC b   | global | recent files                                   |
+| SPC f   | global | find file                                      |
+| SPC r   | global | prefix for refactoring actions                 |
+| SPC r r | global | replace string                                 |
+| SPC c   | global | prefix for comment  actions                    |
+| SPC p   | global | prefix for projectile ( project level actions) |
+| SPC g   | global | prefix for magit                               |
+|---------+--------+------------------------------------------------|
