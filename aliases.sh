@@ -12,7 +12,7 @@ alias tlmgr='/usr/share/texmf-dist/scripts/texlive/tlmgr.pl --usermode'
 #+ALIAS_SECTION PYTHON
 alias py='python'
 alias venv='python -m venv'
-alias pyd='source ~/.python-envs/default/bin/activate'
+alias pyalg='source ~/.python-envs/algorithms/bin/activate'
 alias pyls='ls -l ~/.python-envs/'
 
 #+ALIAS_SECTION TMUX

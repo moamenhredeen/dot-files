@@ -48,7 +48,7 @@ nmap <leader>X :wQ<cr>
 
 " Windows and Navigation
 nmap <leader>b :action RecentFiles<cr>
-nmap <leader>a :action RecentChangedFiles<cr>
+nmap <leader>e :action RecentChangedFiles<cr>
 nmap <leader>nf :action GotoFile<cr>
 nmap <leader>f :action GotoFile<cr>
 nmap <leader>nc :action GotoClass<cr>
@@ -74,9 +74,9 @@ nmap <leader>gn :action Forward<cr>
 
 
 " Errors
-nmap <leader>eh :action ShowErrorDescription<cr>
-nmap <leader>ep :action GotoPreviousError<cr>
-nmap <leader>en :action GotoNextError<cr>
+"nmap <leader>eh :action ShowErrorDescription<cr>
+"nmap <leader>ep :action GotoPreviousError<cr>
+"nmap <leader>en :action GotoNextError<cr>
 
 " Refactorings
 vmap T :action Refactorings.QuickListPopupAction<cr>
@@ -103,3 +103,5 @@ nmap <leader>ya :action Annotate<cr>
 nmap <leader>yl :action Vcs.Show.Log<cr>
 nmap <leader>yd :action Compare.LastVersion<cr>
 nmap <leader>yr :action Git.ResolveConflicts<cr>
+
+nmap <leader>a :action ToggleZenMode<cr>
