@@ -16,12 +16,9 @@
 #........_\/////////////____\///________\///____\///////////_____\///________\///__#
 ####################################################################################
 
-# TASKS : 
-# TODO : aliases manager validate user input 
-# TODO : aliases manager validate deleted aliases
 
 # constants (  )
-ALIASES_FILE="/home/moamen/new-git/dot-files/aliases.sh"
+ALIASES_FILE="~/.aliases"
 
 
 ### customizations
