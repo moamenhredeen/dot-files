@@ -1,0 +1,8 @@
+require('configure-plugins.language-servers')
+require('configure-plugins.cmp-setup')
+require('configure-plugins.lualine-setup')
+require('configure-plugins.gitsigns-setup')
+require('configure-plugins.telescope-setup')
+require('configure-plugins.neogit-setup')
+require('configure-plugins.nvimtree-setup')
+require('configure-plugins.toggleterm-setup')

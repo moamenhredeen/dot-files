@@ -11,7 +11,8 @@ local servers = {
 	'angularls',
 	'texlab',
 	'bashls',
-	'eslint'
+	'eslint',
+	'gopls'
 }
 
 local on_attach = function(client, bufnr)

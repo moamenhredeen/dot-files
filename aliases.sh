@@ -12,8 +12,9 @@ alias tlmgr='/usr/share/texmf-dist/scripts/texlive/tlmgr.pl --usermode'
 #+ALIAS_SECTION PYTHON
 alias py='python'
 alias venv='python -m venv'
-alias pyalg='source ~/.python-envs/algorithms/bin/activate'
-alias pyls='ls -l ~/.python-envs/'
+alias pymain='source ~/.python-environments/main/bin/activate'
+alias pyalgo='source ~/.python-environments/algo/bin/activate'
+alias pyls='ls -l ~/.python-environments/'
 
 #+ALIAS_SECTION TMUX
 alias ta='tmux attach -t'
@@ -56,23 +57,21 @@ alias mvnt='mvn test'
 #+ALIAS_SECTION WINDOWS STYLE
 alias cls='clear'
 
+
+#+ALIAS_SECTION ARCHLINUX
+alias pacmani='sudo pacman -S'
+alias pacmans='pacman -Ss'
+alias pacmanr='sudo pacman -R'
+alias pacmanq='sudo pacman -Qs'
+alias pacmanu='sudo pacman -Qtdq'
+alias pacmanc='sudo pacman -R $(pacman -Qtdq)'
+
 ############################################################################
 #+ALIAS_SECTION MANAGED
 alias tarf='tar -xzvf'
-alias pacmani='sudo pacman -S'
-alias pacmans='sudo pacman -Ss'
 alias docker='sudo docker'
 alias syss='sudo systemctl status'
 alias sysr='sudo systemctl start'
-
-
 alias lg='lazygit'
 
-alias pacmanr='sudo pacman -R'
-
-alias pacmanq='sudo pacman -Q'
-
-alias pacmanu='sudo pacman -Qtdq'
-
-alias pacmanc='sudo pacman -R $(pacman -Qtdq)'
 

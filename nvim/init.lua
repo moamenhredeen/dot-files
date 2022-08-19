@@ -1,19 +1,15 @@
--- load plugins
-require('install-packer')
-require('plugins')
 
--- load ui configuration
-require('appearance')
+local configuration_steps = {
+'install-packer',
+'install-plugins',
+'configure-plugins',
+'customize-ui',
+'register-autocmds',
+'map-keys',
+}
 
--- load lsp configuration
-require('language-servers')
-require('cmp-setup')
-require('lualine-setup')
-require('telescope-setup')
-require('telescope-custom')
 
--- autocommands 
-require('autocommands')
+for _, step in ipairs(configuration_steps) do
+	require(step)
+end
 
--- load keymappign
-require('keymapping')
