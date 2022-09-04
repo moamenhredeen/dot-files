@@ -75,3 +75,4 @@ alias sysr='sudo systemctl start'
 alias lg='lazygit'
 
 
+alias gw='./gradlew'
