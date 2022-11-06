@@ -1,38 +1,41 @@
 vim.g.mapleader = ' '
 
-
 -- define key mapping
 local keymapping = {
 	['vim'] = {
-		['<leader>w'] 	= ':w',
-		['<leader>x'] 	= ':x',
-		['<leader>q'] 	= ':q!',
-		['<C-j>'] 			= ':wincmd j',
-		['<C-k>'] 			= ':wincmd k',
-		['<C-h>'] 			= ':wincmd h',
-		['<C-l>'] 			= ':wincmd l',
-	 	['<leader>e'] 	= 'NvimTreeToggle',
+		['<leader>w'] 	= {command = ':w', 							mode = {'n'}},
+		['<leader>x'] 	= {command = ':x', 							mode = {'n'}},
+		['<leader>q'] 	= {command = ':q!', 						mode = {'n'}},
+		['<C-j>'] 			= {command = ':wincmd j', 			mode = {'n', 't'}},
+		['<C-k>'] 			= {command = ':wincmd k', 			mode = {'n', 't'}},
+		['<C-h>'] 			= {command = ':wincmd h', 			mode = {'n', 't'}},
+		['<C-l>'] 			= {command = ':wincmd l', 			mode = {'n', 't'}},
+		['<leader>e'] 	= {command = 'NvimTreeToggle', 	mode = {'n'}},
+		['<leader>t'] 	= {command = 'ToggleTerm', 			mode =  {'n'}}
 	},
 
 	['telescope.builtin'] = {
-		['<leader>b'] 	= 'buffers',
-		['<leader>f'] 	= 'git_files',
-		['<leader>s'] 	= 'live_grep',
-		['<leader>ab'] 	= 'git_branches',
-		['<leader>ac'] 	= 'git_commits',
-		['<leader>as'] 	= 'git_status',
-		['<C-P>'] 			= 'commands',
-		--['<C-H>'] 			= 'help_tags',
-		['<C-N>'] 			= 'man_pages',
+		['<leader>b'] 	= {command = 'buffers', 				mode = {'n'}},
+		['<leader>f'] 	= {command = 'git_files', 			mode = {'n'}},
+		['<leader>s'] 	= {command = 'live_grep', 			mode = {'n'}},
+		['<leader>ab'] 	= {command = 'git_branches', 		mode = {'n'}},
+		['<leader>ac'] 	= {command = 'git_commits', 		mode = {'n'}},
+		['<leader>as'] 	= {command = 'git_status', 			mode = {'n'}},
+		['<leader>ap'] 	= {command = 'commands', 				mode = {'n'}},
+		['<leader>am'] 	= {command = 'man_pages', 			mode = {'n'}},
+		['<leader>ah'] 	= {command = 'help_tags', 			mode =  {'n'}},
+		-- ['<C-P>'] 		= {command = 'commands', 				mode = {'n'}},
+		-- ['<C-H>'] 		= 'help_tags',
+		-- ['<C-N>'] 		= {command = 'man_pages', 			mode = {'n'}},
 	},
 
 	['configure-plugins.telescope-custom'] = {
-		['<leader>ad'] 	= 'edit_dotfiles',
+		['<leader>ad'] 	= {command = 'edit_dotfiles', 	mode = {'n'}},
 	},
 
 	['utils'] = {
-		['<leader>#'] 	= 'openNotesFile'
-	}
+		['<leader>#'] 	= {command = 'openNotesFile', 	mode = {'n'}}
+	},
 }
 
 
@@ -40,26 +43,15 @@ local keymapping = {
 local map = vim.keymap.set
 local options = {noremap = true}
 for module, keymapping_table in pairs(keymapping) do
-	for key, fn in pairs(keymapping_table) do
+	for key, command in pairs(keymapping_table) do
 		if module == 'vim' then
-			map('n', key, function() vim.cmd(fn) end, options)
+			for _, mode in ipairs(command['mode']) do
+				map(mode, key, function() vim.cmd(command['command']) end, options)
+			end
 		else
-		 	map('n', key, require(module)[fn], options)
+			for _, mode  in ipairs(command['mode']) do
+				map(mode, key, require(module)[command['command']], options)
+			end
 		end
 	end
 end
-
--- TODO refactor this 
--- terminal key mapping (register only when open the terminal (autocmd) )
-function _G.set_terminal_keymaps()
-  local opts = {buffer = 0}
-  vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
-  vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], opts)
-  vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], opts)
-  vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], opts)
-  vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], opts)
-end
-
--- if you only want these mappings for toggle term use term://*toggleterm#* instead
-vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
-
