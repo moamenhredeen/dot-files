@@ -49,7 +49,7 @@ nmap <leader>X :wQ<cr>
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " Windows
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-nmap <leader>e :action ToggleZenMode<cr>
+nmap <leader>e :action ToggleDistractionFreeMode<cr>
 nmap <leader>b :action RecentFiles<cr>
 nmap <leader>f :action GotoFile<cr>
 nmap <leader>t :action GotoClass<cr>
@@ -59,6 +59,7 @@ nmap <leader>s :action Find<cr>
 nmap <leader>ab :action ShowBookmarks<cr>
 nmap <leader>as :action GotoSymbol<cr>
 nmap <leader>al :action RecentLocations<cr>
+nmap gm :action MainMenu<cr>
 
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " code navigation
