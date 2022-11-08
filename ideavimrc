@@ -59,6 +59,7 @@ nmap <leader>s :action Find<cr>
 nmap <leader>ab :action ShowBookmarks<cr>
 nmap <leader>as :action GotoSymbol<cr>
 nmap <leader>al :action RecentLocations<cr>
+nmap gm :action MainMenu<cr>
 
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " code navigation
