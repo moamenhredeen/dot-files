@@ -1,8 +1,9 @@
 # My dotfiles
 
-## Emacs
+## Emacs (Deprecated)
 - init.el
 - config.org
+
 
 ## Neovim
 - init.el
@@ -18,3 +19,6 @@
 
 ## bash
 - my_bash_config.sh
+
+# init.el 
+the new emacs configuration
