@@ -480,6 +480,7 @@
     "w"       'save-buffer
     "f"       'find-file
     "b"       'consult-buffer
+    "q"       'delete-window
     ;;"s"       'my/consult-ripgrep-current-file
     "s"       'my/consult-ripgrep-current-file
     "k"       'magit-status
@@ -493,7 +494,13 @@
     ;; org roam key binding
     "rf"      'org-roam-node-find
     "rb"      'org-roam-buffer
-    "rt"      'org-roam-buffer-toggle)
+    "rt"      'org-roam-buffer-toggle
+
+    ;; org journal key binding
+    "jn"      'org-journal-next-entry
+    "jp"      'org-journal-previous-entry
+    "ji"      'org-journal-new-entry
+    "js"      'org-journal-search)
 
   ;; Org Mode Keybindings
   (my-leader-def
@@ -511,6 +518,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org mode customizations
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package org
+  :config
+  (setq org-src-fontify-natively t
+        org-src-window-setup 'current-window ;; edit in current window
+        org-src-strip-leading-and-trailing-blank-lines t
+        org-src-preserve-indentation t;; do not put two spaces on the left
+        org-edit-src-content-indentation 0
+        org-src-tab-acts-natively t)
+  (add-to-list 'org-agenda-files (file-name-concat (expand-file-name (getenv "USERPROFILE"))"git-repos" "main")))
+
 (use-package org-bullets
   :ensure t
   :mode ("\\.org\\'" . org-mode)
@@ -521,29 +539,29 @@
   (setq org-ellipsis " ⤵")
   (setq org-todo-keywords '((sequence "TODO" "NEXT" "INPROGRESS" "|" "DONE" "BLOCKED")))
   (setq org-todo-keyword-faces
-	  '(("TODO" . (:foreground "#cc241d" :weight bold :inverse-video t))
-	    ("NEXT" . (:foreground "#cc241d" :weight bold :inverse-video t))
-	    ("INPROGRESS" . (:foreground "#d65d0e" :weight bold :inverse-video t))
-	    ("DONE" . (:foreground "#98971a" :weight bold :inverse-video t))
-	    ("BLOCKED" . (:foreground "#ebdbb2" :weight bold :inverse-video t))))
+	      '(("TODO" . (:foreground "#cc241d" :weight bold :inverse-video t))
+	        ("NEXT" . (:foreground "#cc241d" :weight bold :inverse-video t))
+	        ("INPROGRESS" . (:foreground "#d65d0e" :weight bold :inverse-video t))
+	        ("DONE" . (:foreground "#98971a" :weight bold :inverse-video t))
+	        ("BLOCKED" . (:foreground "#ebdbb2" :weight bold :inverse-video t))))
 
-(setq org-link-abbrev-alist
-  '(("ggle" . "http://www.google.com/search?q=%s")
-    ("gmap" . "http://maps.google.com/maps?q=%s")
-    ("omap" . "http://nominatim.openstreetmap.org/search?q=%s&polygon=1"))))
-
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-
-(setq org-hide-leading-stars t)
-(setq org-src-fontify-natively t)
-(global-prettify-symbols-mode t)
+  (setq org-link-abbrev-alist
+        '(("ggle" . "http://www.google.com/search?q=%s")
+          ("gmap" . "http://maps.google.com/maps?q=%s")
+          ("omap" . "http://nominatim.openstreetmap.org/search?q=%s&polygon=1")))
+  (setq org-hide-leading-stars t)
+  (setq org-src-fontify-natively t)
+  (global-prettify-symbols-mode t))
 
 
-(use-package ox-reveal :ensure t)
-(setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
-(setq org-reveal-mathjax t)
-(require 'ox-md)
-(require 'ox-beamer)
+
+;;(require 'ox-md)
+;;(require 'ox-beamer)
+;; (use-package ox-reveal
+;;   :ensure t
+;;   :custom
+;;   (org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
+;;   (org-reveal-mathjax t))
 
 (use-package org-roam
   :ensure t
@@ -579,7 +597,20 @@
         org-roam-ui-open-on-start t))
 
 (use-package org-journal
-  :ensure t)
+  :ensure t
+  :defer t
+  :init
+  ;; Change default prefix key; needs to be set before loading org-journal
+  (setq org-journal-prefix-key "C-c j ")
+  :custom
+  (org-journal-dir (file-name-concat (expand-file-name (getenv "USERPROFILE"))"git-repos" "main" "journal"))
+  (org-journal-agenda-integration t)
+  (org-journal-file-format "%Y-%m.org")
+  (org-journal-file-type 'monthly)
+  :config
+  ;; TODO: do i need this ?? 
+  (setq org-agenda-file-regexp "\\`\\\([^.].*\\.org\\\|[0-9]\\\{8\\\}\\\(\\.gpg\\\)?\\\)\\'")
+  (add-to-list 'org-agenda-files org-journal-dir))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; auto generated
@@ -589,6 +620,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(org-agenda-files '("c:/Users/moame/git-repos/main/plan.org"))
  '(package-selected-packages
    '(org-journal org-roam-ui embark-consult embark org-roam magit which-key general marginalia orderless evil-escape all-the-icons vertico-directory vertico evil-collection evil-org evil-surround evil ox-reveal doom-modeline gruvbox-theme use-package)))
 
@@ -597,5 +629,5 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:weight normal :height 150 :width normal))))
+ '(default ((t (:weight normal :height 150 :width normal :family "Cascadia Code"))))
  '(whitespace-tab ((t (:foreground "#636363")))))

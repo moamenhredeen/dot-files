@@ -71,6 +71,7 @@
 ;;(global-whitespace-mode) ; Enable whitespace mode everywhere
 ; END TABS CONFIG
 
+;; show line numbers
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Define and initialise package repositories
@@ -118,8 +119,7 @@
 (global-display-line-numbers-mode t)
 
 ;; Disable line numbers for some modes
-(dolist (mode '(org-mode-hook
-		  term-mode-hook
+(dolist (mode '(term-mode-hook
 		  shell-mode-hook
 		  treemacs-mode-hook
 		  eshell-mode-hook))
@@ -503,16 +503,30 @@
     "js"      'org-journal-search)
 
   ;; Org Mode Keybindings
+  (general-define-key
+   :keymaps  '(org-tree-slide-mode-map override)
+   :states   '(normal insert)
+   "<right>"     'org-tree-slide-move-next-tree
+   "<left>"     'org-tree-slide-move-previous-tree)
+
+  ;; Org Mode evil Keybindings
   (my-leader-def
     :states   'normal
     :keymaps  'org-mode-map
     "gh"      'consult-org-heading
     "y"       'org-store-link
     "p"       'org-insert-link
-
-    ;; org roam key binding
     "ri"      'org-roam-node-insert
-    "rs"      'org-roam-db-sync))
+    "rs"      'org-roam-db-sync)
+
+  ;; org mode local leader 
+  (general-create-definer my-local-leader-def
+    :prefix   "SPC l")
+
+  (my-local-leader-def
+    :states     'normal
+    :keymaps    '(org-mode-map org-tree-slide-mode-map)
+    "s"         'org-tree-slide-mode))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -521,6 +535,12 @@
 
 (use-package org
   :config
+  (setq org-src-fontify-natively t
+        org-src-window-setup 'current-window ;; edit in current window
+        org-src-strip-leading-and-trailing-blank-lines t
+        org-src-preserve-indentation t;; do not put two spaces on the left
+        org-edit-src-content-indentation 0
+        org-src-tab-acts-natively t)
   (add-to-list 'org-agenda-files (file-name-concat (expand-file-name (getenv "USERPROFILE"))"git-repos" "main")))
 
 (use-package org-bullets
@@ -606,6 +626,13 @@
   (setq org-agenda-file-regexp "\\`\\\([^.].*\\.org\\\|[0-9]\\\{8\\\}\\\(\\.gpg\\\)?\\\)\\'")
   (add-to-list 'org-agenda-files org-journal-dir))
 
+(use-package org-tree-slide
+  :ensure t
+  :custom
+  (org-tree-slide-heading-emphasis t)
+  (org-tree-slide-breadcrumbs "❯")
+  (org-tree-slide-indicator '(:next "   Next ❯" :previous "❮ Previous" :content "❮  CONTENT  ❯")))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; auto generated
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -616,12 +643,12 @@
  ;; If there is more than one, they won't work right.
  '(org-agenda-files '("c:/Users/moame/git-repos/main/plan.org"))
  '(package-selected-packages
-   '(org-journal org-roam-ui embark-consult embark org-roam magit which-key general marginalia orderless evil-escape all-the-icons vertico-directory vertico evil-collection evil-org evil-surround evil ox-reveal doom-modeline gruvbox-theme use-package)))
+   '(org-tree-slide epresent org-journal org-roam-ui embark-consult embark org-roam magit which-key general marginalia orderless evil-escape all-the-icons vertico-directory vertico evil-collection evil-org evil-surround evil ox-reveal doom-modeline gruvbox-theme use-package)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:weight normal :height 150 :width normal))))
+ '(default ((t (:weight normal :height 150 :width normal :family "Cascadia Code"))))
  '(whitespace-tab ((t (:foreground "#636363")))))
