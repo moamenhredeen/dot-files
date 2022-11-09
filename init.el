@@ -634,6 +634,62 @@
   (org-tree-slide-indicator '(:next "   Next ❯" :previous "❮ Previous" :content "❮  CONTENT  ❯")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; programming laguages 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; syntax heileighting 
+(use-package tree-sitter :ensure t)
+(use-package tree-sitter-langs :ensure t)
+(use-package tree-sitter-indent :ensure t)
+
+
+;; rust language 
+(use-package rust-mode
+  :ensure t
+  :defer t
+  :mode ("\\.rs\\'" . rust-mode)
+  :hook ((rust-mode . (lambda () (setq indent-tabs-mode nil)))
+         (rust-mode . (lambda () (prettify-symbols-mode))))
+  :config
+  (setq rust-format-on-save t))
+
+(use-package csharp-mode
+  :ensure t
+  :mode ("\\.cs\\'" . csharp-tree-sitter-mode))
+
+(use-package yasnippet
+  :ensure t
+  ;;:defer t
+  ;;:hook ((prog-mode . yas-minor-mode))
+  :config
+  (yas-global-mode 1))
+
+(use-package eglot
+  :ensure t
+  :defer t
+  :hook ((prog-mode . eglot)))
+
+(use-package company
+  :ensure t
+  :defer t
+  :hook (prog-mode . company-mode)
+  :config
+  (setq company-backends '((company-capf :with company-yasnippet :separate)
+                           (company-yasnippet :separate)))
+  (define-key company-active-map
+              (kbd "TAB")
+              #'company-complete-common-or-cycle)
+  (define-key company-active-map
+              (kbd "<backtab>")
+              (lambda ()
+                (interactive)
+                (company-complete-common-or-cycle -1))))
+
+(use-package yasnippet-snippets
+  :ensure t)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; auto generated
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (custom-set-variables
@@ -641,9 +697,11 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("443e2c3c4dd44510f0ea8247b438e834188dc1c6fb80785d83ad3628eadf9294" "da75eceab6bea9298e04ce5b4b07349f8c02da305734f7c0c8c6af7b5eaa9738" "251ed7ecd97af314cd77b07359a09da12dcd97be35e3ab761d4a92d8d8cf9a71" "b54376ec363568656d54578d28b95382854f62b74c32077821fdfd604268616a" "b99e334a4019a2caa71e1d6445fc346c6f074a05fcbb989800ecbe54474ae1b0" "be84a2e5c70f991051d4aaf0f049fa11c172e5d784727e0b525565bb1533ec78" "02f57ef0a20b7f61adce51445b68b2a7e832648ce2e7efb19d217b6454c1b644" "adaf421037f4ae6725aa9f5654a2ed49e2cd2765f71e19a7d26a454491b486eb" "944d52450c57b7cbba08f9b3d08095eb7a5541b0ecfb3a0a9ecd4a18f3c28948" "683b3fe1689da78a4e64d3ddfce90f2c19eb2d8ab1bab1738a63d8263119c3f4" "636b135e4b7c86ac41375da39ade929e2bd6439de8901f53f88fde7dd5ac3561" default))
  '(org-agenda-files '("c:/Users/moame/git-repos/main/plan.org"))
  '(package-selected-packages
-   '(org-tree-slide epresent org-journal org-roam-ui embark-consult embark org-roam magit which-key general marginalia orderless evil-escape all-the-icons vertico-directory vertico evil-collection evil-org evil-surround evil ox-reveal doom-modeline gruvbox-theme use-package)))
+   '(csharp-mode tree-sitter-indent yasnippet company eglot elgot rust-mode tree-sitter org-journal org-roam-ui embark-consult embark org-roam magit which-key general marginalia orderless evil-escape all-the-icons vertico-directory vertico evil-collection evil-org evil-surround evil ox-reveal doom-modeline gruvbox-theme use-package)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
