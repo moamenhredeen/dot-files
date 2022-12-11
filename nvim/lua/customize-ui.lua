@@ -1,7 +1,7 @@
 
 vim.opt.termguicolors = true
-vim.opt.background = "dark"
-vim.cmd('colorscheme gruvbox')
+--vim.opt.background = "dark"
+vim.cmd('colorscheme onedark')
 vim.opt.cursorline = true
 vim.opt.number = true
 vim.opt.tabstop = 2

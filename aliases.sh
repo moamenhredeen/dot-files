@@ -66,6 +66,12 @@ alias pacmanq='sudo pacman -Qs'
 alias pacmanu='sudo pacman -Qtdq'
 alias pacmanc='sudo pacman -R $(pacman -Qtdq)'
 
+
+#+ALIAS_SECTION TOOLS
+alias hh='hstr'
+alias bat='batcat'
+alias fd='fdfind'
+
 ############################################################################
 #+ALIAS_SECTION MANAGED
 alias tarf='tar -xzvf'

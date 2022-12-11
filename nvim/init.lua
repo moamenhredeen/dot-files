@@ -1,6 +1,5 @@
 
 local configuration_steps = {
-'install-packer',
 'install-plugins',
 'configure-plugins',
 'customize-ui',

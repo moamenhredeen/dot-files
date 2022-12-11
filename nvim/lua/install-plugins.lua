@@ -5,29 +5,17 @@ return require('packer').startup(function(use)
 	use 'wbthomason/packer.nvim'
 
  	-- gruvbox colorscheme 
-	use { "ellisonleao/gruvbox.nvim" }
+	use {'navarasu/onedark.nvim', 
+		config = function()
+			require("onedark").load()
+		end
+	}
 	use { 'TimUntersberger/neogit', requires = 'nvim-lua/plenary.nvim' }
-
-	use {
-  'lewis6991/gitsigns.nvim',
-	}
-
-	use {
-		'kyazdani42/nvim-tree.lua',
-		requires = {
-			'kyazdani42/nvim-web-devicons', -- optional, for file icons
-		},
-		tag = 'nightly' -- optional, updated every week. (see issue #1193)
-	}
-
+	use { 'lewis6991/gitsigns.nvim', }
+	use { 'kyazdani42/nvim-tree.lua', requires = { 'kyazdani42/nvim-web-devicons', tag = 'nightly' 	}}
 	use {"akinsho/toggleterm.nvim", tag = 'v2.*'}
-
-	use 'neovim/nvim-lspconfig' -- Configurations for Nvim LSP
-	use { 
-		'nvim-telescope/telescope.nvim',
-		tag = '0.1.0',
-		requires = { 'nvim-lua/plenary.nvim' }
-	}
+	use 'neovim/nvim-lspconfig'
+	use { 'nvim-telescope/telescope.nvim', tag = '0.1.0', requires = { 'nvim-lua/plenary.nvim' }}
 	use 'L3MON4D3/LuaSnip'
 	use 'onsails/lspkind.nvim'
 
@@ -40,20 +28,19 @@ return require('packer').startup(function(use)
 	use 'saadparwaiz1/cmp_luasnip'
 	use 'kdheepak/cmp-latex-symbols'
 
-	use {
-    'numToStr/Comment.nvim',
-    config = function()
-        require('Comment').setup()
-    end
+	use { 'numToStr/Comment.nvim',
+	    config = function()
+		require('Comment').setup()
+	    end
 	}
 
-	use {
-		"windwp/nvim-autopairs",
-    config = function() require("nvim-autopairs").setup {} end
+	use { "windwp/nvim-autopairs",
+	    config = function() 
+		    require("nvim-autopairs").setup {} 
+	    end
 	}
 
-	use {
-		'nvim-lualine/lualine.nvim',
+	use { 'nvim-lualine/lualine.nvim',
 		requires = { 'kyazdani42/nvim-web-devicons', opt = true }
 	}
 end)
