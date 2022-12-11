@@ -9,7 +9,7 @@
  '(custom-safe-themes
    '("735561d82728e28f275802fc875c3a2caf14d06f434604a7516c59d49120b163" default))
  '(package-selected-packages
-   '(org-bullets gruvbox-theme orderless typescript-mode lsp-mode vertico use-package)))
+   '(dap-mode yasnippet company rust-mode eglot org-bullets gruvbox-theme orderless typescript-mode lsp-mode vertico use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
