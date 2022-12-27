@@ -99,12 +99,13 @@
 ;; customize user interface
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq initial-scratch-message "
-██╗  ██╗██╗    ███╗   ███╗ ██████╗  █████╗ ███╗   ███╗███████╗███╗   ██╗
-██║  ██║██║    ████╗ ████║██╔═══██╗██╔══██╗████╗ ████║██╔════╝████╗  ██║
-███████║██║    ██╔████╔██║██║   ██║███████║██╔████╔██║█████╗  ██╔██╗ ██║
-██╔══██║██║    ██║╚██╔╝██║██║   ██║██╔══██║██║╚██╔╝██║██╔══╝  ██║╚██╗██║
-██║  ██║██║    ██║ ╚═╝ ██║╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗██║ ╚████║
-╚═╝  ╚═╝╚═╝    ╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚═╝  ╚═══╝")
+;; ██╗  ██╗██╗    ███╗   ███╗ ██████╗  █████╗ ███╗   ███╗███████╗███╗   ██╗
+;; ██║  ██║██║    ████╗ ████║██╔═══██╗██╔══██╗████╗ ████║██╔════╝████╗  ██║
+;; ███████║██║    ██╔████╔██║██║   ██║███████║██╔████╔██║█████╗  ██╔██╗ ██║
+;; ██╔══██║██║    ██║╚██╔╝██║██║   ██║██╔══██║██║╚██╔╝██║██╔══╝  ██║╚██╗██║
+;; ██║  ██║██║    ██║ ╚═╝ ██║╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗██║ ╚████║
+;; ╚═╝  ╚═╝╚═╝    ╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚═╝  ╚═══╝
+")
 
 
 ;; uesr interface centric
@@ -301,10 +302,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package org
   :config
-  (add-to-list 'org-agenda-files
-	       (file-name-concat
-		(expand-file-name
-		 (getenv "USERPROFILE"))"git-repos" "main"))
+  (add-to-list 'org-agenda-files (file-name-concat (getenv "HOME") "git-repos" "main"))
   (setq org-src-fontify-natively t
         org-src-window-setup 'current-window ;; edit in current window
         org-src-strip-leading-and-trailing-blank-lines t
@@ -312,6 +310,13 @@
         org-edit-src-content-indentation 0
         org-src-tab-acts-natively t))
 
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t) ;; Other languages
+   (shell . t)
+   ;; Python & Jupyter
+   (python . t)
+   (jupyter . t)))
 
 (use-package ox-latex
   :custom
@@ -366,7 +371,7 @@
   :ensure t
   :custom
   ;; make sure that the directory exists
-  (org-roam-directory (file-name-concat (expand-file-name (getenv "USERPROFILE"))"git-repos" "main" "org-roam"))
+  (org-roam-directory (file-name-concat (expand-file-name (getenv "HOME"))"git-repos" "main" "org-roam"))
   ;; define org roam templates
   (org-roam-capture-templates '(
     ("d" "default" plain "%?"
@@ -423,9 +428,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; syntax heileighting 
-(use-package tree-sitter :ensure t)
-(use-package tree-sitter-langs :ensure t)
-(use-package tree-sitter-indent :ensure t)
+(use-package tree-sitter
+  :ensure t)
+
+(use-package tree-sitter-langs
+  :ensure t)
+
+(use-package tree-sitter-indent
+  :ensure t)
 
 
 ;; rust language 
@@ -434,30 +444,66 @@
   :defer t
   :mode ("\\.rs\\'" . rust-mode)
   :hook ((rust-mode . (lambda () (setq indent-tabs-mode nil)))
-         (rust-mode . (lambda () (prettify-symbols-mode))))
+        (rust-mode . (lambda () (prettify-symbols-mode))))
   :config
   (setq rust-format-on-save t))
 
 (use-package csharp-mode
   :ensure t
+  :defer t
   :mode ("\\.cs\\'" . csharp-tree-sitter-mode))
 
-(use-package yasnippet
-  :ensure t
-  ;;:defer t
-  ;;:hook ((prog-mode . yas-minor-mode))
+
+;; python IDE 
+
+(use-package python
   :config
-  (yas-global-mode 1))
+  ;; Remove guess indent python message
+  (setq python-indent-guess-indent-offset-verbose nil))
+
+(use-package pyvenv
+  :ensure t
+  :init
+  (setenv "WORKON_HOME" "~/.py-envs")
+  :hook ((python-mode . pyvenv-mode)))
 
 (use-package eglot
   :ensure t
   :defer t
-  :hook ((prog-mode . eglot)))
+  :hook ((prog-mode . eglot-ensure)))
+
+(use-package yasnippet
+  :ensure t
+  :defer t
+  :hook ((prog-mode . yas-minor-mode)))
+
+(use-package yasnippet-snippets
+  :ensure t)
 
 (use-package company
   :ensure t
   :defer t
-  :hook (prog-mode . company-mode)
+  :custom
+  ;; Search other buffers with the same modes for completion instead of
+  ;; searching all other buffers.
+  (company-dabbrev-other-buffers t)
+  (company-dabbrev-code-other-buffers t)
+  ;; M-<num> to select an option according to its number.
+  (company-show-numbers t)
+  ;; Only 2 letters required for completion to activate.
+  (company-minimum-prefix-length 3)
+  ;; Do not downcase completions by default.
+  (company-dabbrev-downcase nil)
+  ;; Even if I write something with the wrong case,
+  ;; provide the correct casing.
+  (company-dabbrev-ignore-case t)
+  ;; company completion wait
+  (company-idle-delay 0.2)
+  ;; No company-mode in shell & eshell
+  (company-global-modes '(not eshell-mode shell-mode))
+  ;; Use company with text and programming modes.
+  :hook ((text-mode . company-mode)
+         (prog-mode . company-mode))
   :config
   (setq company-backends '((company-capf :with company-yasnippet :separate)
                            (company-yasnippet :separate)))
@@ -469,10 +515,6 @@
               (lambda ()
                 (interactive)
                 (company-complete-common-or-cycle -1))))
-
-(use-package yasnippet-snippets
-  :ensure t)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  latex
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -662,7 +704,7 @@ of TO-TIME so that the user can customize the date format more easily."
  '(git-gutter:window-width 1)
  '(org-agenda-files '("c:/Users/moame/git-repos/main/plan.org"))
  '(package-selected-packages
-   '(vterm evil-mc consult-projectile docker wgrep git-gutter nyan-mode minimap darcula-theme ox-gfm ox-beamer ox-md csharp-mode tree-sitter-indent yasnippet company eglot elgot rust-mode tree-sitter org-journal org-roam-ui embark-consult embark org-roam magit which-key general marginalia orderless evil-escape all-the-icons vertico-directory vertico evil-collection evil-org evil-surround evil ox-reveal doom-modeline gruvbox-theme use-package)))
+   '(lsp-mode pyvenv pyvenv-mode pyenv-mode jupyter angular-mode scss-mode vterm evil-mc consult-projectile docker wgrep git-gutter nyan-mode minimap darcula-theme ox-gfm ox-beamer ox-md csharp-mode tree-sitter-indent yasnippet company eglot elgot rust-mode tree-sitter org-journal org-roam-ui embark-consult embark org-roam magit which-key general marginalia orderless evil-escape all-the-icons vertico-directory vertico evil-collection evil-org evil-surround evil ox-reveal doom-modeline gruvbox-theme use-package)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

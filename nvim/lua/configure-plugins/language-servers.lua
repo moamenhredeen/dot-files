@@ -12,7 +12,8 @@ local servers = {
 	'texlab',
 	'bashls',
 	'eslint',
-	'gopls'
+	'gopls',
+	'ansiblels'
 }
 
 local on_attach = function(client, bufnr)

@@ -1,3 +1,4 @@
+require('configure-plugins.treesitter-setup')
 require('configure-plugins.language-servers')
 require('configure-plugins.cmp-setup')
 require('configure-plugins.lualine-setup')

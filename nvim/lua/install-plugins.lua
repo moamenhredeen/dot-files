@@ -4,6 +4,8 @@ return require('packer').startup(function(use)
   	-- Packer can manage itself
 	use 'wbthomason/packer.nvim'
 
+	use 'nvim-treesitter/nvim-treesitter'
+
  	-- gruvbox colorscheme 
 	use { "ellisonleao/gruvbox.nvim" }
 	use { 'TimUntersberger/neogit', requires = 'nvim-lua/plenary.nvim' }
@@ -56,4 +58,7 @@ return require('packer').startup(function(use)
 		'nvim-lualine/lualine.nvim',
 		requires = { 'kyazdani42/nvim-web-devicons', opt = true }
 	}
+
+	use 'mfussenegger/nvim-dap'
+	use 'mfussenegger/nvim-dap-python'
 end)
