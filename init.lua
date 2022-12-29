@@ -46,6 +46,12 @@ require('packer').startup(function(use)
     },
   }
 
+  use 'mfussenegger/nvim-dap'
+  use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
+  use 'mfussenegger/nvim-dap-python'
+  use { "mxsdev/nvim-dap-vscode-js", requires = {"mfussenegger/nvim-dap"} }
+
+
   use { -- Autocompletion
     'hrsh7th/nvim-cmp',
     requires = {
@@ -94,6 +100,8 @@ require('packer').startup(function(use)
   use { 'TimUntersberger/neogit', requires = 'nvim-lua/plenary.nvim' }
 
   use 'stevearc/overseer.nvim'
+
+  use "folke/which-key.nvim"
 
   -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')
@@ -173,6 +181,8 @@ vim.o.wrap = false
 vim.o.splitbelow = true
 vim.o.splitright = true
 
+vim.opt.clipboard = 'unnamedplus'
+
 -- disable netrw at the very start of your init.lua (strongly advised)
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
@@ -220,6 +230,9 @@ require('lualine').setup {
     theme = 'onedark',
     component_separators = '|',
     section_separators = '',
+  },
+  sections = {
+    lualine_x = { "overseer" },
   },
 }
 
@@ -270,6 +283,19 @@ require('indent_blankline').setup {
 -- ***
 -- *** git
 -- ***
+
+
+require('gitsigns').setup {
+  signs = {
+    add          = { hl = 'GitSignsAdd', text =     '█', numhl = 'GitSignsAddNr',     linehl = 'GitSignsAddLn'    },
+    change       = { hl = 'GitSignsChange', text =  '█', numhl = 'GitSignsChangeNr',  linehl = 'GitSignsChangeLn' },
+    delete       = { hl = 'GitSignsDelete', text =  '█', numhl = 'GitSignsDeleteNr',  linehl = 'GitSignsDeleteLn' },
+    topdelete    = { hl = 'GitSignsDelete', text =  '█', numhl = 'GitSignsDeleteNr',  linehl = 'GitSignsDeleteLn' },
+    changedelete = { hl = 'GitSignsChange', text =  '█', numhl = 'GitSignsChangeNr',  linehl = 'GitSignsChangeLn' },
+    untracked    = { hl = 'GitSignsAdd', text =     '█', numhl = 'GitSignsAddNr',     linehl = 'GitSignsAddLn'    },
+  },
+}
+
 
 require('neogit').setup {
   disable_signs = true,
@@ -349,19 +375,11 @@ require('neogit').setup {
   }
 }
 
-require('gitsigns').setup {
-  signs = {
-    add          = { hl = 'GitSignsAdd', text =     '█', numhl = 'GitSignsAddNr',     linehl = 'GitSignsAddLn'    },
-    change       = { hl = 'GitSignsChange', text =  '█', numhl = 'GitSignsChangeNr',  linehl = 'GitSignsChangeLn' },
-    delete       = { hl = 'GitSignsDelete', text =  '█', numhl = 'GitSignsDeleteNr',  linehl = 'GitSignsDeleteLn' },
-    topdelete    = { hl = 'GitSignsDelete', text =  '█', numhl = 'GitSignsDeleteNr',  linehl = 'GitSignsDeleteLn' },
-    changedelete = { hl = 'GitSignsChange', text =  '█', numhl = 'GitSignsChangeNr',  linehl = 'GitSignsChangeLn' },
-    untracked    = { hl = 'GitSignsAdd', text =     '█', numhl = 'GitSignsAddNr',     linehl = 'GitSignsAddLn'    },
-  },
-}
-
--- [[ Configure Telescope ]]
--- See `:help telescope` and `:help telescope.setup()`
+-- ***********************************************************************
+-- ***
+-- *** Telescope
+-- *** See `:help telescope` and `:help telescope.setup()`
+-- ***
 require('telescope').setup {
   defaults = {
     mappings = {
@@ -380,22 +398,25 @@ pcall(require('telescope').load_extension, 'fzf')
 -- vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
 vim.keymap.set('n', '<leader>f', require('telescope.builtin').find_files, { desc = 'open [F]ile' })
 vim.keymap.set('n', '<leader>b', require('telescope.builtin').buffers, { desc = 'open [B]uffer' })
-vim.keymap.set('n', '<leader>h', require('telescope.builtin').help_tags, { desc = '[H]elp' })
-vim.keymap.set('n', '<leader>c', require('telescope.builtin').commands, { desc = '[C]ommands' })
-vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
+vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[H]elp' })
+vim.keymap.set('n', '<leader>sc', require('telescope.builtin').commands, { desc = '[C]ommands' })
+vim.keymap.set('n', '<leader>p', require('telescope.builtin').commands, { desc = '[C]ommands' })
+vim.keymap.set('n', '<leader>sm', require('telescope.builtin').marks, { desc = '[S]earch [D]iagnostics' })
+vim.keymap.set('n', '<leader>sq', require('telescope.builtin').quickfix, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
-vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
-vim.keymap.set('n', '<leader>ss', function()
-  -- You can pass additional configuration to telescope to change theme, layout, etc.
-  require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-    winblend = 20,
-    previewer = false,
-  })
+vim.keymap.set('n', '<leader>sw', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
+vim.keymap.set('n', '<leader>sb', function ()
+  require('telescope.builtin')
+    .current_buffer_fuzzy_find(require('telescope.themes')
+    .get_dropdown{ previewer = false })
 end, { desc = '[/] Fuzzily search in current buffer]' })
 
 
--- [[ Configure Treesitter ]]
--- See `:help nvim-treesitter`
+-- ***********************************************************************
+-- ***
+-- *** Treesitter
+-- *** See `:help nvim-treesitter`
+-- ***
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
   ensure_installed = {
@@ -469,7 +490,10 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
 
--- LSP settings.
+-- ***********************************************************************
+-- ***
+-- *** Language Server Protocol 
+-- ***
 --  This function gets run when an LSP connects to a particular buffer.
 local on_attach = function(_, bufnr)
   -- NOTE: Remember that lua is a real programming language, and as such it is possible
@@ -486,8 +510,8 @@ local on_attach = function(_, bufnr)
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
   end
 
+  nmap('<leader>a', vim.lsp.buf.code_action, '[A]ction')
   nmap('<leader>rr', vim.lsp.buf.rename, '[R]efactor [R]ename')
-  nmap('<leader>a', vim.lsp.buf.code_action, 'code [A]ction')
 
   nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
   nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
@@ -534,9 +558,7 @@ local servers = {
   },
 }
 
--- Setup neovim lua configuration
-require('neodev').setup()
---
+
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
@@ -561,10 +583,144 @@ mason_lspconfig.setup_handlers {
   end,
 }
 
--- Turn on lsp status information
-require('fidget').setup()
 
--- nvim-cmp setup
+-- ***********************************************************************
+-- ***
+-- *** Debugger
+-- ***
+
+require("dapui").setup {
+  icons = { expanded = "", collapsed = "", current_frame = "" },
+  mappings = {
+    -- Use a table to apply multiple mappings
+    expand = { "<CR>", "<2-LeftMouse>" },
+    open = "o",
+    remove = "d",
+    edit = "e",
+    repl = "r",
+    toggle = "t",
+  },
+  -- Use this to override mappings for specific elements
+  element_mappings = {
+    -- Example:
+    -- stacks = {
+    --   open = "<CR>",
+    --   expand = "o",
+    -- }
+  },
+  -- Expand lines larger than the window
+  -- Requires >= 0.7
+  expand_lines = vim.fn.has("nvim-0.7") == 1,
+  -- Layouts define sections of the screen to place windows.
+  -- The position can be "left", "right", "top" or "bottom".
+  -- The size specifies the height/width depending on position. It can be an Int
+  -- or a Float. Integer specifies height/width directly (i.e. 20 lines/columns) while
+  -- Float value specifies percentage (i.e. 0.3 - 30% of available lines/columns)
+  -- Elements are the elements shown in the layout (in order).
+  -- Layouts are opened in order so that earlier layouts take priority in window sizing.
+  layouts = {
+    {
+      elements = {
+      -- Elements can be strings or table with id and size keys.
+        { id = "scopes", size = 0.25 },
+        "breakpoints",
+        "stacks",
+        "watches",
+      },
+      size = 40, -- 40 columns
+      position = "left",
+    },
+    {
+      elements = {
+        "repl",
+        "console",
+      },
+      size = 0.25, -- 25% of total lines
+      position = "bottom",
+    },
+  },
+  controls = {
+    -- Requires Neovim nightly (or 0.8 when released)
+    enabled = true,
+    -- Display controls in this element
+    element = "repl",
+    icons = {
+      pause = "",
+      play = "",
+      step_into = "",
+      step_over = "",
+      step_out = "",
+      step_back = "",
+      run_last = "",
+      terminate = "",
+    },
+  },
+  floating = {
+    max_height = nil, -- These can be integers or a float between 0 and 1.
+    max_width = nil, -- Floats will be treated as percentage of your screen.
+    border = "single", -- Border style. Can be "single", "double" or "rounded"
+    mappings = {
+      close = { "q", "<Esc>" },
+    },
+  },
+  windows = { indent = 1 },
+  render = {
+    max_type_length = nil, -- Can be integer or nil.
+    max_value_lines = 100, -- Can be integer or nil.
+  }
+}
+
+
+
+local dap, dapui = require("dap"), require("dapui")
+dap.listeners.after.event_initialized["dapui_config"] = function()
+  dapui.open()
+end
+dap.listeners.before.event_terminated["dapui_config"] = function()
+  dapui.close()
+end
+dap.listeners.before.event_exited["dapui_config"] = function()
+  dapui.close()
+end
+
+require("dap-vscode-js").setup({
+  -- node_path = "node", -- Path of node executable. Defaults to $NODE_PATH, and then "node"
+  -- debugger_path = "(runtimedir)/site/pack/packer/opt/vscode-js-debug", -- Path to vscode-js-debug installation.
+  -- debugger_cmd = { "js-debug-adapter" }, -- Command to use to launch the debug server. Takes precedence over `node_path` and `debugger_path`.
+  adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge', 'node-terminal', 'pwa-extensionHost' }, -- which adapters to register in nvim-dap
+  -- log_file_path = "(stdpath cache)/dap_vscode_js.log" -- Path for file logging
+  -- log_file_level = false -- Logging level for output to file. Set to false to disable file logging.
+  -- log_console_level = vim.log.levels.ERROR -- Logging level for output to console. Set to false to disable console output.
+})
+
+for _, language in ipairs({ "typescript", "javascript" }) do
+  require("dap").configurations[language] = {
+    {
+      type = "pwa-node",
+      request = "launch",
+      name = "Launch file",
+      program = "${file}",
+      cwd = "${workspaceFolder}",
+    },
+    {
+      type = "pwa-node",
+      request = "attach",
+      name = "Attach",
+      processId = require'dap.utils'.pick_process,
+      cwd = "${workspaceFolder}",
+    }
+  }
+end
+
+-- *** adapters 
+-- python adapter
+require('dap-python').setup('~/.py-envs/devops/bin/python')
+
+
+-- ***********************************************************************
+-- ***
+-- *** auto completion
+-- ***
 local cmp = require 'cmp'
 local luasnip = require 'luasnip'
 
@@ -609,10 +765,10 @@ cmp.setup {
 }
 
 
-require("nvim-autopairs").setup {}
-
-
--- OR setup with some options
+-- ***********************************************************************
+-- ***
+-- *** nvim tree
+-- ***
 require("nvim-tree").setup {
   sort_by = "case_sensitive",
   view = {
@@ -660,7 +816,57 @@ vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]])
 
 
 
-require('overseer').setup()
+-- ***********************************************************************
+-- ***
+-- *** task runner 
+-- ***
+require('overseer').setup {
+  direction = 'left',
+  strategy = {
+    "toggleterm",
+    -- have the toggleterm window close automatically after the task exits
+    close_on_exit = false,
+    -- open the toggleterm window when a task starts
+    open_on_start = true,
+    -- mirrors the toggleterm "hidden" parameter, and keeps the task from
+    -- being rendered in the toggleable window
+    hidden = false,
+  }
+}
+
+vim.api.nvim_create_user_command("OverseerRestartLast", function()
+  local overseer = require("overseer")
+  local tasks = overseer.list_tasks({ recent_first = true })
+  if vim.tbl_isempty(tasks) then
+    vim.notify("No tasks found", vim.log.levels.WARN)
+  else
+    overseer.run_action(tasks[1], "restart")
+  end
+end, {})
+
+vim.keymap.set('n', '<leader>tl', require('overseer').toggle, {desc = '[T]ask List'})
+vim.keymap.set('n', '<leader>tt', require('overseer').run_template, {desc = '[T]ask List'})
+vim.keymap.set('n', '<leader>tr', ':OverseerRestartLast<CR>', {desc = 'Restart Last Task'})
+
+
+-- ***********************************************************************
+-- ***
+-- *** others 
+-- ***
+
+
+
+
+require("nvim-autopairs").setup()
+
+-- Turn on lsp status information
+require('fidget').setup()
+
+-- Setup neovim lua configuration
+require('neodev').setup()
+
+require("which-key").setup()
+
 
 -- ***********************************************************************
 -- ***
