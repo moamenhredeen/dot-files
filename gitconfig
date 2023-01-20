@@ -4,14 +4,19 @@
 	email = moamenhredeen@gmail.com
 	name = moamenhredeen
 [alias]
-	lg = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
-	st = status -s -b --show-stash
-	cm = commit -am
-	a = add 
-	s = switch 
-	sc = switch -c 
-	b = branch 
-	co = checkout 
+	lg 	= log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)'
+	ll 	= log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
+	st 	= status -s -b --show-stash
+	cm 	= commit -m
+	a 	= add 
+	s 	= switch 
+	sc 	= switch -c 
+	b 	= branch 
+	br 	= branch -r
+	wl 	= worktree list
+	wa  = worktree add
+	wp 	= worktree prune
+	co 	= checkout 
 [core]
 	pager = 
 	editor = nvim

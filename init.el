@@ -98,14 +98,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; customize user interface
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(setq initial-scratch-message
-      "
+(setq initial-scratch-message "
 ;; ██╗  ██╗██╗    ███╗   ███╗ ██████╗  █████╗ ███╗   ███╗███████╗███╗   ██╗
 ;; ██║  ██║██║    ████╗ ████║██╔═══██╗██╔══██╗████╗ ████║██╔════╝████╗  ██║
 ;; ███████║██║    ██╔████╔██║██║   ██║███████║██╔████╔██║█████╗  ██╔██╗ ██║
 ;; ██╔══██║██║    ██║╚██╔╝██║██║   ██║██╔══██║██║╚██╔╝██║██╔══╝  ██║╚██╗██║
 ;; ██║  ██║██║    ██║ ╚═╝ ██║╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗██║ ╚████║
-;; ╚═╝  ╚═╝╚═╝    ╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚═╝  ╚═══╝")
+;; ╚═╝  ╚═╝╚═╝    ╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚═╝  ╚═══╝
+")
 
 
 ;; uesr interface centric
@@ -121,6 +121,7 @@
 ;; Disable line numbers for some modes
 (dolist (mode '(term-mode-hook
 		  shell-mode-hook
+		  org-mode-hook
 		  treemacs-mode-hook
 		  eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
@@ -129,7 +130,14 @@
 (use-package doom-themes
   :ensure t
   :config
-  (load-theme 'doom-gruvbox t))
+  (load-theme 'doom-gruvbox t)
+  (doom-themes-org-config))
+
+;; (use-package darcula-theme
+;;   :ensure t
+;;   :config
+;;   (load-theme 'darcula))
+
 
 
 (use-package all-the-icons
@@ -164,13 +172,8 @@
 (use-package projectile
   :ensure t
   :diminish projectile-mode
-  :bind
-  (("C-c p f" . helm-projectile-find-file)
-   ("C-c p p" . helm-projectile-switch-project)
-   ("C-c p s" . projectile-save-project-buffers))
   :config
-  (projectile-mode +1)
-  )
+  (projectile-mode +1))
 
 ;; Enable vertico
 (use-package vertico
@@ -197,126 +200,7 @@
 ;; Example configuration for Consult
 (use-package consult
   :ensure t
-  :bind(
-  ;; Replace bindings. Lazily loaded due by `use-package'.
-  
-         ("C-c m" . consult-mode-command)
-         ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
-         ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
-         ("M-s g" . consult-grep)
-         ("M-s G" . consult-git-grep)
-         ("M-s r" . consult-ripgrep)
-         ("C-c h" . consult-history)
-         ("C-c k" . consult-kmacro)
-         ;; C-x bindings (ctl-x-map)
-         ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
-         ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
-         ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
-         ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
-         ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
-         ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
-         ;; Custom M-# bindings for fast register access
-         ("M-#" . consult-register-load)
-         ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
-         ("C-M-#" . consult-register)
-         ;; Other custom bindings
-         ("M-y" . consult-yank-pop)                ;; orig. yank-pop
-         ("<help> a" . consult-apropos)            ;; orig. apropos-command
-         ;; M-g bindings (goto-map)
-         ("M-g e" . consult-compile-error)
-         ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
-         ("M-g g" . consult-goto-line)             ;; orig. goto-line
-         ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
-         ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
-         ("M-g m" . consult-mark)
-         ("M-g k" . consult-global-mark)
-         ("M-g i" . consult-imenu)
-         ("M-g I" . consult-imenu-multi)
-         ;; M-s bindings (search-map)
-         ("M-s d" . consult-find)
-         ("M-s D" . consult-locate)
-         ("M-s g" . consult-grep)
-         ("M-s G" . consult-git-grep)
-         ("M-s r" . consult-ripgrep)
-         ("M-s l" . consult-line)
-         ("M-s L" . consult-line-multi)
-         ("M-s m" . consult-multi-occur)
-         ("M-s k" . consult-keep-lines)
-         ("M-s u" . consult-focus-lines)
-         ;; Isearch integration
-         ("M-s e" . consult-isearch-history)
-         :map isearch-mode-map
-         ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
-         ("M-s e" . consult-isearch-history)       ;; orig. isearch-edit-string
-         ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
-         ("M-s L" . consult-line-multi)            ;; needed by consult-line to detect isearch
-         ;; Minibuffer history
-         :map minibuffer-local-map
-         ("M-s" . consult-history)                 ;; orig. next-matching-history-element
-         ("M-r" . consult-history))                ;; orig. previous-matching-history-element
-
-  ;; Enable automatic preview at point in the *Completions* buffer. This is
-  ;; relevant when you use the default completion UI.
-  ;;:hook (completion-list-mode . consult-preview-at-point-mode)
-
-  ;; The :init configuration is always executed (Not lazy)
-  ;;:init
-
-  ;; Optionally configure the register formatting. This improves the register
-  ;; preview for `consult-register', `consult-register-load',
-  ;; `consult-register-store' and the Emacs built-ins.
-  ;;(setq register-preview-delay 0.5
-  ;;      register-preview-function #'consult-register-format)
-
-  ;; Optionally tweak the register preview window.
-  ;; This adds thin lines, sorting and hides the mode line of the window.
-  ;;(advice-add #'register-preview :override #'consult-register-window)
-
-  ;; Use Consult to select xref locations with preview
-  ;;(setq xref-show-xrefs-function #'consult-xref
-  ;;      xref-show-definitions-function #'consult-xref)
-
-  ;; Configure other variables and modes in the :config section,
-  ;; after lazily loading the package.
-  ;; :config
-
-  ;; Optionally configure preview. The default value
-  ;; is 'any, such that any key triggers the preview.
-  ;; (setq consult-preview-key 'any)
-  ;; (setq consult-preview-key (kbd "M-."))
-  ;; (setq consult-preview-key (list (kbd "<S-down>") (kbd "<S-up>")))
-  ;; For some commands and buffer sources it is useful to configure the
-  ;; :preview-key on a per-command basis using the `consult-customize' macro.
-  ;; (consult-customize
-  ;;  consult-theme :preview-key '(:debounce 0.2 any)
-  ;;  consult-ripgrep consult-git-grep consult-grep
-  ;;  consult-bookmark consult-recent-file consult-xref
-  ;;  consult--source-bookmark consult--source-file-register
-  ;;  consult--source-recent-file consult--source-project-recent-file
-  ;;  ;; :preview-key (kbd "M-.")
-  ;;  :preview-key '(:debounce 0.4 any))
-
-  ;; Optionally configure the narrowing key.
-  ;; Both < and C-+ work reasonably well.
-  ;; (setq consult-narrow-key "<") ;; (kbd "C-+")
-
-  ;; Optionally make narrowing help available in the minibuffer.
-  ;; You may want to use `embark-prefix-help-command' or which-key instead.
-  ;; (define-key consult-narrow-map (vconcat consult-narrow-key "?") #'consult-narrow-help)
-
-  ;; By default `consult-project-function' uses `project-root' from project.el.
-  ;; Optionally configure a different project root function.
-  ;; There are multiple reasonable alternatives to chose from.
-  ;;;; 1. project.el (the default)
-  ;; (setq consult-project-function #'consult--default-project--function)
-  ;;;; 2. projectile.el (projectile-project-root)
-  ;; (autoload 'projectile-project-root "projectile")
-  ;; (setq consult-project-function (lambda (_) (projectile-project-root)))
-  ;;;; 3. vc.el (vc-root-dir)
-  ;; (setq consult-project-function (lambda (_) (vc-root-dir)))
-  ;;;; 4. locate-dominating-file
-  ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
-)
+  :hook (completion-list-mode . consult-preview-at-point-mode))
 
 ;; A few more useful configurations...
 (use-package emacs
@@ -389,6 +273,9 @@
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 
+(use-package consult-projectile
+  :ensure t)
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -397,151 +284,47 @@
 (use-package magit
   :ensure t)
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; key mappings
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package evil
-  :ensure t
-  :init
-  (setq evil-want-keybinding nil)
-  :config
-  (evil-mode 1))
-
-(use-package evil-collection
-  :ensure t
-  :after evil
-  :config (evil-collection-init))
-
-(use-package evil-surround
+(use-package git-gutter
   :ensure t
   :config
-  (global-evil-surround-mode 1))
-
-
-(use-package evil-org
-  :ensure t
-  :after org
-  :config
-  (add-hook 'org-mode-hook 'evil-org-mode)
-  (add-hook 'evil-org-mode-hook
-            (lambda () (evil-org-set-key-theme)))
-  (require 'evil-org-agenda)
-  (evil-org-agenda-set-keys))
-
-;; convert escape to super escape :) 
-(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-
-;; keybinding helper
-(use-package which-key
-  :ensure t
-  :config
-  (which-key-mode)
-  (setq which-key-popup-type 'side-window)
-  (setq which-key-side-window-location 'bottom)
-  (setq which-key-side-window-max-width 0.33)
-  (setq which-key-side-window-max-height 0.25)
-  (setq which-key-idle-delay 1.0)
-  (setq which-key-separator " → " )
-  (setq which-key-prefix-prefix "+" ))
-
-;; TODO: define better search function
-(defun my/consult-ripgrep-current-file ()
-    "Call `consult-ripgrep' for the current buffer (a single file)."
-    (interactive)
-    (let ((consult-project-function (lambda (x) nil))
-          (consult-ripgrep-args
-           (concat "rg "
-                   "--null "
-                   "--line-buffered "
-                   "--color=never "
-                   "--line-number "
-                   "--smart-case "
-                   "--no-heading "
-                   "--max-columns=1000 "
-                   "--max-columns-preview "
-                   "--with-filename "
-                   (shell-quote-argument buffer-file-name))))
-      (consult-ripgrep)))
-
-;; cleaner way for defining keymap
-(use-package general
-  :ensure t
-  :config
-  (general-create-definer my-leader-def
-    :prefix "SPC")
-
-  ;; Global Keybindings
-  (my-leader-def
-    :states   'normal
-    :keymaps  'override
-
-    ;; most used commands 
-    "w"       'save-buffer
-    "f"       'find-file
-    "b"       'consult-buffer
-    "q"       'delete-window
-    ;;"s"       'my/consult-ripgrep-current-file
-    "s"       'my/consult-ripgrep-current-file
-    "k"       'magit-status
-    "x"       'execute-extended-command
-    "h"       'consult-apropos
-
-    ;; org key binding
-    "a"       'org-agenda
-    "c"       'org-capture
-
-    ;; org roam key binding
-    "rf"      'org-roam-node-find
-    "rb"      'org-roam-buffer
-    "rt"      'org-roam-buffer-toggle
-
-    ;; org journal key binding
-    "jn"      'org-journal-next-entry
-    "jp"      'org-journal-previous-entry
-    "ji"      'org-journal-new-entry
-    "js"      'org-journal-search)
-
-  ;; Org Mode Keybindings
-  (general-define-key
-   :keymaps  '(org-tree-slide-mode-map override)
-   :states   '(normal insert)
-   "<right>"     'org-tree-slide-move-next-tree
-   "<left>"     'org-tree-slide-move-previous-tree)
-
-  ;; Org Mode evil Keybindings
-  (my-leader-def
-    :states   'normal
-    :keymaps  'org-mode-map
-    "gh"      'consult-org-heading
-    "y"       'org-store-link
-    "p"       'org-insert-link
-    "ri"      'org-roam-node-insert
-    "rs"      'org-roam-db-sync)
-
-  ;; org mode local leader 
-  (general-create-definer my-local-leader-def
-    :prefix   "SPC l")
-
-  (my-local-leader-def
-    :states     'normal
-    :keymaps    '(org-mode-map org-tree-slide-mode-map)
-    "s"         'org-tree-slide-mode))
+  (custom-set-variables
+   '(git-gutter:modified-sign " ") 
+   '(git-gutter:added-sign " ")    
+   '(git-gutter:deleted-sign " "))
+  (set-face-background 'git-gutter:modified "#83a598") ;; background color
+  (set-face-background 'git-gutter:added "#b8bb26")
+  (set-face-background 'git-gutter:deleted "#fb4934")
+  (global-git-gutter-mode 1))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; org mode customizations
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 (use-package org
   :config
+  (add-to-list 'org-agenda-files (file-name-concat (getenv "HOME") "git-repos" "main"))
   (setq org-src-fontify-natively t
         org-src-window-setup 'current-window ;; edit in current window
         org-src-strip-leading-and-trailing-blank-lines t
         org-src-preserve-indentation t;; do not put two spaces on the left
         org-edit-src-content-indentation 0
-        org-src-tab-acts-natively t)
-  (add-to-list 'org-agenda-files (file-name-concat (expand-file-name (getenv "USERPROFILE"))"git-repos" "main")))
+        org-src-tab-acts-natively t))
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t) ;; Other languages
+   (shell . t)
+   ;; Python & Jupyter
+   (python . t)
+   (jupyter . t)))
+
+(use-package ox-latex
+  :custom
+  (org-latex-listings t))
+
+(use-package ox-gfm
+  :ensure t
+  :after org)
 
 (use-package org-bullets
   :ensure t
@@ -549,8 +332,17 @@
   :hook org-mode
   :config
   (setq org-bullets-face-name (quote org-bullet-face))
-  (setq org-bullets-bullet-list '("▤" "▶" "➜"))
-  (setq org-ellipsis " ⤵")
+  ;;  "➜" ❱ ■   ≡ ∷ ∞ ∬  ━┓ ┉  ┅ ┋┊┋  ╏╏ ║ ═  │ ━ ╭ ─╮ ╱ ⤵
+  ;; ▆ ▇ ██  ░░  ▒▒ 
+  ;; ① ② ③ ④ ⑤
+  ;; Ⓐ Ⓑ Ⓒ Ⓓ Ⓔ
+  ;; ⓐ ⓑ ⓒ ⓓ ⓔ
+  ;; ⓵ ⓶ ⓷ ⓸ ⓹
+  ;; ✤ ✣ ✻ ✽ ✼ ✹ ✺ ❆ ❅ ❖ 
+  ;; ✒ ✐ ✔ ✓ ✘  ❱ ❯
+  ;; ⣿ ⠿  ▤
+  (setq org-bullets-bullet-list '("≡" "❯" "➜" "✻" "✺"))
+  (setq org-ellipsis "─╮")
   (setq org-todo-keywords '((sequence "TODO" "NEXT" "INPROGRESS" "|" "DONE" "BLOCKED")))
   (setq org-todo-keyword-faces
 	      '(("TODO" . (:foreground "#cc241d" :weight bold :inverse-video t))
@@ -569,19 +361,17 @@
 
 
 
-;;(require 'ox-md)
-;;(require 'ox-beamer)
-;; (use-package ox-reveal
-;;   :ensure t
-;;   :custom
-;;   (org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
-;;   (org-reveal-mathjax t))
+(use-package ox-reveal
+  :ensure t
+  :custom
+  (org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
+  (org-reveal-mathjax t))
 
 (use-package org-roam
   :ensure t
   :custom
   ;; make sure that the directory exists
-  (org-roam-directory (file-name-concat (expand-file-name (getenv "USERPROFILE"))"git-repos" "main" "org-roam"))
+  (org-roam-directory (file-name-concat (expand-file-name (getenv "HOME"))"git-repos" "main" "org-roam"))
   ;; define org roam templates
   (org-roam-capture-templates '(
     ("d" "default" plain "%?"
@@ -638,9 +428,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; syntax heileighting 
-(use-package tree-sitter :ensure t)
-(use-package tree-sitter-langs :ensure t)
-(use-package tree-sitter-indent :ensure t)
+(use-package tree-sitter
+  :ensure t)
+
+(use-package tree-sitter-langs
+  :ensure t)
+
+(use-package tree-sitter-indent
+  :ensure t)
 
 
 ;; rust language 
@@ -649,30 +444,66 @@
   :defer t
   :mode ("\\.rs\\'" . rust-mode)
   :hook ((rust-mode . (lambda () (setq indent-tabs-mode nil)))
-         (rust-mode . (lambda () (prettify-symbols-mode))))
+        (rust-mode . (lambda () (prettify-symbols-mode))))
   :config
   (setq rust-format-on-save t))
 
 (use-package csharp-mode
   :ensure t
+  :defer t
   :mode ("\\.cs\\'" . csharp-tree-sitter-mode))
 
-(use-package yasnippet
-  :ensure t
-  ;;:defer t
-  ;;:hook ((prog-mode . yas-minor-mode))
+
+;; python IDE 
+
+(use-package python
   :config
-  (yas-global-mode 1))
+  ;; Remove guess indent python message
+  (setq python-indent-guess-indent-offset-verbose nil))
+
+(use-package pyvenv
+  :ensure t
+  :init
+  (setenv "WORKON_HOME" "~/.py-envs")
+  :hook ((python-mode . pyvenv-mode)))
 
 (use-package eglot
   :ensure t
   :defer t
-  :hook ((prog-mode . eglot)))
+  :hook ((prog-mode . eglot-ensure)))
+
+(use-package yasnippet
+  :ensure t
+  :defer t
+  :hook ((prog-mode . yas-minor-mode)))
+
+(use-package yasnippet-snippets
+  :ensure t)
 
 (use-package company
   :ensure t
   :defer t
-  :hook (prog-mode . company-mode)
+  :custom
+  ;; Search other buffers with the same modes for completion instead of
+  ;; searching all other buffers.
+  (company-dabbrev-other-buffers t)
+  (company-dabbrev-code-other-buffers t)
+  ;; M-<num> to select an option according to its number.
+  (company-show-numbers t)
+  ;; Only 2 letters required for completion to activate.
+  (company-minimum-prefix-length 3)
+  ;; Do not downcase completions by default.
+  (company-dabbrev-downcase nil)
+  ;; Even if I write something with the wrong case,
+  ;; provide the correct casing.
+  (company-dabbrev-ignore-case t)
+  ;; company completion wait
+  (company-idle-delay 0.2)
+  ;; No company-mode in shell & eshell
+  (company-global-modes '(not eshell-mode shell-mode))
+  ;; Use company with text and programming modes.
+  :hook ((text-mode . company-mode)
+         (prog-mode . company-mode))
   :config
   (setq company-backends '((company-capf :with company-yasnippet :separate)
                            (company-yasnippet :separate)))
@@ -684,9 +515,175 @@
               (lambda ()
                 (interactive)
                 (company-complete-common-or-cycle -1))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  latex
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-package yasnippet-snippets
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; other packages 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package docker
   :ensure t)
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Utility Functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun my/insert-date ()
+"Insert a date at point using `org-read-date' with its optional argument
+of TO-TIME so that the user can customize the date format more easily."
+(interactive)
+  (require 'org)
+  (let ((time (org-read-date nil 'to-time nil "Date:  ")))
+    (insert (format-time-string "%Y-%m-%d" time))))
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; key mappings
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package evil
+  :ensure t
+  :init
+  (setq evil-want-integration t)
+  (setq evil-want-keybinding nil)
+  :config
+  (evil-mode 1))
+
+(use-package evil-collection
+  :ensure t
+  :after evil
+  :custom
+  (evil-collection-setup-minibuffer t)
+  :config
+  (evil-collection-init))
+
+(use-package evil-surround
+  :ensure t
+  :config
+  (global-evil-surround-mode 1))
+
+(use-package evil-mc
+  :ensure t
+  :config
+  (global-evil-mc-mode 1))
+
+(use-package evil-org
+  :ensure t
+  :after org
+  :config
+  (add-hook 'org-mode-hook 'evil-org-mode)
+  (add-hook 'evil-org-mode-hook
+            (lambda () (evil-org-set-key-theme)))
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
+
+;; convert escape to super escape :) 
+(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+
+;; keybinding helper
+(use-package which-key
+  :ensure t
+  :config
+  (which-key-mode)
+  (setq which-key-popup-type 'side-window)
+  (setq which-key-side-window-location 'bottom)
+  (setq which-key-side-window-max-width 0.33)
+  (setq which-key-side-window-max-height 0.25)
+  (setq which-key-idle-delay 1.0)
+  (setq which-key-separator " → " )
+  (setq which-key-prefix-prefix "+" ))
+
+;; TODO: define better search function
+(defun my/consult-ripgrep-current-file ()
+    "Call `consult-ripgrep' for the current buffer (a single file)."
+    (interactive)
+    (let ((consult-project-function (lambda (x) nil))
+          (consult-ripgrep-args
+           (concat "rg "
+                   "--null "
+                   "--line-buffered "
+                   "--color=never "
+                   "--line-number "
+                   "--smart-case "
+                   "--no-heading "
+                   "--max-columns=1000 "
+                   "--max-columns-preview "
+                   "--with-filename "
+                   (shell-quote-argument buffer-file-name))))
+      (consult-ripgrep)))
+
+
+;; cleaner way for defining keymap
+(use-package general
+  :ensure t
+  :config
+  (general-create-definer my-leader-def
+    :prefix "SPC")
+
+  ;; Global Keybindings
+  (my-leader-def
+    :states   'normal
+    :keymaps  'override
+
+    ;; most used commands 
+    "w"       'save-buffer
+    "f"       'find-file
+    "b"       'consult-buffer
+    "q"       'delete-window
+    "s"       'my/consult-ripgrep-current-file
+    "k"       'magit-status
+    "x"       'execute-extended-command
+    "h"       'consult-apropos
+    "d"       'docker
+
+    ;; utility functions binding 
+    "ud"      'my/insert-date
+
+    ;; org key binding
+    "a"       'org-agenda
+    "c"       'org-capture
+
+    ;; projectile key bidning
+    "pf"      'projectile-find-file
+    "pb"      'projectile-switch-to-buffer
+    "pi"      'projectile-ibuffer
+
+    ;; org roam key binding
+    "rf"      'org-roam-node-find
+    "rb"      'org-roam-buffer
+    "rt"      'org-roam-buffer-toggle
+
+    ;; org journal key binding
+    "jn"      'org-journal-next-entry
+    "jp"      'org-journal-previous-entry
+    "ji"      'org-journal-new-entry
+    "js"      'org-journal-search)
+
+  ;; Org Mode Keybindings
+  (general-define-key
+   :keymaps  '(org-tree-slide-mode-map override)
+   :states   '(normal insert)
+   "<right>"     'org-tree-slide-move-next-tree
+   "<left>"     'org-tree-slide-move-previous-tree)
+
+  ;; Org Mode evil Keybindings
+  ;; org mode local leader 
+  (general-create-definer my-local-leader-def
+    :prefix   "SPC e")
+
+  (my-local-leader-def
+    :states   'normal
+    :keymaps  'org-mode-map
+    "h"      'consult-org-heading
+    "l"       'org-insert-link
+    "t"       'org-set-tags-command
+    "p"       'org-set-property-and-value
+    "e"       'org-tree-slide-mode))
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -698,15 +695,21 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("443e2c3c4dd44510f0ea8247b438e834188dc1c6fb80785d83ad3628eadf9294" "da75eceab6bea9298e04ce5b4b07349f8c02da305734f7c0c8c6af7b5eaa9738" "251ed7ecd97af314cd77b07359a09da12dcd97be35e3ab761d4a92d8d8cf9a71" "b54376ec363568656d54578d28b95382854f62b74c32077821fdfd604268616a" "b99e334a4019a2caa71e1d6445fc346c6f074a05fcbb989800ecbe54474ae1b0" "be84a2e5c70f991051d4aaf0f049fa11c172e5d784727e0b525565bb1533ec78" "02f57ef0a20b7f61adce51445b68b2a7e832648ce2e7efb19d217b6454c1b644" "adaf421037f4ae6725aa9f5654a2ed49e2cd2765f71e19a7d26a454491b486eb" "944d52450c57b7cbba08f9b3d08095eb7a5541b0ecfb3a0a9ecd4a18f3c28948" "683b3fe1689da78a4e64d3ddfce90f2c19eb2d8ab1bab1738a63d8263119c3f4" "636b135e4b7c86ac41375da39ade929e2bd6439de8901f53f88fde7dd5ac3561" default))
+   '("79586dc4eb374231af28bbc36ba0880ed8e270249b07f814b0e6555bdcb71fab" "443e2c3c4dd44510f0ea8247b438e834188dc1c6fb80785d83ad3628eadf9294" "da75eceab6bea9298e04ce5b4b07349f8c02da305734f7c0c8c6af7b5eaa9738" "251ed7ecd97af314cd77b07359a09da12dcd97be35e3ab761d4a92d8d8cf9a71" "b54376ec363568656d54578d28b95382854f62b74c32077821fdfd604268616a" "b99e334a4019a2caa71e1d6445fc346c6f074a05fcbb989800ecbe54474ae1b0" "be84a2e5c70f991051d4aaf0f049fa11c172e5d784727e0b525565bb1533ec78" "02f57ef0a20b7f61adce51445b68b2a7e832648ce2e7efb19d217b6454c1b644" "adaf421037f4ae6725aa9f5654a2ed49e2cd2765f71e19a7d26a454491b486eb" "944d52450c57b7cbba08f9b3d08095eb7a5541b0ecfb3a0a9ecd4a18f3c28948" "683b3fe1689da78a4e64d3ddfce90f2c19eb2d8ab1bab1738a63d8263119c3f4" "636b135e4b7c86ac41375da39ade929e2bd6439de8901f53f88fde7dd5ac3561" default))
+ '(git-gutter:added-sign " ")
+ '(git-gutter:deleted-sign " ")
+ '(git-gutter:modified-sign " ")
+ '(git-gutter:visual-line t)
+ '(git-gutter:window-margin 3)
+ '(git-gutter:window-width 1)
  '(org-agenda-files '("c:/Users/moame/git-repos/main/plan.org"))
  '(package-selected-packages
-   '(csharp-mode tree-sitter-indent yasnippet company eglot elgot rust-mode tree-sitter org-journal org-roam-ui embark-consult embark org-roam magit which-key general marginalia orderless evil-escape all-the-icons vertico-directory vertico evil-collection evil-org evil-surround evil ox-reveal doom-modeline gruvbox-theme use-package)))
+   '(lsp-mode pyvenv pyvenv-mode pyenv-mode jupyter angular-mode scss-mode vterm evil-mc consult-projectile docker wgrep git-gutter nyan-mode minimap darcula-theme ox-gfm ox-beamer ox-md csharp-mode tree-sitter-indent yasnippet company eglot elgot rust-mode tree-sitter org-journal org-roam-ui embark-consult embark org-roam magit which-key general marginalia orderless evil-escape all-the-icons vertico-directory vertico evil-collection evil-org evil-surround evil ox-reveal doom-modeline gruvbox-theme use-package)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:weight normal :height 150 :width normal :family "Cascadia Code"))))
+ '(default ((t (:weight normal :height 150 :width normal :family "Cascadia Code" :foreground "#B8B8B8"))))
  '(whitespace-tab ((t (:foreground "#636363")))))
