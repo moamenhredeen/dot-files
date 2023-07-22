@@ -352,3 +352,81 @@ ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}git:(%{$fg[red]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%} "
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}) %{$fg[yellow]%}✗"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"
+
+
+export HISTFILE=~/.histfile
+HISTSIZE=10000
+SAVEHIST=10000
+bindkey -e
+autoload -Uz compinit &&  compinit
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
+
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
+
+# HSTR configuration - add this to ~/.zshrc
+alias hh=hstr
+setopt histignorespace
+export HSTR_CONFIG=hicolor
+hstr_no_tiocsti() {
+    zle -I
+    { HSTR_OUT="$( { </dev/tty hstr ${BUFFER}; } 2>&1 1>&3 3>&- )"; } 3>&1;
+    BUFFER="${HSTR_OUT}"
+    CURSOR=${#BUFFER}
+    zle redisplay
+}
+zle -N hstr_no_tiocsti
+bindkey '\C-r' hstr_no_tiocsti
+export HSTR_TIOCSTI=n
+
+
+# use vi key binding
+set -o vi
+
+
+# aliases
+alias v='nvim'
+alias vim='nvim'
+alias fm='xdg-open'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias tlmgr='/usr/share/texmf-dist/scripts/texlive/tlmgr.pl --usermode'
+alias cls='clear'
+
+alias py='python'
+alias venv='python -m venv'
+alias pymain='source ~/.python-environments/main/bin/activate'
+alias pyalgo='source ~/.python-environments/algo/bin/activate'
+alias pyls='ls -l ~/.python-environments/'
+
+alias ta='tmux attach -t'
+alias ts='tmux new-session -s'
+alias tl='tmux list-sessions'
+alias tk='tmux kill-session -t'
+
+alias mw="./mvnw"
+alias gw='./gradlew'
+alias lg='lazygit'
+
+alias hh='hstr'
+alias bat='batcat'
+alias fd='fdfind'
+
+
+# machine specific
+
+# java envs
+export JAVA_HOME="/home/moamenhredeen/tools/jdks/jdk-17.0.7+7"
+export PATH="$PATH:$JAVA_HOME/bin"
+export PATH="$PATH:/home/moamenhredeen/tools/maven/bin"
+export PATH="$PATH:/home/moamenhredeen/tools/gradle/bin"
+
+# flutter 
+export ANDROID_HOME="/home/moamenhredeen/tools/android"
+export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin"
+export PATH="$PATH:/home/moamenhredeen/tools/flutter/bin"

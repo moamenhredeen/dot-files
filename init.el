@@ -4,10 +4,6 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; set default and home directories
-(setq default-directory "C:/Users/moamen.hraden/")
-(setenv "HOME" "C:/Users/moamen.hraden")
-
 ;; configure file limit
 (setq gc-cons-thresold 50000000)
 (setq large-file-warning-thresold 100000000)
