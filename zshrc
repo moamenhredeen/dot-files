@@ -1,3 +1,22 @@
+#!/usr/bin/zsh
+# ***********************************************************************
+# ***
+# ** My Personal ZSH Config
+# ***
+#
+#  ███████╗███████╗██╗  ██╗
+#  ╚══███╔╝██╔════╝██║  ██║
+#    ███╔╝ ███████╗███████║
+#   ███╔╝  ╚════██║██╔══██║
+#  ███████╗███████║██║  ██║
+#  ╚══════╝╚══════╝╚═╝  ╚═╝
+
+
+
+# ***********************************************************************
+# ***
+# *** zsh theme
+# ***
 # The git prompt's git commands are read-only and should not interfere with
 # other processes. This environment variable is equivalent to running with `git
 # --no-optional-locks`, but falls back gracefully for older versions of git.
@@ -341,12 +360,8 @@ ZSH_THEME_GIT_PROMPT_CLEAN=""               # Text to display if the branch is c
 ZSH_THEME_RUBY_PROMPT_PREFIX="("
 ZSH_THEME_RUBY_PROMPT_SUFFIX=")"
 
-
-
 PROMPT="%(?:%{$fg_bold[green]%}➜ :%{$fg_bold[red]%}➜ )"
 PROMPT+=' %{$fg[cyan]%}%c%{$reset_color%} $(git_prompt_info)'
-
-
 
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}git:(%{$fg[red]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%} "
@@ -354,6 +369,12 @@ ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}) %{$fg[yellow]%}✗"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})"
 
 
+
+
+# ***********************************************************************
+# ***
+# *** zsh defaults
+# ***
 export HISTFILE=~/.histfile
 HISTSIZE=10000
 SAVEHIST=10000
@@ -361,12 +382,19 @@ bindkey -e
 autoload -Uz compinit &&  compinit
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
 
-
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+# use vi key binding
+set -o vi
 
+
+
+# ***********************************************************************
+# ***
+# *** tools
+# ***
 
 # HSTR configuration - add this to ~/.zshrc
 alias hh=hstr
@@ -384,11 +412,11 @@ bindkey '\C-r' hstr_no_tiocsti
 export HSTR_TIOCSTI=n
 
 
-# use vi key binding
-set -o vi
 
-
-# aliases
+# ***********************************************************************
+# ***
+# *** aliases
+# ***
 alias v='nvim'
 alias vim='nvim'
 alias fm='xdg-open'
@@ -418,7 +446,10 @@ alias bat='batcat'
 alias fd='fdfind'
 
 
-# machine specific
+# ***********************************************************************
+# ***
+# *** machine specific
+# ***
 
 # java envs
 export JAVA_HOME="/home/moamenhredeen/tools/jdks/jdk-17.0.7+7"

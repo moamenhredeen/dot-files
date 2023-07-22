@@ -1,4 +1,21 @@
-" general settings
+" ***********************************************************************
+" ***
+" *** My Personal IdeaVim Config
+" ***
+"
+"  ██╗██████╗ ███████╗ █████╗ ██╗   ██╗██╗███╗   ███╗
+"  ██║██╔══██╗██╔════╝██╔══██╗██║   ██║██║████╗ ████║
+"  ██║██║  ██║█████╗  ███████║██║   ██║██║██╔████╔██║
+"  ██║██║  ██║██╔══╝  ██╔══██║╚██╗ ██╔╝██║██║╚██╔╝██║
+"  ██║██████╔╝███████╗██║  ██║ ╚████╔╝ ██║██║ ╚═╝ ██║
+"  ╚═╝╚═════╝ ╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝╚═╝     ╚═╝
+
+
+
+" ***********************************************************************
+" ***
+" *** general
+" ***
 set ignorecase
 set smartcase
 set scrolloff=3 " 3 lines above/below cursor when scrolling
@@ -23,9 +40,13 @@ set highlightedyank
 nmap <a-j> 15gj
 nmap <a-k> 15gk
 
-" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-" key binding
-" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+" ***********************************************************************
+" ***
+" *** key binding
+" ***
 
 "nmap K :action MethodUp<cr>
 "nmap J :action MethodDown<cr>
@@ -46,9 +67,10 @@ nmap <leader>x :wq<cr>
 nmap <leader>X :wQ<cr>
 
 
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-" Windows
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" ***********************************************************************
+" ***
+" *** window
+" ***
 nmap <leader>e :action ToggleDistractionFreeMode<cr>
 nmap <leader>b :action RecentFiles<cr>
 nmap <leader>f :action GotoFile<cr>
@@ -61,39 +83,50 @@ nmap <leader>as :action GotoSymbol<cr>
 nmap <leader>al :action RecentLocations<cr>
 nmap gm :action MainMenu<cr>
 
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-" code navigation
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+" ***********************************************************************
+" ***
+" *** code navigation 
+" ***
 nmap gd :action GotoDeclaration<cr>
 nmap gi :action GotoImplementation<cr>
 nmap gu :action FindUsages<cr>
 vmap T :action Refactorings.QuickListPopupAction<cr>
 
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-" refactoring
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+" ***********************************************************************
+" ***
+" ***  refactoring
+" ***
 nmap <leader>rr :action RenameElement<cr>
 nmap <leader>rg :action Generate<cr>
 nmap <leader>ri :action OptimizeImports<cr>
 
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-" Search
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+" ***********************************************************************
+" ***
+" *** search 
+" ***
 nmap / :action Find<cr>
 vmap / :action Find<cr>
 nmap <leader>\ :action FindInPath<cr>
 
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-" comments
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+" ***********************************************************************
+" ***
+" *** comments 
+" ***
 nmap <leader>c :action CommentByLineComment<cr>
 nmap <leader>C :action CommentByBlockComment<cr>
 vmap <leader>c :action CommentByLineComment<cr>
 vmap <leader>C :action CommentByBlockComment<cr>
 
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-" VCS operations
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+" ***********************************************************************
+" ***
+" *** VCS Opterations 
+" ***
 nmap <leader>yy :action Vcs.Show.Local.Changes<cr>
 nmap <leader>yp :action Vcs.QuickListPopupAction<cr>
 nmap <leader>ya :action Annotate<cr>

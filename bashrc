@@ -1,5 +1,9 @@
 #!/usr/bin/bash
-
+# ***********************************************************************
+# ***
+# ** My Personal ZSH Config
+# ***
+#
 #  ██████╗  █████╗ ███████╗██╗  ██╗
 #  ██╔══██╗██╔══██╗██╔════╝██║  ██║
 #  ██████╔╝███████║███████╗███████║
@@ -7,12 +11,25 @@
 #  ██████╔╝██║  ██║███████║██║  ██║
 #  ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
 
-### use vi keybinding
+
+
+# ***********************************************************************
+# ***
+# ** better defaults
+# ***
+
+# use vi keybinding
 set -o vi
 
 # set neovim as default editor
 EDITOR=nvim
 
+
+
+# ***********************************************************************
+# ***
+# *** utils functions
+# ***
 
 # point code constants
 function symbol() {
@@ -58,6 +75,11 @@ function draw_hline() {
 
 
 
+
+# ***********************************************************************
+# ***
+# *** git utils
+# ***
 # get git status for thish folder and all subfolders  
 function my_git_recursive_status(){
     clear
@@ -76,7 +98,10 @@ function my_git_recursive_status(){
 
 
  
-# aliases
+# ***********************************************************************
+# ***
+# *** aliases
+# ***
 alias v='nvim'
 alias vim='nvim'
 alias fm='xdg-open'
