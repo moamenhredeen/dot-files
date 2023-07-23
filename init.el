@@ -100,7 +100,10 @@
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;; change default shell
-(setq shell-file-name "C:/Users/moamen.hraden/.dotnet/tools/pwsh.exe")
+(when
+  (or (string= system-type "ms-dos") (string= system-type "windows-nt"))
+  (setq shell-file-name "C:/Users/moamen.hraden/.dotnet/tools/pwsh.exe"))
+
 
 ;; line wrapping
 (toggle-truncate-lines 1)
@@ -109,11 +112,12 @@
 (setq compilation-window-height 15)
 (setq compilation-scroll-output t)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; Define and initialise package repositories
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;; ***********************************************************************
+;; ***
+;; *** package repositories
+;; ***
 
 (require 'package)
 (add-to-list 'package-archives
@@ -132,11 +136,11 @@
 
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; Customize user interface
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; ***********************************************************************
+;; ***
+;; *** Customize user interface
+;; ***
 
 (setq initial-scratch-message "
  ██╗  ██╗██╗    ███╗   ███╗ ██████╗  █████╗ ███╗   ███╗███████╗███╗   ██╗
@@ -186,11 +190,10 @@
   (setq doom-modeline-height 30))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; Utility packages
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ***********************************************************************
+;; ***
+;; *** Utility Packages
+;; ***
 
 (use-package smartparens
   :ensure t
@@ -334,11 +337,10 @@
   :ensure t)
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; Git Configuraiton
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ***********************************************************************
+;; ***
+;; *** Git configuration
+;; ***
 
 (use-package magit
   :ensure t)
@@ -358,11 +360,10 @@
 
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; Org mode customizations
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ***********************************************************************
+;; ***
+;; *** Org mode
+;; ***
 
 (use-package org
   :config
@@ -483,11 +484,11 @@
   (org-tree-slide-indicator '(:next "   Next ❯" :previous "❮ Previous" :content "❮  CONTENT  ❯")))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; Programming
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; ***********************************************************************
+;; ***
+;; *** Programming
+;; ***
 
 (use-package pascal-mode
   :mode ("\\.iss\\'" . pascal-mode))
@@ -497,6 +498,10 @@
   :defer t
   :config
   (setq compile-command "go run main.go"))
+
+(use-package lua-mode
+  :ensure t
+  :defer t)
 
 (use-package eglot
   :ensure t
@@ -559,11 +564,11 @@
 
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; Utility Functions
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; ***********************************************************************
+;; ***
+;; *** Utility Functions
+;; ***
 
 (defun my/insert-date ()
 "Insert a date at point using `org-read-date' with its optional argument
@@ -575,11 +580,10 @@ of TO-TIME so that the user can customize the date format more easily."
 
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; Key mappings
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ***********************************************************************
+;; ***
+;; *** Key Mapping
+;; ***
 
     (use-package evil
     :ensure t
@@ -714,11 +718,10 @@ of TO-TIME so that the user can customize the date format more easily."
   (setq aw-minibuffer-flag t)
   (global-set-key (kbd "M-o") 'ace-window))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; Auto Generated
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ***********************************************************************
+;; ***
+;; *** Auto Generated
+;; ***
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.

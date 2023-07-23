@@ -8,7 +8,6 @@
 --  ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║
 --  ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║
 --  ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝
-                                                    
 
 
 
@@ -23,7 +22,6 @@ if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
   vim.fn.system { 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path }
   vim.cmd [[packadd packer.nvim]]
 end
-
 
 -- ***********************************************************************
 -- ***
@@ -49,9 +47,9 @@ require('packer').startup(function(use)
   }
 
   use 'mfussenegger/nvim-dap'
-  use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
+  use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
   use 'mfussenegger/nvim-dap-python'
-  use { "mxsdev/nvim-dap-vscode-js", requires = {"mfussenegger/nvim-dap"} }
+  use { "mxsdev/nvim-dap-vscode-js", requires = { "mfussenegger/nvim-dap" } }
 
 
   use { -- Autocompletion
@@ -81,21 +79,21 @@ require('packer').startup(function(use)
   use 'tpope/vim-rhubarb'
   use 'lewis6991/gitsigns.nvim'
 
-  use 'navarasu/onedark.nvim' -- Theme inspired by Atom
-  use 'nvim-lualine/lualine.nvim' -- Fancier statusline
+  use 'navarasu/onedark.nvim'               -- Theme inspired by Atom
+  use 'nvim-lualine/lualine.nvim'           -- Fancier statusline
   use 'lukas-reineke/indent-blankline.nvim' -- Add indentation guides even on blank lines
-  use 'numToStr/Comment.nvim' -- "gc" to comment visual regions/lines
-  use 'tpope/vim-sleuth' -- Detect tabstop and shiftwidth automatically
+  use 'numToStr/Comment.nvim'               -- "gc" to comment visual regions/lines
+  use 'tpope/vim-sleuth'                    -- Detect tabstop and shiftwidth automatically
 
   -- Fuzzy Finder (files, lsp, etc)
-  use { 'nvim-telescope/telescope.nvim', branch = '0.1.x', requires = { 'nvim-lua/plenary.nvim' }}
+  use { 'nvim-telescope/telescope.nvim', branch = '0.1.x', requires = { 'nvim-lua/plenary.nvim' } }
 
   -- Fuzzy Finder Algorithm which requires local dependencies to be built. Only load if `make` is available
   use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make', cond = vim.fn.executable 'make' == 1 }
 
   use 'windwp/nvim-autopairs'
 
-  use { 'nvim-tree/nvim-tree.lua', requires = { 'nvim-tree/nvim-web-devicons' }}
+  use { 'nvim-tree/nvim-tree.lua', requires = { 'nvim-tree/nvim-web-devicons' } }
 
   use "akinsho/toggleterm.nvim"
 
@@ -104,6 +102,8 @@ require('packer').startup(function(use)
   use 'stevearc/overseer.nvim'
 
   use "folke/which-key.nvim"
+
+  use 'ray-x/go.nvim'
 
   -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')
@@ -247,26 +247,26 @@ require('Comment').setup {
     line = 'gcc',
     block = 'gbc'
   },
-   extra = {
-        ---Add comment on the line above
-        above = 'gck',
-        ---Add comment on the line below
-        below = 'gcj',
-        ---Add comment at the end of line
-        eol = 'gca',
-    },
-    ---Enable keybindings
-    ---NOTE: If given `false` then the plugin won't create any mappings
-    mappings = {
-        ---Operator-pending mapping; `gcc` `gbc` `gc[count]{motion}` `gb[count]{motion}`
-        basic = true,
-        ---Extra mapping; `gco`, `gcO`, `gcA`
-        extra = true,
-    },
-    ---Function to call before (un)comment
-    -- pre_hook = nil,
-    ---Function to call after (un)comment
-    -- post_hook = nil
+  extra = {
+    ---Add comment on the line above
+    above = 'gck',
+    ---Add comment on the line below
+    below = 'gcj',
+    ---Add comment at the end of line
+    eol = 'gca',
+  },
+  ---Enable keybindings
+  ---NOTE: If given `false` then the plugin won't create any mappings
+  mappings = {
+    ---Operator-pending mapping; `gcc` `gbc` `gc[count]{motion}` `gb[count]{motion}`
+    basic = true,
+    ---Extra mapping; `gco`, `gcO`, `gcA`
+    extra = true,
+  },
+  ---Function to call before (un)comment
+  -- pre_hook = nil,
+  ---Function to call after (un)comment
+  -- post_hook = nil
 }
 
 -- Enable `lukas-reineke/indent-blankline.nvim`
@@ -289,12 +289,12 @@ require('indent_blankline').setup {
 
 require('gitsigns').setup {
   signs = {
-    add          = { hl = 'GitSignsAdd', text =     '█', numhl = 'GitSignsAddNr',     linehl = 'GitSignsAddLn'    },
-    change       = { hl = 'GitSignsChange', text =  '█', numhl = 'GitSignsChangeNr',  linehl = 'GitSignsChangeLn' },
-    delete       = { hl = 'GitSignsDelete', text =  '█', numhl = 'GitSignsDeleteNr',  linehl = 'GitSignsDeleteLn' },
-    topdelete    = { hl = 'GitSignsDelete', text =  '█', numhl = 'GitSignsDeleteNr',  linehl = 'GitSignsDeleteLn' },
-    changedelete = { hl = 'GitSignsChange', text =  '█', numhl = 'GitSignsChangeNr',  linehl = 'GitSignsChangeLn' },
-    untracked    = { hl = 'GitSignsAdd', text =     '█', numhl = 'GitSignsAddNr',     linehl = 'GitSignsAddLn'    },
+    add          = { hl = 'GitSignsAdd', text = '█', numhl = 'GitSignsAddNr', linehl = 'GitSignsAddLn' },
+    change       = { hl = 'GitSignsChange', text = '█', numhl = 'GitSignsChangeNr', linehl = 'GitSignsChangeLn' },
+    delete       = { hl = 'GitSignsDelete', text = '█', numhl = 'GitSignsDeleteNr', linehl = 'GitSignsDeleteLn' },
+    topdelete    = { hl = 'GitSignsDelete', text = '█', numhl = 'GitSignsDeleteNr', linehl = 'GitSignsDeleteLn' },
+    changedelete = { hl = 'GitSignsChange', text = '█', numhl = 'GitSignsChangeNr', linehl = 'GitSignsChangeLn' },
+    untracked    = { hl = 'GitSignsAdd', text = '█', numhl = 'GitSignsAddNr', linehl = 'GitSignsAddLn' },
   },
 }
 
@@ -304,7 +304,7 @@ require('neogit').setup {
   disable_hint = false,
   disable_context_highlighting = false,
   disable_commit_confirmation = false,
-  -- Neogit refreshes its internal state after specific events, which can be expensive depending on the repository size. 
+  -- Neogit refreshes its internal state after specific events, which can be expensive depending on the repository size.
   -- Disabling `auto_refresh` will make it so you have to manually refresh the status after you open it.
   auto_refresh = true,
   disable_builtin_notifications = false,
@@ -331,15 +331,15 @@ require('neogit').setup {
     -- The diffview integration enables the diff popup, which is a wrapper around `sindrets/diffview.nvim`.
     --
     -- Requires you to have `sindrets/diffview.nvim` installed.
-    -- use { 
-    --   'TimUntersberger/neogit', 
-    --   requires = { 
+    -- use {
+    --   'TimUntersberger/neogit',
+    --   requires = {
     --     'nvim-lua/plenary.nvim',
-    --     'sindrets/diffview.nvim' 
+    --     'sindrets/diffview.nvim'
     --   }
     -- }
     --
-    diffview = false  
+    diffview = false
   },
   -- Setting any section to `false` will make the section not render at all
   sections = {
@@ -407,10 +407,10 @@ vim.keymap.set('n', '<leader>sm', require('telescope.builtin').marks, { desc = '
 vim.keymap.set('n', '<leader>sq', require('telescope.builtin').quickfix, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
-vim.keymap.set('n', '<leader>sb', function ()
+vim.keymap.set('n', '<leader>sb', function()
   require('telescope.builtin')
-    .current_buffer_fuzzy_find(require('telescope.themes')
-    .get_dropdown{ previewer = false })
+      .current_buffer_fuzzy_find(require('telescope.themes')
+        .get_dropdown { previewer = false })
 end, { desc = '[/] Fuzzily search in current buffer]' })
 
 
@@ -422,17 +422,16 @@ end, { desc = '[/] Fuzzily search in current buffer]' })
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
   ensure_installed = {
-    'c',
-    'cpp',
+    'bash',
     'go',
     'lua',
     'python',
-    'rust',
     'typescript',
     'help',
     'yaml',
     'json',
-    'toml'
+    'toml', 
+    'svelte'
   },
 
   highlight = {
@@ -494,7 +493,7 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
 
 -- ***********************************************************************
 -- ***
--- *** Language Server Protocol 
+-- *** Language Server Protocol
 -- ***
 --  This function gets run when an LSP connects to a particular buffer.
 local on_attach = function(_, bufnr)
@@ -535,15 +534,14 @@ local on_attach = function(_, bufnr)
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, '[W]orkspace [L]ist Folders')
 
+
   -- Create a command `:Format` local to the LSP buffer
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
     vim.lsp.buf.format()
   end, { desc = 'Format current buffer with LSP' })
 end
 
--- Enable the following language servers
---  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
---
+
 --  Add any additional override configuration in the following tables. They will be passed to
 --  the `settings` field of the server config. You must look up that documentation yourself.
 local servers = {
@@ -552,10 +550,24 @@ local servers = {
   rust_analyzer = {},
   tsserver = {},
 
-  sumneko_lua = {
+  lua_ls = {
     Lua = {
-      workspace = { checkThirdParty = false },
-      telemetry = { enable = false },
+      runtime = {
+        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+        version = 'LuaJIT',
+      },
+      diagnostics = {
+        -- Get the language server to recognize the `vim` global
+        globals = {'vim'},
+      },
+      workspace = {
+        -- Make the server aware of Neovim runtime files
+        library = vim.api.nvim_get_runtime_file("", true),
+      },
+      -- Do not send telemetry data containing a randomized but unique identifier
+      telemetry = {
+        enable = false,
+      },
     },
   },
 }
@@ -569,7 +581,7 @@ capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 require('mason').setup()
 
 -- Ensure the servers above are installed
-local mason_lspconfig = require 'mason-lspconfig'
+local mason_lspconfig = require('mason-lspconfig')
 
 mason_lspconfig.setup {
   ensure_installed = vim.tbl_keys(servers),
@@ -585,6 +597,13 @@ mason_lspconfig.setup_handlers {
   end,
 }
 
+
+-- ***********************************************************************
+-- ***
+-- *** programming languages
+-- ***
+
+require('go').setup()
 
 -- ***********************************************************************
 -- ***
@@ -623,7 +642,7 @@ require("dapui").setup {
   layouts = {
     {
       elements = {
-      -- Elements can be strings or table with id and size keys.
+        -- Elements can be strings or table with id and size keys.
         { id = "scopes", size = 0.25 },
         "breakpoints",
         "stacks",
@@ -658,8 +677,8 @@ require("dapui").setup {
     },
   },
   floating = {
-    max_height = nil, -- These can be integers or a float between 0 and 1.
-    max_width = nil, -- Floats will be treated as percentage of your screen.
+    max_height = nil,  -- These can be integers or a float between 0 and 1.
+    max_width = nil,   -- Floats will be treated as percentage of your screen.
     border = "single", -- Border style. Can be "single", "double" or "rounded"
     mappings = {
       close = { "q", "<Esc>" },
@@ -708,13 +727,13 @@ for _, language in ipairs({ "typescript", "javascript" }) do
       type = "pwa-node",
       request = "attach",
       name = "Attach",
-      processId = require'dap.utils'.pick_process,
+      processId = require 'dap.utils'.pick_process,
       cwd = "${workspaceFolder}",
     }
   }
 end
 
--- *** adapters 
+-- *** adapters
 -- python adapter
 require('dap-python').setup('~/.py-envs/devops/bin/python')
 
@@ -795,7 +814,7 @@ require("nvim-tree").setup {
   },
 }
 
-vim.keymap.set('n', '<leader>e', require('nvim-tree.api').tree.toggle)
+vim.keymap.set('n', '<leader>e', require('nvim-tree.api').tree.find_file)
 
 
 -- ***********************************************************************
@@ -820,7 +839,7 @@ vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]])
 
 -- ***********************************************************************
 -- ***
--- *** task runner 
+-- *** task runner
 -- ***
 require('overseer').setup {
   direction = 'left',
@@ -846,14 +865,14 @@ vim.api.nvim_create_user_command("OverseerRestartLast", function()
   end
 end, {})
 
-vim.keymap.set('n', '<leader>tl', require('overseer').toggle, {desc = '[T]ask List'})
-vim.keymap.set('n', '<leader>tt', require('overseer').run_template, {desc = '[T]ask List'})
-vim.keymap.set('n', '<leader>tr', ':OverseerRestartLast<CR>', {desc = 'Restart Last Task'})
+vim.keymap.set('n', '<leader>tl', require('overseer').toggle, { desc = '[T]ask List' })
+vim.keymap.set('n', '<leader>tt', require('overseer').run_template, { desc = '[T]ask List' })
+vim.keymap.set('n', '<leader>tr', ':OverseerRestartLast<CR>', { desc = 'Restart Last Task' })
 
 
 -- ***********************************************************************
 -- ***
--- *** others 
+-- *** others
 -- ***
 
 
@@ -912,7 +931,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 --     vim.api.nvim_buf_set_lines(RUN_BUFFER, 0 , 0, false, {"first line", "second line"})
 --   end,
 
---   clear = function () 
+--   clear = function ()
 --   end
 -- }
 --
@@ -930,5 +949,3 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 
 -- vim.keymap.set('n', '<leader>xx', my_create_buffer)
 -- vim.keymap.set('n', '<leader>xe', my_run_code)
-
-
