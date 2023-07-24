@@ -87,9 +87,7 @@
 ;;(global-whitespace-mode)
 
 ;; remove window title bar
-(setq default-frame-alist '((undecorated . t)))
-
-
+;; (setq default-frame-alist '((undecorated . t)))
 ;; add thin border to be able to resize the window
 ;; (add-to-list 'default-frame-alist '(drag-internal-border . 1))
 ;; (add-to-list 'default-frame-alist '(drag-with-header-line . 1))
@@ -99,11 +97,6 @@
 ;; maximaize window by default
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-;; change default shell
-(when
-  (or (string= system-type "ms-dos") (string= system-type "windows-nt"))
-  (setq shell-file-name "C:/Users/moamen.hraden/.dotnet/tools/pwsh.exe"))
-
 
 ;; line wrapping
 (toggle-truncate-lines 1)
@@ -111,6 +104,36 @@
 ;; change compilation window defaults
 (setq compilation-window-height 15)
 (setq compilation-scroll-output t)
+
+
+
+
+
+;; ***********************************************************************
+;; ***
+;; *** OS Specific Config
+;; ***
+
+;; windows specific config
+(when
+    (or (string= system-type "ms-dos") (string= system-type "windows-nt"))
+    (setq shell-file-name "C:/Users/moamen.hraden/.dotnet/tools/pwsh.exe"))
+
+
+
+
+;; ***********************************************************************
+;; ***
+;; *** Machine Specific Config
+;; ***
+
+;; hp work pc config
+(when
+    (string= (system-name) "WAP5CG1194FFK")
+    (setq default-directory "C:/Users/moamen.hraden/"))
+
+
+
 
 
 
@@ -578,14 +601,31 @@ of TO-TIME so that the user can customize the date format more easily."
   (let ((time (org-read-date nil 'to-time nil "Date:  ")))
     (insert (format-time-string "%Y-%m-%d" time))))
 
+(defun my/smart-find-file ()
+    (interactive)
+    (if (projectile-project-p)
+        (consult-projectile-find-file)
+      (ido-find-file)))
 
+(defun my/smart-find-buffer ()
+  (interactive)
+  (if (projectile-project-p)
+      (consult-project-buffer)
+    (consult-buffer)))
+
+;; better renaming for new shells
+(defvar shell-index 0)
+(defun my/shell ()
+  (interactive)
+  (shell (concat (number-to-string shell-index) "-shell"))
+  (setq shell-index (+ shell-index 1)))
 
 ;; ***********************************************************************
 ;; ***
 ;; *** Key Mapping
 ;; ***
 
-    (use-package evil
+(use-package evil
     :ensure t
     :init
     (setq evil-want-integration t)
@@ -593,7 +633,7 @@ of TO-TIME so that the user can customize the date format more easily."
     :config
     (evil-mode 1))
 
-    (use-package evil-collection
+(use-package evil-collection
     :ensure t
     :after evil
     :custom
@@ -601,17 +641,17 @@ of TO-TIME so that the user can customize the date format more easily."
     :config
     (evil-collection-init))
 
-    (use-package evil-surround
+(use-package evil-surround
     :ensure t
     :config
     (global-evil-surround-mode 1))
 
-    (use-package evil-mc
+(use-package evil-mc
     :ensure t
     :config
     (global-evil-mc-mode 1))
 
-    (use-package evil-org
+(use-package evil-org
     :ensure t
     :after org
     :config
@@ -653,33 +693,44 @@ of TO-TIME so that the user can customize the date format more easily."
 
     ;; most used commands
     "w"       'save-buffer
-    ;; TODO: make find-file conditional
-    "f"       'find-file
-    "b"       'consult-buffer
+    "f"       'my/smart-find-file
+    "b"       'my/smart-find-buffer
     "q"       'delete-window
-    "s"       'consult-ripgrep
     "k"       'magit-status
     "x"       'execute-extended-command
     "h"       'consult-apropos
     "d"       'docker
+    "t"       'my/shell
+
+    ;; search
+    "sb"    'consult-line
+    "sp"    'consult-ripgrep
+    "so"    'consult-outline
+    "si"    'consult-imenu
+    "sr"    'consult-register
+    "sm"    'consult-mode-command
+    "sl"    'consult-goto-line
+    "st"    'consult-theme
+
 
     ;; utility functions binding
     "ud"      'my/insert-date
 
     ;; org key binding
-    "a"       'org-agenda
-    "c"       'org-capture
 
-    ;; projectile key bidning
-    "pf"      'consult-projectile-find-file
-    "pd"      'consult-projectile-find-dir
-    "pb"      'consult-projectile-switch-to-buffer
+    ;; general buffe
+    "gf"      'find-file
+    "gb"      'consult-buffer
+
+    ;; project key biding
     "ps"      'consult-projectile-switch-project
 
     ;; org roam key binding
-    "rf"      'org-roam-node-find
-    "rb"      'org-roam-buffer
-    "rt"      'org-roam-buffer-toggle
+    "oa"        'org-agenda
+    "oc"        'org-capture
+    "of"        'org-roam-node-find
+    "ob"        'org-roam-buffer
+    "ot"        'org-roam-buffer-toggle
 
     ;; org journal key binding
     "jn"      'org-journal-next-entry
@@ -717,6 +768,8 @@ of TO-TIME so that the user can customize the date format more easily."
   ;;(setq aw-dispatch-always t)
   (setq aw-minibuffer-flag t)
   (global-set-key (kbd "M-o") 'ace-window))
+
+
 
 ;; ***********************************************************************
 ;; ***
