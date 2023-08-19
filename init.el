@@ -704,6 +704,10 @@
     :config
     (global-evil-mc-mode 1))
 
+(use-package evil-nerd-commenter
+  :after evil
+  :ensure t)
+
 (use-package evil-org
     :ensure t
     :after evil
@@ -741,7 +745,7 @@
 
   ;; Global Keybindings
   (my-leader-def
-    :states   'normal
+    :states   '(normal visual)
     :keymaps  'override
 
     "SPC"   'recompile
@@ -756,6 +760,8 @@
     "h"       'consult-apropos
     "d"       'docker
     "t"       'my/shell
+    "c"     'evilnc-comment-or-uncomment-lines
+
 
     ;; search
     "sb"    'consult-line
@@ -845,7 +851,7 @@
  '(git-gutter:window-width 1)
  '(org-agenda-files '("c:/Users/moame/git-repos/main/plan.org"))
  '(package-selected-packages
-   '(spaceline nano-modeline nano-theme org-modern zig-mode wttrin cargo beacon lua-mode restclient omnisharp evil-goggles highlight-indentation ace-window rg go-mode iss-mode lsp-mode pyvenv pyvenv-mode pyenv-mode jupyter angular-mode scss-mode vterm evil-mc consult-projectile docker wgrep git-gutter nyan-mode minimap darcula-theme ox-gfm ox-beamer ox-md csharp-mode tree-sitter-indent yasnippet company eglot elgot rust-mode tree-sitter org-journal org-roam-ui embark-consult embark org-roam magit which-key general marginalia orderless evil-escape all-the-icons vertico-directory vertico evil-collection evil-org evil-surround evil ox-reveal doom-modeline gruvbox-theme use-package)))
+   '(evil-nerd-commenter spaceline nano-modeline nano-theme org-modern zig-mode wttrin cargo beacon lua-mode restclient omnisharp evil-goggles highlight-indentation ace-window rg go-mode iss-mode lsp-mode pyvenv pyvenv-mode pyenv-mode jupyter angular-mode scss-mode vterm evil-mc consult-projectile docker wgrep git-gutter nyan-mode minimap darcula-theme ox-gfm ox-beamer ox-md csharp-mode tree-sitter-indent yasnippet company eglot elgot rust-mode tree-sitter org-journal org-roam-ui embark-consult embark org-roam magit which-key general marginalia orderless evil-escape all-the-icons vertico-directory vertico evil-collection evil-org evil-surround evil ox-reveal doom-modeline gruvbox-theme use-package)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
