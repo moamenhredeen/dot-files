@@ -39,6 +39,8 @@ set highlightedyank
 " IdeaVim uses 'a' for alt instead of Vim's 'm'
 nmap <a-j> 15gj
 nmap <a-k> 15gk
+nmap <a-h> <c-w>h
+nmap <a-l> <c-w>l
 
 
 
@@ -63,8 +65,7 @@ nmap <leader>= :action EditorResetFontSize<CR>
 nmap <leader>q :q!<cr>
 nmap <leader>Q :action CloseAllEditors<cr>
 nmap <leader>w :action SaveAll<cr>
-nmap <leader>x :wq<cr>
-nmap <leader>X :wQ<cr>
+nmap <leader>x :action GotoAction<cr>
 
 
 " ***********************************************************************

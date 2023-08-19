@@ -11,118 +11,13 @@
 ;;  ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝╚══════╝
 
 
-
-;; ***********************************************************************
-;; ***
-;; *** Utility Functions
-;; ***
-
-(defun my/insert-date ()
-    "Insert a date at point using `org-read-date' with its optional argument
-    of TO-TIME so that the user can customize the date format more easily."
-    (interactive)
-    (require 'org)
-    (let ((time (org-read-date nil 'to-time nil "Date:  ")))
-        (insert (format-time-string "%Y-%m-%d" time))))
-
-(defun my/smart-find-file ()
-        (interactive)
-        (if (projectile-project-p)
-            (consult-projectile-find-file)
-        (ido-find-file)))
-
-(defun my/smart-find-buffer ()
-    (interactive)
-    (if (projectile-project-p)
-        (consult-project-buffer)
-        (consult-buffer)))
-
-    ;; better renaming for new shells
-    (defvar shell-index 0)
-    (defun my/shell ()
-    (interactive)
-    (let (shell-name)
-        (setq shell-name (read-string "enter shell name (default: <number>-shell): "))
-        (if (zerop (length (string-trim shell-name)))
-            (progn
-            (shell (concat (number-to-string shell-index) "-shell"))
-            (setq shell-index (+ shell-index 1)))
-        (shell shell-name))))
-
-
-(defun my/window-split-toggle ()
-    "Toggle between horizontal and vertical split with two windows."
-    (interactive)
-    (if (> (length (window-list)) 2)
-        (error "Can't toggle with more than 2 windows!")
-        (let ((func (if (window-full-height-p)
-                        #'split-window-vertically
-                    #'split-window-horizontally)))
-        (delete-other-windows)
-        (funcall func)
-        (save-selected-window
-            (other-window 1)
-            (switch-to-buffer (other-buffer))))))
-
-(defun my/home-directory ()
-    "os independent home directory.
-        this function return home environment variable on linux
-        and USERPROFILE environment variable on windows."
-  (interactive)
-  (if (or (eq system-type 'windows-nt) (eq system-type 'ms-dos))
-      (getenv "USERPROFILE")
-    (getenv "HOME")))
-
-
-;; Two callable functions for enabling/disabling tabs in Emacs
-(defun disable-tabs () (setq indent-tabs-mode nil))
-(defun enable-tabs  ()
-  (local-set-key (kbd "TAB") 'tab-to-tab-stop)
-  (setq indent-tabs-mode t)
-  (setq tab-width custom-tab-width))
-
-
-
 ;; ***********************************************************************
 ;; ***
 ;; *** better defaults
 ;; ***
 
 
-;; customize default font
-(add-hook 'org-mode-hook
-          (lambda ()
-            (text-scale-adjust 2)
-            (setq buffer-face-mode-face '(:family "Comic Sans MS"))
-            (buffer-face-mode)))
-
-
-;; TODO: find better to modeify default-frame-alist
-(add-to-list 'default-frame-alist '(font . "Cascadia Code"))
-(add-to-list 'default-frame-alist '(foreground-color . "gray30"))
-(add-to-list 'default-frame-alist '(background-color . "#fffaf0"))
-
-
-;; customize built-in mode line
-(set-face-attribute 'mode-line nil
-                    :background "#eee8d5"
-                    :foreground "gray10"
-                    :weight 'bold
-                    :box '(:line-width 5 :color "#eee8d5")
-                    :overline nil
-                    :underline nil)
-
-;; (set-face-attribute 'mode-line-inactive nil
-;;                     :background "#fdf6e3"
-;;                     :foreground "#93a1a1"
-;;                     :box '(:line-width 4 :color "#eee8d5")
-;;                     :overline nil
-;;                     :underline nil)
-
-
-;; customize cursor line
-(set-face-attribute 'cursor nil :background "red")
-
+(fringe-mode 0)
 
 ;; Use RET to open org-mode links, including those in quick-help.org
 (setq org-return-follows-link t)
@@ -225,50 +120,12 @@
 ;; maximaize window by default
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-
 ;; line wrapping
 (toggle-truncate-lines 1)
 
 ;; change compilation window defaults
 (setq compilation-window-height 15)
 (setq compilation-scroll-output t)
-
-
-;; uesr interface centric
-(setq inhibit-startup-message t)
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-(scroll-bar-mode -1)
-(defalias 'yes-or-no-p 'y-or-n-p)
-(global-hl-line-mode 1)
-(column-number-mode)
-(global-display-line-numbers-mode t)
-
-;; Disable line numbers for some modes
-(dolist (mode '(term-mode-hook
-                shell-mode-hook
-                org-mode-hook
-                treemacs-mode-hook
-                eshell-mode-hook))
-  (add-hook mode (lambda () (display-line-numbers-mode 0))))
-
-
-
-;; remove window fringes
-(fringe-mode 0)
-
-(setq initial-scratch-message "
- ██╗  ██╗██╗    ███╗   ███╗ ██████╗  █████╗ ███╗   ███╗███████╗███╗   ██╗
- ██║  ██║██║    ████╗ ████║██╔═══██╗██╔══██╗████╗ ████║██╔════╝████╗  ██║
- ███████║██║    ██╔████╔██║██║   ██║███████║██╔████╔██║█████╗  ██╔██╗ ██║
- ██╔══██║██║    ██║╚██╔╝██║██║   ██║██╔══██║██║╚██╔╝██║██╔══╝  ██║╚██╗██║
- ██║  ██║██║    ██║ ╚═╝ ██║╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗██║ ╚████║
- ╚═╝  ╚═╝╚═╝    ╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚═╝  ╚═══╝
-")
-
-
-(use-package all-the-icons
-  :ensure t)
 
 
 ;; ***********************************************************************
@@ -318,6 +175,59 @@
   (require 'use-package))
 
 
+
+
+;; ***********************************************************************
+;; ***
+;; *** Customize user interface
+;; ***
+
+(setq initial-scratch-message "
+ ██╗  ██╗██╗    ███╗   ███╗ ██████╗  █████╗ ███╗   ███╗███████╗███╗   ██╗
+ ██║  ██║██║    ████╗ ████║██╔═══██╗██╔══██╗████╗ ████║██╔════╝████╗  ██║
+ ███████║██║    ██╔████╔██║██║   ██║███████║██╔████╔██║█████╗  ██╔██╗ ██║
+ ██╔══██║██║    ██║╚██╔╝██║██║   ██║██╔══██║██║╚██╔╝██║██╔══╝  ██║╚██╗██║
+ ██║  ██║██║    ██║ ╚═╝ ██║╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗██║ ╚████║
+ ╚═╝  ╚═╝╚═╝    ╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚═╝  ╚═══╝
+")
+
+
+;; uesr interface centric
+(setq inhibit-startup-message t)
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
+(defalias 'yes-or-no-p 'y-or-n-p)
+(global-hl-line-mode 1)
+(column-number-mode)
+(global-display-line-numbers-mode t)
+
+;; Disable line numbers for some modes
+(dolist (mode '(term-mode-hook
+                shell-mode-hook
+                org-mode-hook
+                treemacs-mode-hook
+                eshell-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+;; set theme
+;; (use-package doom-themes
+;;   :ensure t
+;;   :config
+;;   (load-theme 'doom-gruvbox t)
+;;   (doom-themes-org-config))
+
+
+;; modeline
+;; (use-package doom-modeline
+;;   :ensure t
+;;   :init (doom-modeline-mode 1)
+;;   :config
+;;   (setq doom-modeline-height 30))
+
+
+(use-package all-the-icons
+  :ensure t)
 
 
 ;; ***********************************************************************
@@ -497,16 +407,14 @@
         org-src-strip-leading-and-trailing-blank-lines t
         org-src-preserve-indentation t;; do not put two spaces on the left
         org-edit-src-content-indentation 0
-        org-src-tab-acts-natively t
-        org-hide-leading-stars t
-        org-hide-block-startup t)
-        org-ellipsis " ─╮"
-        org-todo-keywords '((sequence "TODO" "NEXT" "INPROGRESS" "|" "DONE" "BLOCKED"))
-        org-todo-keyword-faces '(("TODO" . (:foreground "#ff6e6e" :weight bold :box (:line-width 1)))
+        org-src-tab-acts-natively t)
+  (setq org-ellipsis " ─╮")
+  (setq org-todo-keywords '((sequence "TODO" "NEXT" "INPROGRESS" "|" "DONE" "BLOCKED")))
+  (setq org-todo-keyword-faces '(("TODO" . (:foreground "#ff6e6e" :weight bold :box (:line-width 1)))
                                  ("NEXT" . (:foreground "#cc241d" :weight bold :box (:line-width 1)))
                                  ("INPROGRESS" . (:foreground "#d65d0e" :weight bold :box (:line-width 1)))
                                  ("DONE" . (:foreground "#98971a" :weight bold :box (:line-width 1) ))
-                                 ("BLOCKED" . (:foreground "#ebdbb2" :weight bold :box (:line-width 1) ))))
+                                 ("BLOCKED" . (:foreground "#ebdbb2" :weight bold :box (:line-width 1) )))))
 
 (org-babel-do-load-languages
  'org-babel-load-languages
@@ -668,6 +576,76 @@
 
 
 
+    ;; ***********************************************************************
+    ;; ***
+    ;; *** Utility Functions
+    ;; ***
+
+    (defun my/insert-date ()
+    "Insert a date at point using `org-read-date' with its optional argument
+    of TO-TIME so that the user can customize the date format more easily."
+    (interactive)
+    (require 'org)
+    (let ((time (org-read-date nil 'to-time nil "Date:  ")))
+        (insert (format-time-string "%Y-%m-%d" time))))
+
+    (defun my/smart-find-file ()
+        (interactive)
+        (if (projectile-project-p)
+            (consult-projectile-find-file)
+        (ido-find-file)))
+
+    (defun my/smart-find-buffer ()
+    (interactive)
+    (if (projectile-project-p)
+        (consult-project-buffer)
+        (consult-buffer)))
+
+    ;; better renaming for new shells
+    (defvar shell-index 0)
+    (defun my/shell ()
+    (interactive)
+    (let (shell-name)
+        (setq shell-name (read-string "enter shell name (default: <number>-shell): "))
+        (if (zerop (length (string-trim shell-name)))
+            (progn
+            (shell (concat (number-to-string shell-index) "-shell"))
+            (setq shell-index (+ shell-index 1)))
+        (shell shell-name))))
+
+
+    (defun my/window-split-toggle ()
+    "Toggle between horizontal and vertical split with two windows."
+    (interactive)
+    (if (> (length (window-list)) 2)
+        (error "Can't toggle with more than 2 windows!")
+        (let ((func (if (window-full-height-p)
+                        #'split-window-vertically
+                    #'split-window-horizontally)))
+        (delete-other-windows)
+        (funcall func)
+        (save-selected-window
+            (other-window 1)
+            (switch-to-buffer (other-buffer))))))
+
+    (defun my/home-directory ()
+    "os independent home directory.
+        this function return home environment variable on linux
+        and USERPROFILE environment variable on windows."
+  (interactive)
+  (if (or (eq system-type 'windows-nt) (eq system-type 'ms-dos))
+      (getenv "USERPROFILE")
+    (getenv "HOME")))
+
+
+;; Two callable functions for enabling/disabling tabs in Emacs
+(defun disable-tabs () (setq indent-tabs-mode nil))
+(defun enable-tabs  ()
+  (local-set-key (kbd "TAB") 'tab-to-tab-stop)
+  (setq indent-tabs-mode t)
+  (setq tab-width custom-tab-width))
+
+
 
 ;; ***********************************************************************
 ;; ***
@@ -677,12 +655,10 @@
 (use-package evil
     :ensure t
     :init
-    (setq
-        evil-want-integration t
-        evil-want-keybinding nil)
+    (setq evil-want-integration t)
+    (setq evil-want-keybinding nil)
     :config
     (evil-mode 1))
-
 
 (use-package evil-collection
     :ensure t
@@ -694,19 +670,16 @@
 
 (use-package evil-surround
     :ensure t
-    :after evil
     :config
     (global-evil-surround-mode 1))
 
 (use-package evil-mc
     :ensure t
-    :after evil
     :config
     (global-evil-mc-mode 1))
 
 (use-package evil-org
     :ensure t
-    :after evil
     :after org
     :config
     (add-hook 'org-mode-hook 'evil-org-mode)
@@ -734,7 +707,6 @@
 ;; cleaner way for defining keymap
 (use-package general
   :ensure t
-  :after evil
   :config
   (general-create-definer my-leader-def
     :prefix "SPC")
@@ -811,7 +783,6 @@
 
 
 
-
 (use-package ace-window
   :ensure t
   :config
@@ -845,7 +816,7 @@
  '(git-gutter:window-width 1)
  '(org-agenda-files '("c:/Users/moame/git-repos/main/plan.org"))
  '(package-selected-packages
-   '(spaceline nano-modeline nano-theme org-modern zig-mode wttrin cargo beacon lua-mode restclient omnisharp evil-goggles highlight-indentation ace-window rg go-mode iss-mode lsp-mode pyvenv pyvenv-mode pyenv-mode jupyter angular-mode scss-mode vterm evil-mc consult-projectile docker wgrep git-gutter nyan-mode minimap darcula-theme ox-gfm ox-beamer ox-md csharp-mode tree-sitter-indent yasnippet company eglot elgot rust-mode tree-sitter org-journal org-roam-ui embark-consult embark org-roam magit which-key general marginalia orderless evil-escape all-the-icons vertico-directory vertico evil-collection evil-org evil-surround evil ox-reveal doom-modeline gruvbox-theme use-package)))
+   '(nano-modeline nano-theme org-modern zig-mode wttrin cargo beacon lua-mode restclient omnisharp evil-goggles highlight-indentation ace-window rg go-mode iss-mode lsp-mode pyvenv pyvenv-mode pyenv-mode jupyter angular-mode scss-mode vterm evil-mc consult-projectile docker wgrep git-gutter nyan-mode minimap darcula-theme ox-gfm ox-beamer ox-md csharp-mode tree-sitter-indent yasnippet company eglot elgot rust-mode tree-sitter org-journal org-roam-ui embark-consult embark org-roam magit which-key general marginalia orderless evil-escape all-the-icons vertico-directory vertico evil-collection evil-org evil-surround evil ox-reveal doom-modeline gruvbox-theme use-package)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
