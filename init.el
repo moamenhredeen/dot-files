@@ -228,7 +228,7 @@
 (global-whitespace-mode)
 
 ;; maximaize window by default
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
+;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 
 ;; line wrapping
