@@ -137,11 +137,33 @@ local configure_telescope = function()
 	local telescope = require('telescope')
 	telescope.setup {
 		defaults = {
+			layout_config = {
+				bottom_pane = {
+					height = 10,
+					prompt_position = "top",
+				},
+			},
 			mappings = {
 				i = {
 					['<C-u>'] = false,
 					['<C-d>'] = false,
 				},
+			},
+		},
+		pickers = {
+			find_files = {
+				theme = 'ivy',
+			},
+			live_grep = {
+				theme = 'ivy',
+				previewer = false
+			},
+			buffers = {
+				theme = 'ivy',
+				previewer = false
+			},
+			help_tags = {
+				theme = 'ivy',
 			},
 		},
 	}
@@ -161,8 +183,8 @@ local configure_telescope = function()
 	vim.keymap.set('n', '<Leader>f', telescope_builtin.find_files, { desc = 'open [F]ile' })
 	vim.keymap.set('n', '<Leader>b', telescope_builtin.buffers, { desc = 'open [B]uffer' })
 	vim.keymap.set('n', '<Leader>sh', telescope_builtin.help_tags, { desc = '[H]elp' })
-	vim.keymap.set('n', '<Leader>sc', telescope_builtin.commands, { desc = '[C]ommands' })
-	vim.keymap.set('n', '<Leader>p', telescope_builtin.commands, { desc = '[C]ommands' })
+	vim.keymap.set('n', '<Leader>x', telescope_builtin.commands, { desc = '[C]ommands' })
+	vim.keymap.set('n', '<Leader>sc', telescope_builtin.git_commits, { desc = '[C]ommands' })
 	vim.keymap.set('n', '<Leader>sm', telescope_builtin.marks, { desc = '[S]earch [D]iagnostics' })
 	vim.keymap.set('n', '<Leader>sq', telescope_builtin.quickfix, { desc = '[S]earch [D]iagnostics' })
 	vim.keymap.set('n', '<Leader>sd', telescope_builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
@@ -180,7 +202,7 @@ local configure_cmp = function()
 	local cmp = require('cmp')
 	local luasnip = require('luasnip')
 
-	cmp.setup {
+	cmp.setup({
 		snippet = {
 			expand = function(args)
 				luasnip.lsp_expand(args.body)
@@ -218,7 +240,7 @@ local configure_cmp = function()
 			{ name = 'luasnip' },
 			{ name = 'path' },
 		},
-	}
+	})
 end
 
 
@@ -350,13 +372,12 @@ end
 -- nvim tree
 --
 local configure_nvimtree = function()
-
 	-- disable netrw at the very start of your init.lua (strongly advised)
 	vim.g.loaded_netrw = 1
 	vim.g.loaded_netrwPlugin = 1
 	local api = require('nvim-tree.api')
 
-	local my_on_attach = function (bufnr)
+	local my_on_attach = function(bufnr)
 		api.config.mappings.default_on_attach(bufnr)
 	end
 
@@ -380,7 +401,7 @@ local configure_nvimtree = function()
 		-- },
 	}
 
-	vim.keymap.set('n', '<Leader>e', api.tree.open)
+	vim.keymap.set('n', '<Leader>e', api.tree.toggle)
 end
 
 
@@ -461,4 +482,5 @@ require("lazy").setup({
 		dependencies = {
 			'nvim-tree/nvim-web-devicons' }
 	},
+	{ 'lervag/vimtex'},
 })
