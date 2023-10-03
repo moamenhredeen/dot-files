@@ -108,9 +108,9 @@ nmap <leader>ri :action OptimizeImports<cr>
 " ***
 " *** search 
 " ***
-nmap / :action Find<cr>
-vmap / :action Find<cr>
-nmap <leader>\ :action FindInPath<cr>
+" nmap / :action Find<cr>
+" vmap / :action Find<cr>
+" nmap <leader>\ :action FindInPath<cr>
 
 
 

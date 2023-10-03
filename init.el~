@@ -64,6 +64,12 @@
             (other-window 1)
             (switch-to-buffer (other-buffer))))))
 
+;; (defun my/open-buffer-in-horizontal-split ()
+;;     (interactive)
+;;   (split-window-below)
+;;   (evil-window-down)
+;;   (consult-buffer))
+
 (defun my/home-directory ()
     "os independent home directory.
         this function return home environment variable on linux
@@ -94,39 +100,11 @@
 ;; ***
 
 
-;; customize default font
-(add-hook 'org-mode-hook
-          (lambda ()
-            (text-scale-adjust 2)
-            (setq buffer-face-mode-face '(:family "Comic Sans MS"))
-            (buffer-face-mode)))
-
-
-;; TODO: find better to modeify default-frame-alist
+;; custom font
 (add-to-list 'default-frame-alist '(font . "Cascadia Code"))
-(add-to-list 'default-frame-alist '(foreground-color . "gray30"))
-(add-to-list 'default-frame-alist '(background-color . "#fffaf0"))
-
-
-;; customize built-in mode line
-(set-face-attribute 'mode-line nil
-                    :background "#eee8d5"
-                    :foreground "gray10"
-                    :weight 'bold
-                    :box '(:line-width 5 :color "#eee8d5")
-                    :overline nil
-                    :underline nil)
-
-;; (set-face-attribute 'mode-line-inactive nil
-;;                     :background "#fdf6e3"
-;;                     :foreground "#93a1a1"
-;;                     :box '(:line-width 4 :color "#eee8d5")
-;;                     :overline nil
-;;                     :underline nil)
-
 
 ;; customize cursor line
-(set-face-attribute 'cursor nil :background "red")
+;; (set-face-attribute 'cursor nil :background "red")
 
 
 ;; Use RET to open org-mode links, including those in quick-help.org
@@ -227,9 +205,6 @@
 ;; Enable whitespace mode everywhere
 (global-whitespace-mode)
 
-;; maximaize window by default
-;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
-
 
 ;; line wrapping
 (toggle-truncate-lines 1)
@@ -263,17 +238,29 @@
 (fringe-mode 0)
 
 (setq initial-scratch-message "
- ██╗  ██╗██╗    ███╗   ███╗ ██████╗  █████╗ ███╗   ███╗███████╗███╗   ██╗
- ██║  ██║██║    ████╗ ████║██╔═══██╗██╔══██╗████╗ ████║██╔════╝████╗  ██║
- ███████║██║    ██╔████╔██║██║   ██║███████║██╔████╔██║█████╗  ██╔██╗ ██║
- ██╔══██║██║    ██║╚██╔╝██║██║   ██║██╔══██║██║╚██╔╝██║██╔══╝  ██║╚██╗██║
- ██║  ██║██║    ██║ ╚═╝ ██║╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗██║ ╚████║
- ╚═╝  ╚═╝╚═╝    ╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚═╝  ╚═══╝
+;;  ███████╗███╗   ███╗ █████╗  ██████╗███████╗
+;;  ██╔════╝████╗ ████║██╔══██╗██╔════╝██╔════╝
+;;  █████╗  ██╔████╔██║███████║██║     ███████╗
+;;  ██╔══╝  ██║╚██╔╝██║██╔══██║██║     ╚════██║
+;;  ███████╗██║ ╚═╝ ██║██║  ██║╚██████╗███████║
+;;  ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝╚══════╝
 ")
 
+(use-package spacemacs-theme
+  :ensure t
+  :config
+  (load-theme 'spacemacs-dark))
 
-(use-package all-the-icons
-  :ensure t)
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode t)
+  :custom
+  (doom-modeline-support-imenu t)
+  (doom-modeline-height 30)
+  (doom-modeline-hud t)
+  (doom-modeline-icon nil)
+  (doom-modeline-buffer-name t)
+  (doom-modeline-env-version t))
 
 
 ;; ***********************************************************************
@@ -381,6 +368,18 @@
 ;; A few more useful configurations...
 (use-package emacs
   :init
+  ;; TAB cycle if there are only few candidates
+  (setq completion-cycle-threshold 3)
+
+  ;; Emacs 28: Hide commands in M-x which do not apply to the current mode.
+  ;; Corfu commands are hidden, since they are not supposed to be used via M-x.
+  ;; (setq read-extended-command-predicate
+  ;;       #'command-completion-default-include-p)
+
+  ;; Enable indentation+completion using the TAB key.
+  ;; `completion-at-point' is often bound to M-TAB.
+  (setq tab-always-indent 'complete)
+
   ;; Add prompt indicator to `completing-read-multiple'.
   ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
   (defun crm-indicator (args)
@@ -465,6 +464,9 @@
 (use-package docker
   :ensure t)
 
+(use-package treemacs
+  :ensure t)
+
 
 ;; ***********************************************************************
 ;; ***
@@ -496,7 +498,7 @@
 
 (use-package org
   :config
-  (add-to-list 'org-agenda-files (file-name-concat (my/home-directory) "git-repos" "main"))
+  (add-to-list 'org-agenda-files (file-name-concat (my/home-directory) "git-repos" "main" "main.org"))
   (setq org-src-fontify-natively t
         org-src-window-setup 'current-window ;; edit in current window
         org-src-strip-leading-and-trailing-blank-lines t
@@ -506,7 +508,7 @@
         org-hide-leading-stars t
         org-hide-block-startup t)
         org-ellipsis " ─╮"
-        org-todo-keywords '((sequence "TODO" "NEXT" "INPROGRESS" "|" "DONE" "BLOCKED"))
+        org-todo-keywords '("TODO" "NEXT" "INPROGRESS" "|" "DONE" "BLOCKED")
         org-todo-keyword-faces '(("TODO" . (:foreground "#ff6e6e" :weight bold :box (:line-width 1)))
                                  ("NEXT" . (:foreground "#cc241d" :weight bold :box (:line-width 1)))
                                  ("INPROGRESS" . (:foreground "#d65d0e" :weight bold :box (:line-width 1)))
@@ -575,7 +577,7 @@
   ;; Change default prefix key; needs to be set before loading org-journal
   (setq org-journal-prefix-key "C-c j ")
   :custom
-    (org-journal-dir (file-name-concat (expand-file-name (my/home-directory))"git-repos" "main" "journal"))
+    (org-journal-dir (file-name-concat (expand-file-name (my/home-directory)) "git-repos" "main" "journal"))
     (org-journal-agenda-integration t)
     (org-journal-file-format "%Y-%m.org")
     (org-journal-file-type 'monthly)
@@ -593,84 +595,82 @@
 
 
 
-    ;; ***********************************************************************
-    ;; ***
-    ;; *** Programming
-    ;; ***
-
-    (use-package pascal-mode
-    :mode ("\\.iss\\'" . pascal-mode))
-
-    (use-package go-mode
-    :ensure t
-    :defer t
-    :config
-    (setq compile-command "go run main.go"))
-
-    (use-package lua-mode
-    :ensure t
-    :defer t)
-
-    (use-package eglot
-    :ensure t
-    :defer t
-    :hook ((prog-mode . eglot-ensure)))
-
-    (use-package yasnippet
-    :ensure t
-    :defer t
-    :hook ((prog-mode . yas-minor-mode)))
-
-    (use-package yasnippet-snippets
-    :ensure t)
-
-    (use-package company
-    :ensure t
-    :defer t
-    :custom
-    ;; Search other buffers with the same modes for completion instead of
-    ;; searching all other buffers.
-    (company-dabbrev-other-buffers t)
-    (company-dabbrev-code-other-buffers t)
-    ;; M-<num> to select an option according to its number.
-    (company-show-numbers t)
-    ;; Only 2 letters required for completion to activate.
-    (company-minimum-prefix-length 3)
-    ;; Do not downcase completions by default.
-    (company-dabbrev-downcase nil)
-    ;; Even if I write something with the wrong case,
-    ;; provide the correct casing.
-    (company-dabbrev-ignore-case t)
-    ;; company completion wait
-    (company-idle-delay 0.2)
-    ;; No company-mode in shell & eshell
-    (company-global-modes '(not eshell-mode shell-mode))
-    ;; Use company with text and programming modes.
-    :hook ((text-mode . company-mode)
-            (prog-mode . company-mode))
-    :config
-    (setq company-backends '((company-capf :with company-yasnippet :separate)
-                            (company-yasnippet :separate)))
-    (define-key company-active-map
-                (kbd "TAB")
-                #'company-complete-common-or-cycle)
-    (define-key company-active-map
-                (kbd "<backtab>")
-                (lambda ()
-                    (interactive)
-                    (company-complete-common-or-cycle -1))))
+;; ***********************************************************************
+;; ***
+;; *** Programming
+;; ***
 
 
-    ;; load opascal-mode automatically for these file extensions
-    ;; (add-to-list 'auto-mode-alist
-    ;;              '("\\.\\(pas\\|iss\\)\\'" . pascal-mode))
-
-    ;; ;; configure pascal lsp
-    ;; (with-eval-after-load 'eglot
-    ;;   (add-to-list 'eglot-server-programs
-    ;;                '(pascal-mode . ("fools" "--stdio"))))
+(use-package yasnippet
+  :ensure t
+  :defer t
+  :hook ((prog-mode . yas-minor-mode)))
 
 
+(use-package yasnippet-snippets
+  :ensure t)
+
+(use-package eglot
+  :ensure t
+  :after (yasnippet)
+  :hook ((prog-mode . eglot-ensure)))
+
+
+
+(use-package corfu
+  :ensure t
+  :init (global-corfu-mode)
+  :custom
+  (corfu-auto t)                 ;; Enable auto completion
+  (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+  (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+  (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+  (corfu-popupinfo-delay 1)
+  :bind (:map corfu-map
+              ("TAB" . corfu-next)
+              ([tab] . corfu-next)
+              ("S-TAB" . corfu-previous)
+              ([backtab] . corfu-previous)))
+
+
+(defun corfu-move-to-minibuffer ()
+  (interactive)
+  (when completion-in-region--data
+    (let ((completion-extra-properties corfu--extra)
+          completion-cycle-threshold completion-cycling)
+      (apply #'consult-completion-in-region completion-in-region--data))))
+(keymap-set corfu-map "M-m" #'corfu-move-to-minibuffer)
+(add-to-list 'corfu-continue-commands #'corfu-move-to-minibuffer)
+
+
+(use-package tide
+  :ensure t
+  :after (corfu)
+  :hook ((typescript-ts-mode . tide-setup)
+         (tsx-ts-mode . tide-setup)
+         (typescript-ts-mode . tide-hl-identifier-mode)
+         (before-save . tide-format-before-save)))
+
+(use-package pascal-mode
+  :mode ("\\.iss\\'" . pascal-mode))
+
+
+(use-package lua-mode
+  :ensure t)
+
+(use-package js2-mode
+  :ensure t
+  :defer 20
+  :mode (("\\.js\\" . js2-mode)))
+
+
+
+;; ***********************************************************************
+;; ***
+;; *** TODO latex config
+;; ***
+
+;;(use-package auctex)
 
 
 
@@ -740,11 +740,24 @@
   (setq which-key-separator " → " )
   (setq which-key-prefix-prefix "+" ))
 
+
 ;; cleaner way for defining keymap
 (use-package general
   :ensure t
   :after evil
   :config
+
+  (general-define-key
+   ;; navigation
+   "M-k"    'evil-window-up
+   "M-j"    'evil-window-down
+   "M-h"    'evil-window-left
+   "M-l"    'evil-window-right
+   "M-s"    'split-window-below
+   "M-v"    'split-window-right
+   "M-q"    'evil-quit
+   "M-o"    'tab-switch)
+
   (general-create-definer my-leader-def
     :prefix "SPC")
 
@@ -765,7 +778,13 @@
     "h"       'consult-apropos
     "d"       'docker
     "t"       'my/shell
-    "c"     'evilnc-comment-or-uncomment-lines
+    "c"       'evilnc-comment-or-uncomment-lines
+    "e"         'treemacs
+
+    ;; eglot
+    ;; "aa"     'eglot-code-actions
+    ;; "ar"     'eglot-rename
+    ;; "af"     'eglot-format
 
 
     ;; search
@@ -777,8 +796,9 @@
     "sm"    'consult-mode-command
     "sl"    'consult-goto-line
     "st"    'consult-theme
+    "sw"    'occur
 
-    ;; utility functions binding
+    ;; utility binding functions
     "ud"      'my/insert-date
 
     ;; project key biding
@@ -823,26 +843,6 @@
 
 
 
-
-(use-package ace-window
-  :ensure t
-  :config
-  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
-  ;;(setq aw-dispatch-always t)
-  (setq aw-minibuffer-flag t)
-  (global-set-key (kbd "M-o") 'ace-window))
-
-(global-set-key (kbd "M-t") 'my/window-split-toggle)
-
-
-;; ***********************************************************************
-;; ***
-;; *** Auto Generated
-;; ***
-
-(use-package auctex)
-
-
 ;; ***********************************************************************
 ;; ***
 ;; *** Auto Generated
@@ -853,25 +853,18 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(company-show-quick-access t nil nil "Customized with use-package company")
  '(custom-safe-themes
-   '("3c451787cee570710bff441154a7db8b644cdbb7d270189b2724c6041a262381" "8d412c0ed46b865312d6df5c1dfd1821d349dd3cba00049cf88c4ad34403597e" "bf798e9e8ff00d4bf2512597f36e5a135ce48e477ce88a0764cfb5d8104e8163" "37c8c2817010e59734fe1f9302a7e6a2b5e8cc648cf6a6cc8b85f3bf17fececf" "6945dadc749ac5cbd47012cad836f92aea9ebec9f504d32fe89a956260773ca4" "aec7b55f2a13307a55517fdf08438863d694550565dee23181d2ebd973ebd6b8" "56044c5a9cc45b6ec45c0eb28df100d3f0a576f18eef33ff8ff5d32bac2d9700" "8d3ef5ff6273f2a552152c7febc40eabca26bae05bd12bc85062e2dc224cde9a" "1781e8bccbd8869472c09b744899ff4174d23e4f7517b8a6c721100288311fa5" "e7820b899036ae7e966dcaaec29fd6b87aef253748b7de09e74fdc54407a7a02" "00cec71d41047ebabeb310a325c365d5bc4b7fab0a681a2a108d32fb161b4006" "467dc6fdebcf92f4d3e2a2016145ba15841987c71fbe675dcfe34ac47ffb9195" "3fe1ebb870cc8a28e69763dde7b08c0f6b7e71cc310ffc3394622e5df6e4f0da" "c865644bfc16c7a43e847828139b74d1117a6077a845d16e71da38c8413a5aaa" "e3daa8f18440301f3e54f2093fe15f4fe951986a8628e98dcd781efbec7a46f2" "afa47084cb0beb684281f480aa84dab7c9170b084423c7f87ba755b15f6776ef" "1a1ac598737d0fcdc4dfab3af3d6f46ab2d5048b8e72bc22f50271fd6d393a00" "3f1dcd824a683e0ab194b3a1daac18a923eed4dba5269eecb050c718ab4d5a26" "79586dc4eb374231af28bbc36ba0880ed8e270249b07f814b0e6555bdcb71fab" "443e2c3c4dd44510f0ea8247b438e834188dc1c6fb80785d83ad3628eadf9294" "da75eceab6bea9298e04ce5b4b07349f8c02da305734f7c0c8c6af7b5eaa9738" "251ed7ecd97af314cd77b07359a09da12dcd97be35e3ab761d4a92d8d8cf9a71" "b54376ec363568656d54578d28b95382854f62b74c32077821fdfd604268616a" "b99e334a4019a2caa71e1d6445fc346c6f074a05fcbb989800ecbe54474ae1b0" "be84a2e5c70f991051d4aaf0f049fa11c172e5d784727e0b525565bb1533ec78" "02f57ef0a20b7f61adce51445b68b2a7e832648ce2e7efb19d217b6454c1b644" "adaf421037f4ae6725aa9f5654a2ed49e2cd2765f71e19a7d26a454491b486eb" "944d52450c57b7cbba08f9b3d08095eb7a5541b0ecfb3a0a9ecd4a18f3c28948" "683b3fe1689da78a4e64d3ddfce90f2c19eb2d8ab1bab1738a63d8263119c3f4" "636b135e4b7c86ac41375da39ade929e2bd6439de8901f53f88fde7dd5ac3561" default))
+   '("7fd8b914e340283c189980cd1883dbdef67080ad1a3a9cc3df864ca53bdc89cf" default))
  '(git-gutter:added-sign " ")
  '(git-gutter:deleted-sign " ")
  '(git-gutter:modified-sign " ")
- '(git-gutter:visual-line t)
- '(git-gutter:window-margin 3)
- '(git-gutter:window-width 1)
- '(org-agenda-files '("c:/Users/moame/git-repos/main/plan.org"))
  '(package-selected-packages
-   '(auctex moe-theme ample-theme monokai-theme evil-nerd-commenter spaceline nano-modeline nano-theme org-modern zig-mode wttrin cargo beacon lua-mode restclient omnisharp evil-goggles highlight-indentation ace-window rg go-mode iss-mode lsp-mode pyvenv pyvenv-mode pyenv-mode jupyter angular-mode scss-mode vterm evil-mc consult-projectile docker wgrep git-gutter nyan-mode minimap darcula-theme ox-gfm ox-beamer ox-md csharp-mode tree-sitter-indent yasnippet company eglot elgot rust-mode tree-sitter org-journal org-roam-ui embark-consult embark org-roam magit which-key general marginalia orderless evil-escape all-the-icons vertico-directory vertico evil-collection evil-org evil-surround evil ox-reveal doom-modeline gruvbox-theme use-package)))
-
+   '(treemacs-projectile treemacs-evil ejc-sql cider yasnippet-snippets which-key web-mode vscode-dark-plus-theme vertico undo-tree tide spacemacs-theme spaceline space-theming smartparens restclient ox-reveal ox-gfm org-tree-slide org-roam-ui org-modern org-journal org-bullets orderless nano-theme nano-modeline monokai-theme moe-theme marginalia magit lua-mode lsp-ui highlight-indentation go-mode gitlab git-gutter general flycheck-eglot evil-surround evil-org evil-nerd-commenter evil-mc evil-goggles evil-collection embark-consult eat doom-themes doom-modeline docker dap-mode corfu consult-projectile company atom-one-dark-theme ample-theme all-the-icons)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:weight normal :height 100 :width normal :family "Cascadia Code" :foreground "#B8B8B8"))))
  '(evil-goggles-change-face ((t (:inherit diff-removed))))
  '(evil-goggles-default-face ((t (:inherit 'highlight))))
  '(evil-goggles-delete-face ((t (:inherit diff-removed))))
@@ -879,5 +872,4 @@
  '(evil-goggles-undo-redo-add-face ((t (:inherit diff-added))))
  '(evil-goggles-undo-redo-change-face ((t (:inherit diff-changed))))
  '(evil-goggles-undo-redo-remove-face ((t (:inherit diff-removed))))
- '(evil-goggles-yank-face ((t (:inherit diff-changed))))
- '(whitespace-tab ((t (:foreground "#636363")))))
+ '(evil-goggles-yank-face ((t (:inherit diff-changed)))))
