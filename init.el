@@ -829,6 +829,11 @@
 ;; *** User UI Customization
 ;; ***
 
+(custom-theme-set-faces
+ 'user
+ '(org-document-title ((t (:inherit bold :foreground "#bc6ec5" :underline t :height 1.8))))
+ '(org-level-1 ((t (:inherit bold :foreground "#4f97d7" :height 1.5))))
+ '(org-headline-done ((t (:foreground "#878787")))))
 
 ;; ***********************************************************************
 ;; ***
@@ -845,6 +850,7 @@
  '(git-gutter:added-sign " ")
  '(git-gutter:deleted-sign " ")
  '(git-gutter:modified-sign " ")
+ '(org-fontify-done-headline t)
  '(package-selected-packages
    '(yasnippet-snippets which-key web-mode vscode-dark-plus-theme vertico undo-tree spacemacs-theme spaceline space-theming smartparens restclient ox-reveal ox-gfm org-tree-slide org-roam-ui org-journal org-bullets orderless nano-theme nano-modeline monokai-theme moe-theme marginalia magit highlight-indentation go-mode git-gutter general evil-surround evil-org evil-nerd-commenter evil-mc evil-goggles evil-collection embark-consult eat doom-themes doom-modeline docker corfu consult-projectile company atom-one-dark-theme ample-theme all-the-icons)))
 (custom-set-faces
@@ -859,4 +865,6 @@
  '(evil-goggles-undo-redo-add-face ((t (:inherit diff-added))))
  '(evil-goggles-undo-redo-change-face ((t (:inherit diff-changed))))
  '(evil-goggles-undo-redo-remove-face ((t (:inherit diff-removed))))
- '(evil-goggles-yank-face ((t (:inherit diff-changed)))))
+ '(evil-goggles-yank-face ((t (:inherit diff-changed))))
+ '(org-headline-done ((t (:foreground "#878787"))))
+ '(org-level-1 ((t (:inherit bold :foreground "#4f97d7" :height 1.5)))))
