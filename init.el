@@ -93,12 +93,22 @@
   (setq tab-width custom-tab-width))
 
 
+;; TODO: define function to sync my notes
+;; (stage, commit and push changes to github from any file with global keybinding)
+;; (defun my/sync-notes ()
+;;   (interactive)
+;;   (find-file (file-name-concat (my/home-directory) "git-repos" "main" "main.org"))
+
+
 
 ;; ***********************************************************************
 ;; ***
 ;; *** better defaults
 ;; ***
 
+
+;; disable warning
+(setq warning-minimum-level :emergency)
 
 ;; custom font
 (add-to-list 'default-frame-alist '(font . "Cascadia Code"))
@@ -249,7 +259,7 @@
 (use-package spacemacs-theme
   :ensure t
   :config
-  (load-theme 'spacemacs-dark))
+  (load-theme 'spacemacs-dark t))
 
 (use-package doom-modeline
   :ensure t
@@ -500,20 +510,21 @@
   :config
   (add-to-list 'org-agenda-files (file-name-concat (my/home-directory) "git-repos" "main" "main.org"))
   (setq org-src-fontify-natively t
+        org-hide-emphasis-markers t
         org-src-window-setup 'current-window ;; edit in current window
         org-src-strip-leading-and-trailing-blank-lines t
         org-src-preserve-indentation t;; do not put two spaces on the left
         org-edit-src-content-indentation 0
         org-src-tab-acts-natively t
         org-hide-leading-stars t
-        org-hide-block-startup t)
+        org-hide-block-startup t
         org-ellipsis " ─╮"
         org-todo-keywords '("TODO" "NEXT" "INPROGRESS" "|" "DONE" "BLOCKED")
         org-todo-keyword-faces '(("TODO" . (:foreground "#ff6e6e" :weight bold :box (:line-width 1)))
                                  ("NEXT" . (:foreground "#cc241d" :weight bold :box (:line-width 1)))
                                  ("INPROGRESS" . (:foreground "#d65d0e" :weight bold :box (:line-width 1)))
                                  ("DONE" . (:foreground "#98971a" :weight bold :box (:line-width 1) ))
-                                 ("BLOCKED" . (:foreground "#ebdbb2" :weight bold :box (:line-width 1) ))))
+                                 ("BLOCKED" . (:foreground "#ebdbb2" :weight bold :box (:line-width 1) )))))
 
 (org-babel-do-load-languages
  'org-babel-load-languages
@@ -615,8 +626,6 @@
   :after (yasnippet)
   :hook ((prog-mode . eglot-ensure)))
 
-
-
 (use-package corfu
   :ensure t
   :init (global-corfu-mode)
@@ -641,27 +650,6 @@
       (apply #'consult-completion-in-region completion-in-region--data))))
 (keymap-set corfu-map "M-m" #'corfu-move-to-minibuffer)
 (add-to-list 'corfu-continue-commands #'corfu-move-to-minibuffer)
-
-
-(use-package tide
-  :ensure t
-  :after (corfu)
-  :hook ((typescript-ts-mode . tide-setup)
-         (tsx-ts-mode . tide-setup)
-         (typescript-ts-mode . tide-hl-identifier-mode)
-         (before-save . tide-format-before-save)))
-
-(use-package pascal-mode
-  :mode ("\\.iss\\'" . pascal-mode))
-
-
-(use-package lua-mode
-  :ensure t)
-
-(use-package js2-mode
-  :ensure t
-  :defer 20
-  :mode (("\\.js\\" . js2-mode)))
 
 
 
@@ -845,6 +833,17 @@
 
 ;; ***********************************************************************
 ;; ***
+;; *** User UI Customization
+;; ***
+
+(custom-theme-set-faces
+ 'user
+ '(org-document-title ((t (:inherit bold :foreground "#bc6ec5" :underline t :height 1.8))))
+ '(org-level-1 ((t (:inherit bold :foreground "#4f97d7" :height 1.5))))
+ '(org-headline-done ((t (:foreground "#878787")))))
+
+;; ***********************************************************************
+;; ***
 ;; *** Auto Generated
 ;; ***
 
@@ -856,8 +855,9 @@
  '(git-gutter:added-sign " ")
  '(git-gutter:deleted-sign " ")
  '(git-gutter:modified-sign " ")
+ '(org-fontify-done-headline t)
  '(package-selected-packages
-   '(doom-modeline yasnippet-snippets which-key vertico undo-tree treemacs tide spacemacs-theme smartparens restclient ox-reveal ox-gfm org-tree-slide org-roam-ui org-journal orderless marginalia magit lua-mode js2-mode git-gutter general evil-surround evil-org evil-nerd-commenter evil-mc evil-goggles evil-collection embark-consult docker corfu consult-projectile)))
+   '(yasnippet-snippets which-key web-mode vscode-dark-plus-theme vertico undo-tree spacemacs-theme spaceline space-theming smartparens restclient ox-reveal ox-gfm org-tree-slide org-roam-ui org-journal org-bullets orderless nano-theme nano-modeline monokai-theme moe-theme marginalia magit highlight-indentation go-mode git-gutter general evil-surround evil-org evil-nerd-commenter evil-mc evil-goggles evil-collection embark-consult eat doom-themes doom-modeline docker corfu consult-projectile company atom-one-dark-theme ample-theme all-the-icons)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -870,4 +870,6 @@
  '(evil-goggles-undo-redo-add-face ((t (:inherit diff-added))))
  '(evil-goggles-undo-redo-change-face ((t (:inherit diff-changed))))
  '(evil-goggles-undo-redo-remove-face ((t (:inherit diff-removed))))
- '(evil-goggles-yank-face ((t (:inherit diff-changed)))))
+ '(evil-goggles-yank-face ((t (:inherit diff-changed))))
+ '(org-headline-done ((t (:foreground "#878787"))))
+ '(org-level-1 ((t (:inherit bold :foreground "#4f97d7" :height 1.5)))))

@@ -17,6 +17,8 @@
 -- *** better defaults
 -- ***
 
+-- set font for gui neovim clients
+vim.opt.guifont = 'FiraCode Nerd Font'
 
 -- highlight current line
 vim.o.cursorline = true
@@ -127,7 +129,9 @@ local configure_treesitter = function()
 			"vimdoc",
 			"go",
 			"javascript",
-			"typescript"
+			"typescript",
+			"scss",
+			"svelte"
 		},
 		auto_intall = true,
 		highlight = {
