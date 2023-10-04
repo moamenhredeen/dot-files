@@ -443,7 +443,6 @@ alias lg='lazygit'
 
 alias hh='hstr'
 alias bat='batcat'
-alias fd='fdfind'
 
 
 # ***********************************************************************

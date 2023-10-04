@@ -853,13 +853,11 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("7fd8b914e340283c189980cd1883dbdef67080ad1a3a9cc3df864ca53bdc89cf" default))
  '(git-gutter:added-sign " ")
  '(git-gutter:deleted-sign " ")
  '(git-gutter:modified-sign " ")
  '(package-selected-packages
-   '(js2-mode treemacs-projectile treemacs-evil ejc-sql cider yasnippet-snippets which-key web-mode vscode-dark-plus-theme vertico undo-tree tide spacemacs-theme spaceline space-theming smartparens restclient ox-reveal ox-gfm org-tree-slide org-roam-ui org-modern org-journal org-bullets orderless nano-theme nano-modeline monokai-theme moe-theme marginalia magit lua-mode lsp-ui highlight-indentation go-mode gitlab git-gutter general flycheck-eglot evil-surround evil-org evil-nerd-commenter evil-mc evil-goggles evil-collection embark-consult eat doom-themes doom-modeline docker dap-mode corfu consult-projectile company atom-one-dark-theme ample-theme all-the-icons)))
+   '(doom-modeline yasnippet-snippets which-key vertico undo-tree treemacs tide spacemacs-theme smartparens restclient ox-reveal ox-gfm org-tree-slide org-roam-ui org-journal orderless marginalia magit lua-mode js2-mode git-gutter general evil-surround evil-org evil-nerd-commenter evil-mc evil-goggles evil-collection embark-consult docker corfu consult-projectile)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
