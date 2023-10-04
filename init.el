@@ -93,6 +93,13 @@
   (setq tab-width custom-tab-width))
 
 
+;; TODO: define function to sync my notes
+;; (stage, commit and push changes to github from any file with global keybinding)
+;; (defun my/sync-notes ()
+;;   (interactive)
+;;   (find-file (file-name-concat (my/home-directory) "git-repos" "main" "main.org"))
+
+
 
 ;; ***********************************************************************
 ;; ***
