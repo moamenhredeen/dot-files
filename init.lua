@@ -130,8 +130,7 @@ local configure_treesitter = function()
 			"go",
 			"javascript",
 			"typescript",
-			"scss",
-			"svelte"
+			"scss"
 		},
 		auto_intall = true,
 		highlight = {
@@ -489,41 +488,78 @@ end
 --
 require("lazy").setup({
 	-- { "ellisonleao/gruvbox.nvim",        config = configure_theme,      lazy = false, priority = 2000 },
-	{ "Mofiqul/vscode.nvim",             config = configure_theme,      lazy = false, priority = 2000 },
-	{ 'nvim-telescope/telescope.nvim',   config = configure_telescope,  lazy = false, priority = 1000 },
-	{ "nvim-treesitter/nvim-treesitter", config = configure_treesitter, lazy = false },
+	{
+		"Mofiqul/vscode.nvim",
+		config = configure_theme,
+		lazy = false,
+		priority = 2000
+	},
+	{
+		'nvim-telescope/telescope.nvim',
+		config = configure_telescope,
+		lazy = false, priority = 1000
+	},
+	{
+		"nvim-treesitter/nvim-treesitter",
+		config = configure_treesitter,
+		lazy = false
+	},
 	{
 		'hrsh7th/nvim-cmp',
 		config = configure_cmp,
 		lazy = false,
 		dependencies = {
-			'hrsh7th/cmp-path', 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip' }
+			'hrsh7th/cmp-path',
+			'hrsh7th/cmp-nvim-lsp',
+			'L3MON4D3/LuaSnip',
+			'saadparwaiz1/cmp_luasnip'
+		}
 	},
 	{
 		"neovim/nvim-lspconfig",
 		config = configure_lspconfig,
 		lazy = false,
 		dependencies = {
-			"williamboman/mason.nvim", "williamboman/mason-lspconfig.nvim" }
+			"williamboman/mason.nvim",
+			"williamboman/mason-lspconfig.nvim"
+		}
 	},
-	{ 'lewis6991/gitsigns.nvim', config = configure_gitsigns, lazy = false },
+	{
+		'lewis6991/gitsigns.nvim',
+		config = configure_gitsigns,
+		lazy = false
+	},
 	{
 		"NeogitOrg/neogit",
 		config = true,
 		lazy = false,
 		dependencies = {
-			"nvim-lua/plenary.nvim", "sindrets/diffview.nvim" }
+			"nvim-lua/plenary.nvim",
+			"sindrets/diffview.nvim"
+		}
 	},
-	{ 'numToStr/Comment.nvim',   config = configure_comment,  lazy = false },
-	{ 'windwp/nvim-autopairs',   config = true,               lazy = false },
+	{
+		'numToStr/Comment.nvim',
+		config = configure_comment,
+		lazy = false
+	},
+	{
+		'windwp/nvim-autopairs',
+		config = true,
+		lazy = false
+	},
 	{
 		'nvim-tree/nvim-tree.lua',
 		config = configure_nvimtree,
 		lazy = false,
 		dependencies = {
-			'nvim-tree/nvim-web-devicons' }
+			'nvim-tree/nvim-web-devicons'
+		}
 	},
-	{ 'lervag/vimtex', lazy = true },
+	{
+		'lervag/vimtex',
+		lazy = true
+	},
 	{
 		'akinsho/toggleterm.nvim',
 		lazy = false,
@@ -557,14 +593,6 @@ require("lazy").setup({
 			}
 		end,
 	},
-	-- {
-	-- 	'akinsho/flutter-tools.nvim',
-	-- 	lazy = false,
-	-- 	dependencies = {
-	-- 		'nvim-lua/plenary.nvim',
-	-- 	},
-	-- 	config = true,
-	-- }
 })
 
 
@@ -593,6 +621,13 @@ local insert_current_file_path = function()
 	insert_at_cursor(vim.fn.expand('%:p'))
 end
 
+local clean_whitespaces = function()
+		local save_cursor = vim.fn.getpos(".")
+		pcall(function() vim.cmd [[%s/\s\+$//e]] end)
+		vim.fn.setpos(".", save_cursor)
+end
+
 vim.keymap.set('n', '<Leader>gc', open_config_file)
 vim.keymap.set('n', '<Leader>gd', insert_today_date)
 vim.keymap.set('n', '<Leader>gf', insert_current_file_path)
+vim.keymap.set('n', '<Leader>gc', clean_whitespaces)
