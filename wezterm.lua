@@ -12,9 +12,18 @@ return {
 	font = wezterm.font 'Fira Code',
 	default_prog = { 'pwsh.exe' },
   keys = {
+		-- full mode
     { key = 'Enter', mods = 'ALT', action = act.ToggleFullScreen },
+
+		-- split
     { key = 's', mods = 'SHIFT|ALT', action = act.SplitVertical{ domain =  'CurrentPaneDomain' } },
     { key = 'v', mods = 'SHIFT|ALT', action = act.SplitHorizontal{ domain =  'CurrentPaneDomain' } },
+
+		-- pane navigation
+		{ key = 'k', mods = 'SHIFT|ALT', action = act.ActivatePaneDirection 'Up' },
+		{ key = 'j', mods = 'SHIFT|ALT', action = act.ActivatePaneDirection 'Down' },
+		{ key = 'h', mods = 'SHIFT|ALT', action = act.ActivatePaneDirection 'Left' },
+		{ key = 'l', mods = 'SHIFT|ALT', action = act.ActivatePaneDirection 'Right' },
   },
 
   key_tables = {

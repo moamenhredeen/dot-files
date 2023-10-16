@@ -62,7 +62,7 @@ vim.opt.clipboard = 'unnamedplus'
 
 vim.o.tabstop = 2
 vim.o.shiftwidth = 2
-vim.o.noexpandtab = true
+-- vim.o.noexpandtab = true
 
 
 vim.g.mapleader = ' '
@@ -152,7 +152,7 @@ local configure_telescope = function()
 		defaults = {
 			layout_config = {
 				bottom_pane = {
-					height = 10,
+					height = 5,
 					prompt_position = "top",
 				},
 			},
@@ -163,46 +163,39 @@ local configure_telescope = function()
 				},
 			},
 		},
-		pickers = {
-			find_files = {
-				theme = 'ivy',
-			},
-			live_grep = {
-				theme = 'ivy',
-				previewer = false
-			},
-			buffers = {
-				theme = 'ivy',
-				previewer = false
-			},
-			help_tags = {
-				theme = 'ivy',
-			},
-		},
 	}
 
+	local telescope_builtin = require('telescope.builtin')
+
 	local fuzzy_find_buffer = function()
-		require('telescope.builtin')
-				.current_buffer_fuzzy_find(require('telescope.themes')
+				telescope_builtin
+					.current_buffer_fuzzy_find(require('telescope.themes')
 					.get_dropdown { previewer = false })
+	end
+
+	local find_dot_file = function ()
+		telescope_builtin.find_files({
+			cwd = "~/git-repos/dot-files"
+		})
 	end
 
 	-- Enable telescope fzf native, if installed
 	pcall(telescope.load_extension, 'fzf')
 
 	-- See `:help telescope.builtin`
-	local telescope_builtin = require('telescope.builtin')
 	-- vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
 	vim.keymap.set('n', '<Leader>f', telescope_builtin.find_files, { desc = 'open [F]ile' })
 	vim.keymap.set('n', '<Leader>b', telescope_builtin.buffers, { desc = 'open [B]uffer' })
-	vim.keymap.set('n', '<Leader>sh', telescope_builtin.help_tags, { desc = '[H]elp' })
 	vim.keymap.set('n', '<Leader>x', telescope_builtin.commands, { desc = '[C]ommands' })
+	vim.keymap.set('n', '<Leader>sh', telescope_builtin.help_tags, { desc = '[H]elp' })
 	vim.keymap.set('n', '<Leader>sc', telescope_builtin.git_commits, { desc = '[C]ommands' })
 	vim.keymap.set('n', '<Leader>sm', telescope_builtin.marks, { desc = '[S]earch [D]iagnostics' })
 	vim.keymap.set('n', '<Leader>sq', telescope_builtin.quickfix, { desc = '[S]earch [D]iagnostics' })
 	vim.keymap.set('n', '<Leader>sd', telescope_builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
 	vim.keymap.set('n', '<Leader>sw', telescope_builtin.live_grep, { desc = '[S]earch by [G]rep' })
+
 	vim.keymap.set('n', '<Leader>sb', fuzzy_find_buffer, { desc = '[/] Fuzzily search in current buffer]' })
+	vim.keymap.set('n', '<Leader>d', find_dot_file, { desc = '[D]ot files' })
 end
 
 
@@ -279,9 +272,13 @@ local on_attach = function(_, bufnr)
 
 	nmap('<Leader>a', vim.lsp.buf.code_action, '[A]ction')
 	nmap('<Leader>rr', vim.lsp.buf.rename, '[R]efactor [R]ename')
-	nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+	nmap('gd', vim.lsp.buf.type_definition, '[G]oto [D]efinition')
 	nmap('gr', telescopeBuildIn.lsp_references, '[G]oto [R]eferences')
-	nmap('<Leader>o', telescopeBuildIn.lsp_document_symbols, 'Document [O]utline')
+	nmap('<Leader>o', function ()
+		telescopeBuildIn.lsp_document_symbols({
+			show_line = true,
+		})
+	end , 'Document [O]utline')
 	nmap('gi', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
 
 	nmap('<Leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
@@ -416,7 +413,11 @@ local configure_nvimtree = function()
 		-- },
 	}
 
-	vim.keymap.set('n', '<Leader>e', api.tree.toggle)
+	vim.keymap.set('n', '<Leader>e', function ()
+		api.tree.open({
+			find_file = true
+		})
+	end)
 end
 
 
@@ -460,30 +461,6 @@ end
 
 
 -- *************************************************
--- configure toggleterm
---
-local configure_toggleterm = function()
-	require('toggleterm').setup({
-		size = 20,
-		open_mapping = '<C-t>',
-		border = 'single',
-		shell = 'pwsh.exe',
-		winbar = {
-			enabled = false
-		}
-	})
-
-	local opts = { buffer = 0 }
-	vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
-	vim.keymap.set('t', '<M-h>', [[<Cmd>wincmd h<CR>]], opts)
-	vim.keymap.set('t', '<M-j>', [[<Cmd>wincmd j<CR>]], opts)
-	vim.keymap.set('t', '<M-k>', [[<Cmd>wincmd k<CR>]], opts)
-	vim.keymap.set('t', '<M-l>', [[<Cmd>wincmd l<CR>]], opts)
-	vim.keymap.set('t', '<M-w>', [[<C-\><C-n><C-w>]], opts)
-end
-
-
--- *************************************************
 -- install plugisn and apply configuratio
 --
 require("lazy").setup({
@@ -491,23 +468,19 @@ require("lazy").setup({
 	{
 		"Mofiqul/vscode.nvim",
 		config = configure_theme,
-		lazy = false,
 		priority = 2000
 	},
 	{
 		'nvim-telescope/telescope.nvim',
 		config = configure_telescope,
-		lazy = false, priority = 1000
 	},
 	{
 		"nvim-treesitter/nvim-treesitter",
 		config = configure_treesitter,
-		lazy = false
 	},
 	{
 		'hrsh7th/nvim-cmp',
 		config = configure_cmp,
-		lazy = false,
 		dependencies = {
 			'hrsh7th/cmp-path',
 			'hrsh7th/cmp-nvim-lsp',
@@ -518,7 +491,6 @@ require("lazy").setup({
 	{
 		"neovim/nvim-lspconfig",
 		config = configure_lspconfig,
-		lazy = false,
 		dependencies = {
 			"williamboman/mason.nvim",
 			"williamboman/mason-lspconfig.nvim"
@@ -527,12 +499,10 @@ require("lazy").setup({
 	{
 		'lewis6991/gitsigns.nvim',
 		config = configure_gitsigns,
-		lazy = false
 	},
 	{
 		"NeogitOrg/neogit",
 		config = true,
-		lazy = false,
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			"sindrets/diffview.nvim"
@@ -541,60 +511,45 @@ require("lazy").setup({
 	{
 		'numToStr/Comment.nvim',
 		config = configure_comment,
-		lazy = false
 	},
 	{
 		'windwp/nvim-autopairs',
 		config = true,
-		lazy = false
 	},
 	{
 		'nvim-tree/nvim-tree.lua',
 		config = configure_nvimtree,
-		lazy = false,
 		dependencies = {
 			'nvim-tree/nvim-web-devicons'
 		}
 	},
 	{
 		'lervag/vimtex',
-		lazy = true
-	},
-	{
-		'akinsho/toggleterm.nvim',
-		lazy = false,
-		version = "*",
-		config = configure_toggleterm
 	},
 	{
 		'stevearc/overseer.nvim',
-		lazy = false,
 		config = function()
 			require('overseer').setup()
 		end
 	},
 	{
-		"nvim-neorg/neorg",
-		build = ":Neorg sync-parsers",
-		dependencies = { "nvim-lua/plenary.nvim" },
-		config = function()
-			require("neorg").setup {
-				load = {
-					["core.defaults"] = {},  -- Loads default behaviour
-					["core.concealer"] = {}, -- Adds pretty icons to your documents
-					["core.dirman"] = {      -- Manages Neorg workspaces
-						config = {
-							workspaces = {
-								notes = "~/notes",
-							},
-						},
-					},
-				},
-			}
-		end,
+		"ray-x/lsp_signature.nvim",
+		event = "VeryLazy",
+		opts = {},
+		config = function(_, opts) require'lsp_signature'.setup(opts) end
 	},
+	{
+		"j-hui/fidget.nvim",
+		tag = "legacy",
+		event = "LspAttach",
+		config = true
+	},
+	{ 
+		"folke/neodev.nvim",
+		config = true,
+		event = "BufEnter init.lua"
+	}
 })
-
 
 
 -- *************************************************
