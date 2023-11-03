@@ -281,7 +281,7 @@
 ;; windows specific config
 (when
     (or (string= system-type "ms-dos") (string= system-type "windows-nt"))
-    (setq shell-file-name "C:/Users/moamen.hraden/.dotnet/tools/pwsh.exe"))
+    (setq shell-file-name "pwsh.exe"))
 
 
 

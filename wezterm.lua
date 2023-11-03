@@ -8,7 +8,7 @@ local act = wezterm.action
 
 return {
 
-	color_scheme = 'Batman',
+	color_scheme = 'Gruvbox Material (Gogh)',
 	font = wezterm.font 'Fira Code',
 	default_prog = { 'pwsh.exe' },
   keys = {
