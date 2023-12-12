@@ -12,6 +12,71 @@
 
 
 
+
+;; ***********************************************************************
+;; ***
+;; *** better defaults
+;; ***
+
+;; UTF-8 as default encoding
+(prefer-coding-system 'utf-8)
+;; (set-language-environment 'utf-8)
+;; (set-default-coding-systems 'utf-8)
+;; (set-keyboard-coding-system 'utf-8-unix)
+;; add this especially on Windows, else python output problem
+;; (set-terminal-coding-system 'utf-8-unix)
+
+;; custom font
+(add-to-list 'default-frame-alist '(font . "JuliaMono"))
+
+
+;; (OPTIONAL) Shift width for evil-mode users
+;; For the vim-like motions of ">>" and "<<".
+(setq-default evil-shift-width custom-tab-width)
+
+;; change compilation window defaults
+(setq compilation-window-height 15)
+(setq compilation-scroll-output t)
+
+;; Disable line numbers for some modes
+(dolist (mode '(term-mode-hook
+                shell-mode-hook
+                org-mode-hook
+                treemacs-mode-hook
+                eshell-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+
+
+;; Hooks to Enable/Disable Tabs
+;; Disable line numbers for some modes
+(add-hook 'prog-mode-hook 'my/enable-tabs)
+(add-hook 'lisp-mode-hook 'my/disable-tabs)
+(add-hook 'emacs-lisp-mode-hook 'my/disable-tabs)
+
+;; customize dired
+(add-hook 'dired-mode-hook #'dired-hide-details-mode)
+
+
+;; save emacs backups in a different directory
+;; (some build-systems build automatically all files with a prefix, and .#something.someending breakes that)
+(setq backup-directory-alist '(("." . "~/.emacsbackups")))
+
+
+
+(use-package doom-themes
+  :ensure t
+  :config
+  (load-theme 'doom-solarized-dark t))
+
+;; Unique buffer names
+(use-package uniquify
+  :config
+  (setq uniquify-buffer-name-style 'reverse
+        uniquify-separator " • "
+        uniquify-after-kill-buffer-p t
+        uniquify-ignore-buffers-re "^\\*"))
+
 ;; ***********************************************************************
 ;; ***
 ;; *** Utility Functions
@@ -64,12 +129,6 @@
             (other-window 1)
             (switch-to-buffer (other-buffer))))))
 
-;; (defun my/open-buffer-in-horizontal-split ()
-;;     (interactive)
-;;   (split-window-below)
-;;   (evil-window-down)
-;;   (consult-buffer))
-
 (defun my/home-directory ()
     "os independent home directory.
         this function return home environment variable on linux
@@ -86,67 +145,14 @@
 
 
 ;; Two callable functions for enabling/disabling tabs in Emacs
-(defun disable-tabs () (setq indent-tabs-mode nil))
-(defun enable-tabs  ()
+(defun my/disable-tabs ()
+  (setq indent-tabs-mode nil))
+
+(defun my/enable-tabs  ()
   (local-set-key (kbd "TAB") 'tab-to-tab-stop)
   (setq indent-tabs-mode t)
   (setq tab-width custom-tab-width))
 
-
-;; TODO: define function to sync my notes
-;; (stage, commit and push changes to github from any file with global keybinding)
-;; (defun my/sync-notes ()
-;;   (interactive)
-;;   (find-file (file-name-concat (my/home-directory) "git-repos" "main" "main.org"))
-
-
-
-;; ***********************************************************************
-;; ***
-;; *** better defaults
-;; ***
-
-
-;; disable warning
-(setq warning-minimum-level :emergency)
-
-;; custom font
-(add-to-list 'default-frame-alist '(font . "Cascadia Code"))
-
-;; customize cursor line
-;; (set-face-attribute 'cursor nil :background "red")
-
-
-;; Use RET to open org-mode links, including those in quick-help.org
-(setq org-return-follows-link t)
-
-;; y/n for  answering yes/no questions
-(fset 'yes-or-no-p 'y-or-n-p)
-
-;; Size of temporary buffers
-(temp-buffer-resize-mode)
-(setq temp-buffer-max-height 8)
-
-;; Buffer encoding
-(prefer-coding-system       'utf-8)
-(set-default-coding-systems 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(set-language-environment   'utf-8)
-
-;; Unique buffer names
-(require 'uniquify)
-(setq uniquify-buffer-name-style 'reverse
-      uniquify-separator " • "
-      uniquify-after-kill-buffer-p t
-      uniquify-ignore-buffers-re "^\\*")
-
-;; Default shell in term
-(unless
-    (or (eq system-type 'windows-nt)
-        (not (file-exists-p "/bin/zsh")))
-  (setq-default shell-file-name "/bin/zsh")
-  (setq explicit-shell-file-name "/bin/zsh"))
 
 ;; Kill term buffer when exiting
 (defadvice term-sentinel (around my-advice-term-sentinel (proc msg))
@@ -158,145 +164,21 @@
 (ad-activate 'term-sentinel)
 
 
-;; configure file limit
-(setq gc-cons-thresold 50000000)
-(setq large-file-warning-thresold 100000000)
-
-
-;; Minimize garbage collection during startup
-(setq gc-cons-threshold most-positive-fixnum)
-
-;; Lower threshold back to 8 MiB (default is 800kB)
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (setq gc-cons-threshold (expt 2 23))))
-
-;; Speed up startup
-(setq auto-mode-case-fold nil)
-
-(setq ring-bell-function 'ignore)
-
-;; always select the newly opend buffer
-(setq help-window-select t)
-
-; START TABS CONFIG
-;; Create a variable for our preferred tab width
-(setq custom-tab-width 4)
-
-;; Hooks to Enable Tabs
-(add-hook 'prog-mode-hook 'enable-tabs)
-
-
-;; Hooks to Disable Tabs
-(add-hook 'lisp-mode-hook 'disable-tabs)
-(add-hook 'emacs-lisp-mode-hook 'disable-tabs)
-
-;; Language-Specific Tweaks
-(setq-default python-indent-offset custom-tab-width) ;; Python
-(setq-default js-indent-level custom-tab-width)      ;; Javascript
-
-;; Making electric-indent behave sanely
-(setq-default electric-indent-inhibit t)
-
-;; Make the backspace properly erase the tab instead of
-;; removing 1 space at a time.
-(setq backward-delete-char-untabify-method 'hungry)
-
-;; (OPTIONAL) Shift width for evil-mode users
-;; For the vim-like motions of ">>" and "<<".
-(setq-default evil-shift-width custom-tab-width)
-
-;; WARNING: This will change your life
-;; (OPTIONAL) Visualize tabs as a pipe character - "|"
-;; This will also show trailing characters as they are useful to spot.
-(setq whitespace-style '(face tabs tab-mark trailing))
-(setq whitespace-display-mappings
-      '((tab-mark 9 [124 9] [92 9]))) ; 124 is the ascii ID for '\|'
-;; Enable whitespace mode everywhere
-(global-whitespace-mode)
-
-
-;; line wrapping
-(toggle-truncate-lines 1)
-
-;; change compilation window defaults
-(setq compilation-window-height 15)
-(setq compilation-scroll-output t)
-
-
-;; uesr interface centric
-(setq inhibit-startup-message t)
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-(scroll-bar-mode -1)
-(defalias 'yes-or-no-p 'y-or-n-p)
-(global-hl-line-mode 1)
-(column-number-mode)
-(global-display-line-numbers-mode t)
-
-;; Disable line numbers for some modes
-(dolist (mode '(term-mode-hook
-                shell-mode-hook
-                org-mode-hook
-                treemacs-mode-hook
-                eshell-mode-hook))
-  (add-hook mode (lambda () (display-line-numbers-mode 0))))
-
-
-
-;; remove window fringes
-(fringe-mode 0)
-
-(setq initial-scratch-message "
-;;  ███████╗███╗   ███╗ █████╗  ██████╗███████╗
-;;  ██╔════╝████╗ ████║██╔══██╗██╔════╝██╔════╝
-;;  █████╗  ██╔████╔██║███████║██║     ███████╗
-;;  ██╔══╝  ██║╚██╔╝██║██╔══██║██║     ╚════██║
-;;  ███████╗██║ ╚═╝ ██║██║  ██║╚██████╗███████║
-;;  ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝╚══════╝
-")
-
-(use-package spacemacs-theme
-  :ensure t
-  :config
-  (load-theme 'spacemacs-dark t))
-
-(use-package doom-modeline
-  :ensure t
-  :init (doom-modeline-mode t)
-  :custom
-  (doom-modeline-support-imenu t)
-  (doom-modeline-height 30)
-  (doom-modeline-hud t)
-  (doom-modeline-icon nil)
-  (doom-modeline-buffer-name t)
-  (doom-modeline-env-version t))
-
-
 ;; ***********************************************************************
 ;; ***
-;; *** OS Specific Config
+;; *** OS / Machine Specific Config
 ;; ***
 
-;; windows specific config
-(when
-    (or (string= system-type "ms-dos") (string= system-type "windows-nt"))
-    (setq shell-file-name "pwsh.exe"))
-
-
-
-
-;; ***********************************************************************
-;; ***
-;; *** Machine Specific Config
-;; ***
-
-;; TODO: do i need this ???
-;; hp work pc config
-(when
-    (string= (system-name) "WAP5CG1194FFK")
-    (setq default-directory "C:/Users/moamen.hraden/"))
-
+(cond
+ ((or (string= system-type "ms-dos")
+      (string= system-type "windows-nt"))
+  (setq shell-file-name "pwsh.exe"))
+ ((or (eq system-type 'windows-nt)
+      (not (file-exists-p "/bin/zsh")))
+  (setq-default shell-file-name "/bin/zsh")
+  (setq explicit-shell-file-name "/bin/zsh"))
+ ((string= (system-name) "WAP5CG1194FFK")
+  (setq default-directory "C:/Users/moamen.hraden/")))
 
 
 ;; ***********************************************************************
@@ -304,28 +186,20 @@
 ;; *** package repositories
 ;; ***
 
-(require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/") t)
-(package-initialize)
 
-
-
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-(require 'use-package)
-
-(eval-when-compile
-  (require 'use-package))
-
-
+(use-package package
+  :config
+  (add-to-list 'package-archives
+               '("melpa" . "https://melpa.org/packages/")
+               t))
 
 
 ;; ***********************************************************************
 ;; ***
 ;; *** Utility Packages
 ;; ***
+
+
 
 (use-package smartparens
   :ensure t
@@ -340,6 +214,13 @@
 (use-package undo-tree
   :ensure t)
 
+
+(use-package dired-subtree
+  :ensure t
+  :after dired
+  :config
+  (bind-key "<tab>" #'dired-subtree-toggle dired-mode-map)
+  (bind-key "<backtab>" #'dired-subtree-cycle dired-mode-map))
 
 (use-package projectile
   :ensure t
@@ -474,10 +355,6 @@
 (use-package docker
   :ensure t)
 
-(use-package treemacs
-  :ensure t)
-
-
 ;; ***********************************************************************
 ;; ***
 ;; *** Git configuration
@@ -519,19 +396,13 @@
         org-hide-leading-stars t
         org-hide-block-startup t
         org-ellipsis " ─╮"
-        org-todo-keywords '("TODO" "NEXT" "INPROGRESS" "|" "DONE" "BLOCKED")
-        org-todo-keyword-faces '(("TODO" . (:foreground "#ff6e6e" :weight bold :box (:line-width 1)))
-                                 ("NEXT" . (:foreground "#cc241d" :weight bold :box (:line-width 1)))
-                                 ("INPROGRESS" . (:foreground "#d65d0e" :weight bold :box (:line-width 1)))
-                                 ("DONE" . (:foreground "#98971a" :weight bold :box (:line-width 1) ))
-                                 ("BLOCKED" . (:foreground "#ebdbb2" :weight bold :box (:line-width 1) )))))
-
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((emacs-lisp . t) ;; Other languages
-   (shell . t)
-   ;; Python & Jupyter
-   (python . t)))
+        org-todo-keywords '("TODO" "WIP" "|" "DONE" "BLOCKED" "CANCELED")
+        org-todo-keyword-faces '(("TODO" . (:foreground "#ff6e6e" :weight bold))
+                                 ("NEXT" . (:foreground "#cc241d" :weight bold))
+                                 ("WIP" . (:foreground "#d65d0e" :weight bold))
+                                 ("DONE" . (:foreground "#98971a" :weight bold))
+                                 ("CANCELED" . (:foreground "#ebdbb2" :weight bold))
+                                 ("BLOCKED" . (:foreground "#ebdbb2" :weight bold)))))
 
 (use-package ox-latex
   :custom
@@ -540,17 +411,6 @@
 (use-package ox-gfm
   :ensure t
   :after org)
-
-;; (setq org-hide-leading-stars t)
-;; (setq org-src-fontify-natively t)
-;; (global-prettify-symbols-mode t))
-
-
-(use-package ox-reveal
-  :ensure t
-  :custom
-  (org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
-  (org-reveal-mathjax t))
 
 (use-package org-roam
   :ensure t
@@ -572,14 +432,14 @@
   :config
   (org-roam-setup))
 
-(use-package org-roam-ui
-  :ensure t
-  :after org-roam
-  :config
-  (setq org-roam-ui-sync-theme t
-        org-roam-ui-follow t
-        org-roam-ui-update-on-save t
-        org-roam-ui-open-on-start t))
+;; (use-package org-roam-ui
+;;   :ensure t
+;;   :after org-roam
+;;   :config
+;;   (setq org-roam-ui-sync-theme t
+;;         org-roam-ui-follow t
+;;         org-roam-ui-update-on-save t
+;;         org-roam-ui-open-on-start t))
 
 (use-package org-journal
   :ensure t
@@ -597,14 +457,6 @@
     (setq org-agenda-file-regexp "\\`\\\([^.].*\\.org\\\|[0-9]\\\{8\\\}\\\(\\.gpg\\\)?\\\)\\'")
     (add-to-list 'org-agenda-files org-journal-dir))
 
-    (use-package org-tree-slide
-    :ensure t
-    :custom
-    (org-tree-slide-heading-emphasis t)
-    (org-tree-slide-breadcrumbs "❯")
-    (org-tree-slide-indicator '(:next "   Next ❯" :previous "❮ Previous" :content "❮  CONTENT  ❯")))
-
-
 
 ;; ***********************************************************************
 ;; ***
@@ -612,19 +464,37 @@
 ;; ***
 
 
-(use-package yasnippet
-  :ensure t
-  :defer t
-  :hook ((prog-mode . yas-minor-mode)))
+(add-to-list 'major-mode-remap-alist '((csharp-mode     . csharp-ts-mode)
+                                       (java-mode       . java-ts-mode)
+                                       (python-mode     . python-ts-mode)
+                                       (js-mode         . js-ts-mode)
+                                       (js2-mode        . js-ts-mode)
+                                       (css-mode        . css-ts-mode)
+                                       (typescript-mode . typescript-ts-mode)
+                                       (js-json-mode    . json-ts-mode)
+                                       (go-mode         . go-ts-mode)
+                                       (yaml-mode       . yaml-ts-mode)))
 
 
 (use-package yasnippet-snippets
   :ensure t)
 
+(use-package yasnippet
+  :ensure t
+  :config
+  (yas-global-mode 1))
+
+
+
 (use-package eglot
   :ensure t
   :after (yasnippet)
-  :hook ((prog-mode . eglot-ensure)))
+  :hook ((go-ts-mode
+          typescript-ts-mode
+          powershell-mode
+          nxml-mode
+          js-ts-mode
+          go-ts-mode) . eglot-ensure))
 
 (use-package corfu
   :ensure t
@@ -634,7 +504,8 @@
   (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
   (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
   (corfu-on-exact-match nil)     ;; Configure handling of exact matches
-  (corfu-popupinfo-delay 1)
+  (corfu-popupinfo-delay 0.2)
+  (corfu-auto-prefix 2)
   :bind (:map corfu-map
               ("TAB" . corfu-next)
               ([tab] . corfu-next)
@@ -653,13 +524,134 @@
 
 
 
+;; Add extensions
+(use-package cape
+  :ensure t
+  :bind (("C-c p p" . completion-at-point)))
+
+
+(use-package yasnippet-capf
+  :ensure t
+  :config
+  (add-to-list 'completion-at-point-functions #'yasnippet-capf))
+
+(use-package plantuml-mode
+  :ensure t
+  :custom
+  (plantuml-default-exec-mode 'jar)
+  (plantuml-jar-path (file-name-concat user-emacs-directory "plantuml.jar"))
+  :config
+  (when
+      (not
+       (file-exists-p
+        (file-name-concat user-emacs-directory "plantuml.jar")))
+    (plantuml-download-jar))
+  (add-to-list 'completion-at-point-functions
+               (list
+                (cape-capf-super #'cape-dabbrev))))
+
+
 ;; ***********************************************************************
 ;; ***
 ;; *** TODO latex config
 ;; ***
 
-;;(use-package auctex)
+;; (use-package auctex
+;;   :no-require t
+;;   :mode ("\\.tex\\'" . LaTeX-mode)
+;;   :init
+;;   (setq TeX-parse-self t ; parse on load
+;;           reftex-plug-into-AUCTeX t
+;;           TeX-auto-save t  ; parse on save
+;;           TeX-source-correlate-mode t
+;;           TeX-source-correlate-method 'synctex
+;;         TeX-source-correlate-start-server nil
+;;         TeX-electric-sub-and-superscript t
+;;         TeX-engine 'luatex ;; use lualatex by default
+;;         TeX-save-query nil))
 
+
+;; (use-package latex
+;;   :ensure auctex
+;;   :general
+;;   (patrl/local-leader-keys
+;;     :keymaps 'LaTeX-mode-map
+;;     ;; "TAB" 'TeX-complete-symbol ;; FIXME let's 'TAB' do autocompletion (but it's kind of useless to be honest)
+;;     "=" '(reftex-toc :wk "reftex toc")
+;;     "(" '(reftex-latex :wk "reftex label")
+;;     ")" '(reftex-reference :wk "reftex ref")
+;;     "m" '(LaTeX-macro :wk "insert macro")
+;;     "s" '(LaTeX-section :wk "insert section header")
+;;     "e" '(LaTeX-environment :wk "insert environment")
+;;     "p" '(preview-at-point :wk "preview at point")
+;;     "f" '(TeX-font :wk "font")
+;;     "c" '(TeX-command-run-all :wk "compile"))
+;;   :init
+;;   (setq TeX-electric-math (cons "\\(" "\\)")) ;; '$' inserts an in-line equation '\(...\)'
+;;   ;; (setq preview-scale-function 1.5) ;; too big on vivacia
+;;   :config
+;;   ;; (add-hook 'TeX-mode-hook #'visual-line-mode)
+;;   (add-hook 'TeX-mode-hook #'reftex-mode)
+;;   (add-hook 'TeX-mode-hook #'olivetti-mode)
+;;   (add-hook 'TeX-mode-hook #'turn-on-auto-fill)
+;;   (add-hook 'TeX-mode-hook #'prettify-symbols-mode)
+;;   (add-hook 'TeX-after-compilation-finished-functions
+;;                 #'TeX-revert-document-buffer)
+;;   (add-to-list 'TeX-view-program-selection '(output-pdf "PDF Tools"))
+;;   (add-hook 'TeX-mode-hook #'outline-minor-mode))
+
+;; ***********************************************************************
+;; ***
+;; *** gnus (emacs mail and new reader)
+;; ***
+
+
+(use-package gnus
+  :ensure t
+  :custom
+  (user-full-name "Moamen Hraden")
+  (user-mail-address "moamenhredeen@gmail.com")
+  ;; (message-send-mail-function 'smtpmail-send-it)
+  ;; (smtpmail-default-smtp-server "smtp.gmail.com")
+  ;; (smtpmail-smtp-service 587)
+  ;; (smtpmail-local-domain "hp-work")
+  (gnus-use-cache t)
+  (gnus-view-pseudo-asynchronously t)
+  (gnus-mime-display-multipart-related-as-mixed t)
+  (gnus-use-correct-string-widths nil)
+  (gnus-inhibit-images nil)
+  (smiley-style 'medium)
+  (gnus-select-method '(nnnil ""))
+  (gnus-secondary-select-methods '((nnml "")
+                                   (nnimap "gmail"
+                                           (nnimap-address "imap.gmail.com")
+                                           (nnimap-server-port 993)
+                                           (nnimap-stream ssl)
+                                           (nnmail-expiry-target  "nnimap+gmail:[Gmail]/Trash")
+                                           (nnir-search-engine imap))))
+  (gnus-auto-select-first nil)
+  (gnus-summary-display-arrow nil)
+  :config
+  (add-hook 'gnus-group-mode-hook 'gnus-topic-mode))
+
+
+(use-package elfeed
+  :ensure t
+  :custom
+  (elfeed-db-directory (file-name-concat (my/home-directory) "git-repos" "main" "elfeed")))
+
+(use-package elfeed-org
+  :ensure t
+  :custom
+  (rmh-elfeed-org-files
+   (list
+    (file-name-concat
+     (my/home-directory)
+     "git-repos"
+     "main"
+     "elfeed.org")))
+  :config
+  (elfeed-org))
 
 
 ;; ***********************************************************************
@@ -668,48 +660,47 @@
 ;; ***
 
 (use-package evil
-    :ensure t
-    :init
-    (setq
-        evil-want-integration t
-        evil-want-keybinding nil)
-    :config
-    (evil-mode 1))
+  :ensure t
+  :init
+  (setq
+   evil-want-integration t
+   evil-want-keybinding nil)
+  :config
+  (evil-mode 1))
 
 
 (use-package evil-collection
-    :ensure t
-    :after evil
-    :custom
-    (evil-collection-setup-minibuffer t)
-    :config
-    (evil-collection-init))
+  :ensure t
+  :after evil
+  :custom
+  (evil-collection-setup-minibuffer t)
+  :config
+  (evil-collection-init))
 
 (use-package evil-surround
-    :ensure t
-    :after evil
-    :config
-    (global-evil-surround-mode 1))
+  :ensure t
+  :after evil
+  :config
+  (global-evil-surround-mode 1))
 
-(use-package evil-mc
-    :ensure t
-    :after evil
-    :config
-    (global-evil-mc-mode 1))
+(use-package evil-multiedit
+  :ensure t
+  :after evil
+  :config
+  (evil-multiedit-default-keybinds))
 
 (use-package evil-nerd-commenter
   :after evil
   :ensure t)
 
 (use-package evil-org
-    :ensure t
-    :after evil
-    :after org
-    :config
-    (add-hook 'org-mode-hook 'evil-org-mode)
-    (add-hook 'evil-org-mode-hook
-                (lambda () (evil-org-set-key-theme)))
-    (require 'evil-org-agenda)
+  :ensure t
+  :after evil
+  :after org
+  :config
+  (add-hook 'org-mode-hook 'evil-org-mode)
+  (add-hook 'evil-org-mode-hook (lambda () (evil-org-set-key-theme)))
+  (require 'evil-org-agenda)
   (evil-org-agenda-set-keys))
 
 ;; convert escape to super escape :)
@@ -767,7 +758,7 @@
     "d"       'docker
     "t"       'my/shell
     "c"       'evilnc-comment-or-uncomment-lines
-    "e"         'treemacs
+    "e"       'dired-jump
 
     ;; eglot
     ;; "aa"     'eglot-code-actions
@@ -785,9 +776,6 @@
     "sl"    'consult-goto-line
     "st"    'consult-theme
     "sw"    'occur
-
-    ;; utility binding functions
-    "ud"      'my/insert-date
 
     ;; project key biding
     "ps"      'consult-projectile-switch-project
@@ -826,8 +814,7 @@
     "h"      'consult-org-heading
     "l"       'org-insert-link
     "t"       'org-set-tags-command
-    "p"       'org-set-property-and-value
-    "e"       'org-tree-slide-mode))
+    "p"       'org-set-property-and-value))
 
 
 
@@ -846,7 +833,6 @@
 ;; ***
 ;; *** Auto Generated
 ;; ***
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -855,9 +841,8 @@
  '(git-gutter:added-sign " ")
  '(git-gutter:deleted-sign " ")
  '(git-gutter:modified-sign " ")
- '(org-fontify-done-headline t)
  '(package-selected-packages
-   '(yasnippet-snippets which-key web-mode vscode-dark-plus-theme vertico undo-tree spacemacs-theme spaceline space-theming smartparens restclient ox-reveal ox-gfm org-tree-slide org-roam-ui org-journal org-bullets orderless nano-theme nano-modeline monokai-theme moe-theme marginalia magit highlight-indentation go-mode git-gutter general evil-surround evil-org evil-nerd-commenter evil-mc evil-goggles evil-collection embark-consult eat doom-themes doom-modeline docker corfu consult-projectile company atom-one-dark-theme ample-theme all-the-icons)))
+   '(auctex dired-subtree evil-multiedit pdf-tools emmet-mode plantuml-mode cape yasnippet-snippets yasnippet org-contrib org-plus-contrib ox-confluence yaml which-key web-mode vertico undo-tree smartparens shrink-path sesman restclient request powershell pkg-info pfuture ox-gfm org-roam-ui org-journal org-bullets orderless nerd-icons nano-modeline monkeytype mmt marginalia magit lua-mode hydra ht git-gutter general evil-surround evil-org evil-nerd-commenter evil-mc evil-goggles evil-collection embark-consult elfeed-org eat doom-themes docker consult-projectile company cfrs bui all-the-icons ace-window)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -871,5 +856,6 @@
  '(evil-goggles-undo-redo-change-face ((t (:inherit diff-changed))))
  '(evil-goggles-undo-redo-remove-face ((t (:inherit diff-removed))))
  '(evil-goggles-yank-face ((t (:inherit diff-changed))))
+ '(org-document-title ((t (:inherit bold :foreground "#bc6ec5" :underline t :height 1.8))))
  '(org-headline-done ((t (:foreground "#878787"))))
  '(org-level-1 ((t (:inherit bold :foreground "#4f97d7" :height 1.5)))))

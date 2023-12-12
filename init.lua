@@ -110,10 +110,7 @@ vim.opt.rtp:prepend(lazypath)
 --
 local configure_theme = function()
 	vim.o.background = "dark"
-	-- vim.cmd([[colorscheme gruvbox]])
-	local vscode_theme = require('vscode')
-	vscode_theme.setup()
-	vscode_theme.load()
+	vim.cmd([[colorscheme gruvbox]])
 end
 
 
@@ -465,91 +462,22 @@ end
 -- install plugisn and apply configuratio
 --
 require("lazy").setup({
-	-- { "ellisonleao/gruvbox.nvim",        config = configure_theme,      lazy = false, priority = 2000 },
-	{
-		"Mofiqul/vscode.nvim",
-		config = configure_theme,
-		priority = 2000
-	},
-	{
-		'nvim-telescope/telescope.nvim',
-		config = configure_telescope,
-	},
-	{
-		"nvim-treesitter/nvim-treesitter",
-		config = configure_treesitter,
-	},
-	{
-		'hrsh7th/nvim-cmp',
-		config = configure_cmp,
-		dependencies = {
-			'hrsh7th/cmp-path',
-			'hrsh7th/cmp-nvim-lsp',
-			'L3MON4D3/LuaSnip',
-			'saadparwaiz1/cmp_luasnip'
-		}
-	},
-	{
-		"neovim/nvim-lspconfig",
-		config = configure_lspconfig,
-		dependencies = {
-			"williamboman/mason.nvim",
-			"williamboman/mason-lspconfig.nvim"
-		}
-	},
-	{
-		'lewis6991/gitsigns.nvim',
-		config = configure_gitsigns,
-	},
-	{
-		"NeogitOrg/neogit",
-		config = true,
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			"sindrets/diffview.nvim"
-		}
-	},
-	{
-		'numToStr/Comment.nvim',
-		config = configure_comment,
-	},
-	{
-		'windwp/nvim-autopairs',
-		config = true,
-	},
-	{
-		'nvim-tree/nvim-tree.lua',
-		config = configure_nvimtree,
-		dependencies = {
-			'nvim-tree/nvim-web-devicons'
-		}
-	},
-	{
-		'lervag/vimtex',
-	},
-	{
-		'stevearc/overseer.nvim',
-		config = function()
-			require('overseer').setup()
-		end
-	},
-	{
-		"ray-x/lsp_signature.nvim",
-		event = "VeryLazy",
-		opts = {},
-		config = function(_, opts) require'lsp_signature'.setup(opts) end
-	},
-	{
-		"j-hui/fidget.nvim",
-		tag = "legacy",
-		event = "LspAttach",
-		config = true
-	},
-	{ 
-		"folke/neodev.nvim",
-		config = true,
-		event = "BufEnter init.lua"
-	}
+	{ "ellisonleao/gruvbox.nvim", priority = 1000, config = true, opts = configure_theme },
+	{ 'nvim-telescope/telescope.nvim', config = configure_telescope, },
+	{ "nvim-treesitter/nvim-treesitter", config = configure_treesitter, },
+	{ 'lewis6991/gitsigns.nvim', config = configure_gitsigns, },
+	{ 'numToStr/Comment.nvim', config = configure_comment, },
+	{ 'windwp/nvim-autopairs', config = true, },
+	{ "j-hui/fidget.nvim", tag = "legacy", event = "LspAttach", config = true },
+	{ "folke/neodev.nvim", config = true, event = "BufEnter init.lua" },
+	{ "NeogitOrg/neogit", config = true,
+		dependencies = { "nvim-lua/plenary.nvim", "sindrets/diffview.nvim" } },
+	{ 'hrsh7th/nvim-cmp', config = configure_cmp, 
+		dependencies = { 'hrsh7th/cmp-path', 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip' } },
+	{ "neovim/nvim-lspconfig", config = configure_lspconfig,
+		dependencies = { "williamboman/mason.nvim", "williamboman/mason-lspconfig.nvim" } },
+	{ 'nvim-tree/nvim-tree.lua', config = configure_nvimtree,
+		dependencies = { 'nvim-tree/nvim-web-devicons' } },
 })
 
 
