@@ -64,6 +64,15 @@ vim.o.tabstop = 2
 vim.o.shiftwidth = 2
 -- vim.o.noexpandtab = true
 
+-- change default shell
+if vim.fn.has('macunix') == 1 then
+	vim.opt.shell='bash'
+	vim.g.terminal_emulator='bash'
+else
+	vim.opt.shell='pwsh.exe -c '
+	vim.g.terminal_emulator='pwsh.exe'
+end
+
 
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ','
@@ -205,6 +214,7 @@ end
 local configure_cmp = function()
 	local cmp = require('cmp')
 	local luasnip = require('luasnip')
+	require("luasnip.loaders.from_vscode").lazy_load()
 
 	cmp.setup({
 		snippet = {
@@ -443,7 +453,7 @@ local configure_comment = function()
 			eol = 'gca',
 		},
 		---Enable keybindings
-		---NOTE: If given `false` then the plugin won't create any mappings
+		--NOTE: If given `false` then the plugin won't create any mappings
 		mappings = {
 			---Operator-pending mapping; `gcc` `gbc` `gc[count]{motion}` `gb[count]{motion}`
 			basic = true,
@@ -458,26 +468,57 @@ local configure_comment = function()
 end
 
 
+-- ***********************************************************************
+-- configure comment
+--
+local configure_overseer = function ()
+	--TODO: configure shortcuts
+	require("overseer").setup()
+end
+
+
+
+-- ***********************************************************************
+-- lua line config
+--
+local configure_lualine = function ()
+	require("lualine").setup()
+end
+
+
 -- *************************************************
 -- install plugisn and apply configuratio
 --
 require("lazy").setup({
 	{ "ellisonleao/gruvbox.nvim", priority = 1000, config = true, opts = configure_theme },
-	{ 'nvim-telescope/telescope.nvim', config = configure_telescope, },
+	{ "nvim-telescope/telescope.nvim", config = configure_telescope, },
 	{ "nvim-treesitter/nvim-treesitter", config = configure_treesitter, },
-	{ 'lewis6991/gitsigns.nvim', config = configure_gitsigns, },
-	{ 'numToStr/Comment.nvim', config = configure_comment, },
-	{ 'windwp/nvim-autopairs', config = true, },
+	{ "lewis6991/gitsigns.nvim", config = configure_gitsigns, },
+	{ "numToStr/Comment.nvim", config = configure_comment, },
+	{ "windwp/nvim-autopairs", config = true, },
 	{ "j-hui/fidget.nvim", tag = "legacy", event = "LspAttach", config = true },
+	{ 'stevearc/overseer.nvim', opts = {}, config = configure_overseer },
 	{ "folke/neodev.nvim", config = true, event = "BufEnter init.lua" },
+	{ "sindrets/diffview.nvim", config = true},
 	{ "NeogitOrg/neogit", config = true,
 		dependencies = { "nvim-lua/plenary.nvim", "sindrets/diffview.nvim" } },
-	{ 'hrsh7th/nvim-cmp', config = configure_cmp, 
-		dependencies = { 'hrsh7th/cmp-path', 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip' } },
+	{ 'hrsh7th/nvim-cmp', config = configure_cmp,
+		dependencies = {
+			'hrsh7th/cmp-path',
+			'hrsh7th/cmp-nvim-lsp',
+			{'L3MON4D3/LuaSnip', dependencies= { "rafamadriz/friendly-snippets" }} ,
+			'saadparwaiz1/cmp_luasnip',
+		}
+	},
 	{ "neovim/nvim-lspconfig", config = configure_lspconfig,
 		dependencies = { "williamboman/mason.nvim", "williamboman/mason-lspconfig.nvim" } },
 	{ 'nvim-tree/nvim-tree.lua', config = configure_nvimtree,
 		dependencies = { 'nvim-tree/nvim-web-devicons' } },
+	{ 'nvim-lualine/lualine.nvim', opts = {}, config = configure_lualine,
+		dependencies = { 'nvim-tree/nvim-web-devicons' }},
+	{ "folke/todo-comments.nvim", config = true,
+		dependencies = { "nvim-lua/plenary.nvim" },
+	}
 })
 
 

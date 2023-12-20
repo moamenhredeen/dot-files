@@ -12,7 +12,6 @@
 
 
 
-
 ;; ***********************************************************************
 ;; ***
 ;; *** better defaults
@@ -43,7 +42,8 @@
                 shell-mode-hook
                 org-mode-hook
                 treemacs-mode-hook
-                eshell-mode-hook))
+                eshell-mode-hook
+                pdf-view-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 
@@ -63,12 +63,6 @@
 (setq backup-directory-alist '(("." . "~/.emacsbackups")))
 
 
-
-(use-package doom-themes
-  :ensure t
-  :config
-  (load-theme 'doom-solarized-dark t))
-
 ;; Unique buffer names
 (use-package uniquify
   :config
@@ -77,6 +71,7 @@
         uniquify-after-kill-buffer-p t
         uniquify-ignore-buffers-re "^\\*"))
 
+(setq dired-dwim-target t)
 ;; ***********************************************************************
 ;; ***
 ;; *** Utility Functions
@@ -169,6 +164,7 @@
 ;; *** OS / Machine Specific Config
 ;; ***
 
+;; os specific
 (cond
  ((or (string= system-type "ms-dos")
       (string= system-type "windows-nt"))
@@ -176,10 +172,12 @@
  ((or (eq system-type 'windows-nt)
       (not (file-exists-p "/bin/zsh")))
   (setq-default shell-file-name "/bin/zsh")
-  (setq explicit-shell-file-name "/bin/zsh"))
+  (setq explicit-shell-file-name "/bin/zsh")))
+
+;; machine specific
+(cond
  ((string= (system-name) "WAP5CG1194FFK")
   (setq default-directory "C:/Users/moamen.hraden/")))
-
 
 ;; ***********************************************************************
 ;; ***
@@ -355,6 +353,9 @@
 (use-package docker
   :ensure t)
 
+(use-package pdf-tools
+  :ensure t)
+
 ;; ***********************************************************************
 ;; ***
 ;; *** Git configuration
@@ -398,8 +399,7 @@
         org-ellipsis " ─╮"
         org-todo-keywords '("TODO" "WIP" "|" "DONE" "BLOCKED" "CANCELED")
         org-todo-keyword-faces '(("TODO" . (:foreground "#ff6e6e" :weight bold))
-                                 ("NEXT" . (:foreground "#cc241d" :weight bold))
-                                 ("WIP" . (:foreground "#d65d0e" :weight bold))
+                                 ("WIP" . (:foreground "#ffea73" :weight bold))
                                  ("DONE" . (:foreground "#98971a" :weight bold))
                                  ("CANCELED" . (:foreground "#ebdbb2" :weight bold))
                                  ("BLOCKED" . (:foreground "#ebdbb2" :weight bold)))))
@@ -457,6 +457,9 @@
     (setq org-agenda-file-regexp "\\`\\\([^.].*\\.org\\\|[0-9]\\\{8\\\}\\\(\\.gpg\\\)?\\\)\\'")
     (add-to-list 'org-agenda-files org-journal-dir))
 
+(use-package org-noter
+  :ensure t)
+
 
 ;; ***********************************************************************
 ;; ***
@@ -464,16 +467,16 @@
 ;; ***
 
 
-(add-to-list 'major-mode-remap-alist '((csharp-mode     . csharp-ts-mode)
-                                       (java-mode       . java-ts-mode)
-                                       (python-mode     . python-ts-mode)
-                                       (js-mode         . js-ts-mode)
-                                       (js2-mode        . js-ts-mode)
-                                       (css-mode        . css-ts-mode)
+(add-to-list 'major-mode-remap-alist '((csharp-mode . csharp-ts-mode)
+                                       (java-mode . java-ts-mode)
+                                       (python-mode . python-ts-mode)
+                                       (js-mode . js-ts-mode)
+                                       (js2-mode . js-ts-mode)
+                                       (css-mod . css-ts-mode)
                                        (typescript-mode . typescript-ts-mode)
-                                       (js-json-mode    . json-ts-mode)
-                                       (go-mode         . go-ts-mode)
-                                       (yaml-mode       . yaml-ts-mode)))
+                                       (js-json-mode . json-ts-mode)
+                                       (go-mode . go-ts-mode)
+                                       (yaml-mode . yaml-ts-mode)))
 
 
 (use-package yasnippet-snippets
@@ -494,7 +497,8 @@
           powershell-mode
           nxml-mode
           js-ts-mode
-          go-ts-mode) . eglot-ensure))
+          go-ts-mode
+          latex-mode) . eglot-ensure))
 
 (use-package corfu
   :ensure t
@@ -525,80 +529,41 @@
 
 
 ;; Add extensions
-(use-package cape
-  :ensure t
-  :bind (("C-c p p" . completion-at-point)))
+;; (use-package cape
+;;   :ensure t
+;;   :bind (("C-c p p" . completion-at-point)))
 
 
-(use-package yasnippet-capf
-  :ensure t
-  :config
-  (add-to-list 'completion-at-point-functions #'yasnippet-capf))
+;; (use-package yasnippet-capf
+;;   :ensure t
+;;   :config
+;;   (add-to-list 'completion-at-point-functions #'yasnippet-capf))
 
-(use-package plantuml-mode
-  :ensure t
-  :custom
-  (plantuml-default-exec-mode 'jar)
-  (plantuml-jar-path (file-name-concat user-emacs-directory "plantuml.jar"))
-  :config
-  (when
-      (not
-       (file-exists-p
-        (file-name-concat user-emacs-directory "plantuml.jar")))
-    (plantuml-download-jar))
-  (add-to-list 'completion-at-point-functions
-               (list
-                (cape-capf-super #'cape-dabbrev))))
+;; (use-package plantuml-mode
+;;   :ensure t
+;;   :custom
+;;   (plantuml-default-exec-mode 'jar)
+;;   (plantuml-jar-path (file-name-concat user-emacs-directory "plantuml.jar"))
+;;   :config
+;;   (when
+;;       (not
+;;        (file-exists-p
+;;         (file-name-concat user-emacs-directory "plantuml.jar")))
+;;     (plantuml-download-jar))
+;;   (add-to-list 'completion-at-point-functions
+;;                (list
+;;                 (cape-capf-super #'cape-dabbrev))))
 
+;; (use-package slime
+;;   :ensure t
+;;   :config
+;;   (setq inferior-lisp-program "sbcl"))
 
 ;; ***********************************************************************
 ;; ***
 ;; *** TODO latex config
 ;; ***
 
-;; (use-package auctex
-;;   :no-require t
-;;   :mode ("\\.tex\\'" . LaTeX-mode)
-;;   :init
-;;   (setq TeX-parse-self t ; parse on load
-;;           reftex-plug-into-AUCTeX t
-;;           TeX-auto-save t  ; parse on save
-;;           TeX-source-correlate-mode t
-;;           TeX-source-correlate-method 'synctex
-;;         TeX-source-correlate-start-server nil
-;;         TeX-electric-sub-and-superscript t
-;;         TeX-engine 'luatex ;; use lualatex by default
-;;         TeX-save-query nil))
-
-
-;; (use-package latex
-;;   :ensure auctex
-;;   :general
-;;   (patrl/local-leader-keys
-;;     :keymaps 'LaTeX-mode-map
-;;     ;; "TAB" 'TeX-complete-symbol ;; FIXME let's 'TAB' do autocompletion (but it's kind of useless to be honest)
-;;     "=" '(reftex-toc :wk "reftex toc")
-;;     "(" '(reftex-latex :wk "reftex label")
-;;     ")" '(reftex-reference :wk "reftex ref")
-;;     "m" '(LaTeX-macro :wk "insert macro")
-;;     "s" '(LaTeX-section :wk "insert section header")
-;;     "e" '(LaTeX-environment :wk "insert environment")
-;;     "p" '(preview-at-point :wk "preview at point")
-;;     "f" '(TeX-font :wk "font")
-;;     "c" '(TeX-command-run-all :wk "compile"))
-;;   :init
-;;   (setq TeX-electric-math (cons "\\(" "\\)")) ;; '$' inserts an in-line equation '\(...\)'
-;;   ;; (setq preview-scale-function 1.5) ;; too big on vivacia
-;;   :config
-;;   ;; (add-hook 'TeX-mode-hook #'visual-line-mode)
-;;   (add-hook 'TeX-mode-hook #'reftex-mode)
-;;   (add-hook 'TeX-mode-hook #'olivetti-mode)
-;;   (add-hook 'TeX-mode-hook #'turn-on-auto-fill)
-;;   (add-hook 'TeX-mode-hook #'prettify-symbols-mode)
-;;   (add-hook 'TeX-after-compilation-finished-functions
-;;                 #'TeX-revert-document-buffer)
-;;   (add-to-list 'TeX-view-program-selection '(output-pdf "PDF Tools"))
-;;   (add-hook 'TeX-mode-hook #'outline-minor-mode))
 
 ;; ***********************************************************************
 ;; ***
@@ -720,6 +685,18 @@
   (setq which-key-prefix-prefix "+" ))
 
 
+(use-package hydra
+  :ensure t
+  :config
+  (defhydra h/util-functions ()
+    "utilities"
+    ("d" (dired (file-name-concat (my/home-directory) "git-repos" "dot-files")) "dot-files" :column "directories")
+    ("g" (dired (file-name-concat (my/home-directory) "git-repos")) "git-repos" :column "directories")
+    ("e" (shell-command "explorer.exe .") "explorer" :column "system")
+    ("s" (shell-command "Start-Process pwsh") "shell" :column "system")
+    ("m" my/open-main-org-file "open main.org" :column "quick")))
+
+
 ;; cleaner way for defining keymap
 (use-package general
   :ensure t
@@ -735,7 +712,8 @@
    "M-s"    'split-window-below
    "M-v"    'split-window-right
    "M-q"    'evil-quit
-   "M-o"    'tab-switch)
+   "M-o"    'tab-switch
+   "M-n"    'h/util-functions/body)
 
   (general-create-definer my-leader-def
     :prefix "SPC")
@@ -761,9 +739,9 @@
     "e"       'dired-jump
 
     ;; eglot
-    ;; "aa"     'eglot-code-actions
-    ;; "ar"     'eglot-rename
-    ;; "af"     'eglot-format
+    "aa"     'eglot-code-actions
+    "ar"     'eglot-rename
+    "af"     'eglot-format
 
 
     ;; search
@@ -774,7 +752,6 @@
     "sr"    'consult-register
     "sm"    'consult-mode-command
     "sl"    'consult-goto-line
-    "st"    'consult-theme
     "sw"    'occur
 
     ;; project key biding
@@ -783,7 +760,6 @@
     "pb"      'consult-project-buffer
 
     ;; org roam key binding
-    "oi"        'my/open-main-org-file
     "oa"        'org-agenda
     "oc"        'org-capture
     "of"        'org-roam-node-find
@@ -817,17 +793,58 @@
     "p"       'org-set-property-and-value))
 
 
-
 ;; ***********************************************************************
 ;; ***
 ;; *** User UI Customization
 ;; ***
 
-(custom-theme-set-faces
- 'user
- '(org-document-title ((t (:inherit bold :foreground "#bc6ec5" :underline t :height 1.8))))
- '(org-level-1 ((t (:inherit bold :foreground "#4f97d7" :height 1.5))))
- '(org-headline-done ((t (:foreground "#878787")))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:foreground "#b5b5b5" :background "#242424"))))
+ '(cursor ((t (:background "#ffea73"))))
+ '(eshell-ls-directory ((t (:foreground "#d4c366"))))
+ '(eshell-ls-executable ((t (:foreground "#61d874"))))
+ '(eshell-prompt ((t (:foreground "#d4c366" :bold t))))
+ '(evil-goggles-change-face ((t (:inherit diff-removed))))
+ '(evil-goggles-default-face ((t (:inherit 'highlight))))
+ '(evil-goggles-delete-face ((t (:inherit diff-removed))))
+ '(evil-goggles-paste-face ((t (:inherit diff-added))))
+ '(evil-goggles-undo-redo-add-face ((t (:inherit diff-added))))
+ '(evil-goggles-undo-redo-change-face ((t (:inherit diff-changed))))
+ '(evil-goggles-undo-redo-remove-face ((t (:inherit diff-removed))))
+ '(evil-goggles-yank-face ((t (:inherit diff-changed))))
+ '(font-lock-bracket-face ((t (:foreground "#d4c366"))))
+ '(font-lock-builtin-face ((t (:foreground "#d4c366"))))
+ '(font-lock-comment-face ((t (:foreground "#6f6f6f" :italic t))))
+ '(font-lock-constant-face ((t (:foreground "#c5c5c5"))))
+ '(font-lock-function-name-face ((t (:foreground "#c5c5c5"))))
+ '(font-lock-keyword-face ((t (:foreground "#d4c366" :bold t))))
+ '(font-lock-string-face ((t (:foreground "#249c64"))))
+ '(font-lock-type-face ((t (:foreground "#d4c366" :bold t))))
+ '(font-lock-variable-name-face ((t (:foreground "#c5c5c5"))))
+ '(font-lock-warning-face ((t (:foreground "red" :bold t))))
+ '(fringe ((t (:background "#000000"))))
+ '(hl-line ((t (:background "#1f1f1f"))))
+ '(line-number ((t (:foreground "#6f6f6f"))))
+ '(line-number-current-line ((t (:background "#1f1f1f" :foreground "#ffea73"))))
+ '(minibuffer-prompt ((t (:foreground "#bfbfbf" :bold t))))
+ '(mode-line ((t (:background "#1a1a1a" :foreground "#a1a1a1" :height 1.1))))
+ '(mode-line-emphasis ((t (:foreground "red"))))
+ '(org-checkbox ((t (:foreground "#d4c366" :bold t))))
+ '(org-checkbox-statistics-todo ((t (:foreground "#d4c366" :bold t))))
+ '(org-document-title ((t (:foreground "#d4c366" :bold t :height 1.8))))
+ '(org-headline-done ((t (:foreground "#878787" :italic t))))
+ '(org-level-1 ((t (:foreground "#c5c5c5" :bold t :height 1.5))))
+ '(org-level-2 ((t (:foreground "#61d874" :bold t :height 1.3))))
+ '(org-level-3 ((t (:foreground "pink" :bold t :height 1.1))))
+ '(region ((t (:background "#515151"))))
+ '(secondary-selection ((t (:background "#515151"))))
+ '(show-paren-match ((t (:foreground "#d4c366" :underline t :bold t))))
+ '(vertico-current ((t (:underline "#d2c57d")))))
+
 
 ;; ***********************************************************************
 ;; ***
@@ -842,20 +859,4 @@
  '(git-gutter:deleted-sign " ")
  '(git-gutter:modified-sign " ")
  '(package-selected-packages
-   '(auctex dired-subtree evil-multiedit pdf-tools emmet-mode plantuml-mode cape yasnippet-snippets yasnippet org-contrib org-plus-contrib ox-confluence yaml which-key web-mode vertico undo-tree smartparens shrink-path sesman restclient request powershell pkg-info pfuture ox-gfm org-roam-ui org-journal org-bullets orderless nerd-icons nano-modeline monkeytype mmt marginalia magit lua-mode hydra ht git-gutter general evil-surround evil-org evil-nerd-commenter evil-mc evil-goggles evil-collection embark-consult elfeed-org eat doom-themes docker consult-projectile company cfrs bui all-the-icons ace-window)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(evil-goggles-change-face ((t (:inherit diff-removed))))
- '(evil-goggles-default-face ((t (:inherit 'highlight))))
- '(evil-goggles-delete-face ((t (:inherit diff-removed))))
- '(evil-goggles-paste-face ((t (:inherit diff-added))))
- '(evil-goggles-undo-redo-add-face ((t (:inherit diff-added))))
- '(evil-goggles-undo-redo-change-face ((t (:inherit diff-changed))))
- '(evil-goggles-undo-redo-remove-face ((t (:inherit diff-removed))))
- '(evil-goggles-yank-face ((t (:inherit diff-changed))))
- '(org-document-title ((t (:inherit bold :foreground "#bc6ec5" :underline t :height 1.8))))
- '(org-headline-done ((t (:foreground "#878787"))))
- '(org-level-1 ((t (:inherit bold :foreground "#4f97d7" :height 1.5)))))
+   '(ng2-mode cmake-mode zig-mode tide cider yasnippet-snippets yasnippet-capf yaml xterm-color which-key web-mode vertico undo-tree spinner smartparens slime shrink-path sesman rust-mode restclient request powershell plantuml-mode pkg-info pfuture pdf-tools ox-gfm org-roam-ui org-noter org-journal org-contrib org-bullets orderless nerd-icons nano-theme nano-modeline my-theme-theme monkeytype mmt markdown-mode marginalia magit lua-mode jenkinsfile-mode hydra ht git-gutter general evil-surround evil-org evil-nerd-commenter evil-multiedit evil-mc evil-goggles evil-collection emmet-mode embark-consult elfeed-org eat doom-themes docker dired-subtree corfu consult-projectile company cfrs cape bui batman-theme auctex all-the-icons ace-window)))
