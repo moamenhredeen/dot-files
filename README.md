@@ -20,5 +20,5 @@
 ## bash
 - my_bash_config.sh
 
-# init.el 
+# init.el
 the new emacs configuration
