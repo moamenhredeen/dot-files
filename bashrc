@@ -27,7 +27,7 @@ EDITOR=nvim
 
 
 # colored prompt
-export PS1="\e[0;32m[\u@\h\W]\$ \e[m "
+export PS1="\e[1;32m \w \e[1;33m>\e[1;37m>\e[1;35m> \e[m "
 force_color_prompt=yes
 
  
