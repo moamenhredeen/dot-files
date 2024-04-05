@@ -35,6 +35,3 @@
 	autocrlf = input
 [pull]
 	rebase = false
-[safe]
-	directory = /home/moamen/git-repos/dot-files
-	directory = /home/moamen/git-repos/dot-files/
