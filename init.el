@@ -165,19 +165,19 @@
 ;; ***
 
 ;; os specific
-(cond
- ((or (string= system-type "ms-dos")
-      (string= system-type "windows-nt"))
-  (setq shell-file-name "pwsh.exe"))
- ((or (eq system-type 'windows-nt)
-      (not (file-exists-p "/bin/zsh")))
-  (setq-default shell-file-name "/bin/zsh")
-  (setq explicit-shell-file-name "/bin/zsh")))
+;; (cond
+;;  ((or (string= system-type "ms-dos")
+;;       (string= system-type "windows-nt"))
+;;   (setq shell-file-name "pwsh.exe"))
+;;  ((or (eq system-type 'windows-nt)
+;;       (not (file-exists-p "/bin/zsh")))
+;;   (setq-default shell-file-name "/bin/zsh")
+;;   (setq explicit-shell-file-name "/bin/zsh")))
 
 ;; machine specific
-(cond
- ((string= (system-name) "WAP5CG1194FFK")
-  (setq default-directory "C:/Users/moamen.hraden/")))
+;; (cond
+;;  ((string= (system-name) "WAP5CG1194FFK")
+;;   (setq default-directory "C:/Users/moamen.hraden/")))
 
 ;; ***********************************************************************
 ;; ***
@@ -859,4 +859,4 @@
  '(git-gutter:deleted-sign " ")
  '(git-gutter:modified-sign " ")
  '(package-selected-packages
-   '(ng2-mode cmake-mode zig-mode tide cider yasnippet-snippets yasnippet-capf yaml xterm-color which-key web-mode vertico undo-tree spinner smartparens slime shrink-path sesman rust-mode restclient request powershell plantuml-mode pkg-info pfuture pdf-tools ox-gfm org-roam-ui org-noter org-journal org-contrib org-bullets orderless nerd-icons nano-theme nano-modeline my-theme-theme monkeytype mmt markdown-mode marginalia magit lua-mode jenkinsfile-mode hydra ht git-gutter general evil-surround evil-org evil-nerd-commenter evil-multiedit evil-mc evil-goggles evil-collection emmet-mode embark-consult elfeed-org eat doom-themes docker dired-subtree corfu consult-projectile company cfrs cape bui batman-theme auctex all-the-icons ace-window)))
+   '(properties-mode ng2-mode cmake-mode zig-mode tide cider yasnippet-snippets yasnippet-capf yaml xterm-color which-key web-mode vertico undo-tree spinner smartparens slime shrink-path sesman rust-mode restclient request powershell plantuml-mode pkg-info pfuture pdf-tools ox-gfm org-roam-ui org-noter org-journal org-contrib org-bullets orderless nerd-icons nano-theme nano-modeline my-theme-theme monkeytype mmt markdown-mode marginalia magit lua-mode jenkinsfile-mode hydra ht git-gutter general evil-surround evil-org evil-nerd-commenter evil-multiedit evil-mc evil-goggles evil-collection emmet-mode embark-consult elfeed-org eat doom-themes docker dired-subtree corfu consult-projectile company cfrs cape bui batman-theme auctex all-the-icons ace-window)))
