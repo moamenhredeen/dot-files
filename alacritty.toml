@@ -37,4 +37,5 @@ family = "JuliaMono"
 program = "/usr/bin/tmux"
 
 [window]
-title = "Hello Moamen :)"
+title = "The best way to predict the future is to invent it."
+startup_mode = "Maximized"

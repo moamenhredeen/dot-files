@@ -466,7 +466,6 @@
 ;; *** Programming
 ;; ***
 
-
 (add-to-list 'major-mode-remap-alist '((csharp-mode . csharp-ts-mode)
                                        (java-mode . java-ts-mode)
                                        (python-mode . python-ts-mode)
@@ -478,6 +477,9 @@
                                        (go-mode . go-ts-mode)
                                        (yaml-mode . yaml-ts-mode)))
 
+(use-package rust-mode
+  :ensure t)
+
 
 (use-package yasnippet-snippets
   :ensure t)
@@ -488,43 +490,61 @@
   (yas-global-mode 1))
 
 
-
-(use-package eglot
+(use-package lsp-mode
   :ensure t
-  :after (yasnippet)
-  :hook ((go-ts-mode
-          typescript-ts-mode
-          powershell-mode
-          nxml-mode
-          js-ts-mode
-          go-ts-mode
-          latex-mode) . eglot-ensure))
+  :init
+  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+  (setq lsp-keymap-prefix "C-c l")
+  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+         (XXX-mode . lsp)
+         ;; if you want which-key integration
+         (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp)
 
-(use-package corfu
+;; optionally
+(use-package lsp-ui
   :ensure t
-  :init (global-corfu-mode)
-  :custom
-  (corfu-auto t)                 ;; Enable auto completion
-  (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
-  (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
-  (corfu-on-exact-match nil)     ;; Configure handling of exact matches
-  (corfu-popupinfo-delay 0.2)
-  (corfu-auto-prefix 2)
-  :bind (:map corfu-map
-              ("TAB" . corfu-next)
-              ([tab] . corfu-next)
-              ("S-TAB" . corfu-previous)
-              ([backtab] . corfu-previous)))
+  :commands lsp-ui-mode)
 
 
-(defun corfu-move-to-minibuffer ()
-  (interactive)
-  (when completion-in-region--data
-    (let ((completion-extra-properties corfu--extra)
-          completion-cycle-threshold completion-cycling)
-      (apply #'consult-completion-in-region completion-in-region--data))))
-(keymap-set corfu-map "M-m" #'corfu-move-to-minibuffer)
-(add-to-list 'corfu-continue-commands #'corfu-move-to-minibuffer)
+;; (use-package eglot
+;;   :ensure t
+;;   :after (yasnippet)
+;;   :hook ((go-ts-mode
+;;           rust-mode
+;;           typescript-ts-mode
+;;           powershell-mode
+;;           nxml-mode
+;;           js-ts-mode
+;;           go-ts-mode
+;;           latex-mode) . eglot-ensure))
+
+
+;; (use-package corfu
+;;   :ensure t
+;;   :init (global-corfu-mode)
+;;   :custom
+;;   (corfu-auto t)                 ;; Enable auto completion
+;;   (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+;;   (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+;;   (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+;;   (corfu-popupinfo-delay 0.2)
+;;   (corfu-auto-prefix 2)
+;;   :bind (:map corfu-map
+;;               ("TAB" . corfu-next)
+;;               ([tab] . corfu-next)
+;;               ("S-TAB" . corfu-previous)
+;;               ([backtab] . corfu-previous)))
+
+
+;; (defun corfu-move-to-minibuffer ()
+;;   (interactive)
+;;   (when completion-in-region--data
+;;     (let ((completion-extra-properties corfu--extra)
+;;           completion-cycle-threshold completion-cycling)
+;;       (apply #'consult-completion-in-region completion-in-region--data))))
+;; (keymap-set corfu-map "M-m" #'corfu-move-to-minibuffer)
+;; (add-to-list 'corfu-continue-commands #'corfu-move-to-minibuffer)
 
 
 
@@ -558,6 +578,8 @@
 ;;   :ensure t
 ;;   :config
 ;;   (setq inferior-lisp-program "sbcl"))
+
+
 
 ;; ***********************************************************************
 ;; ***
@@ -859,4 +881,4 @@
  '(git-gutter:deleted-sign " ")
  '(git-gutter:modified-sign " ")
  '(package-selected-packages
-   '(properties-mode ng2-mode cmake-mode zig-mode tide cider yasnippet-snippets yasnippet-capf yaml xterm-color which-key web-mode vertico undo-tree spinner smartparens slime shrink-path sesman rust-mode restclient request powershell plantuml-mode pkg-info pfuture pdf-tools ox-gfm org-roam-ui org-noter org-journal org-contrib org-bullets orderless nerd-icons nano-theme nano-modeline my-theme-theme monkeytype mmt markdown-mode marginalia magit lua-mode jenkinsfile-mode hydra ht git-gutter general evil-surround evil-org evil-nerd-commenter evil-multiedit evil-mc evil-goggles evil-collection emmet-mode embark-consult elfeed-org eat doom-themes docker dired-subtree corfu consult-projectile company cfrs cape bui batman-theme auctex all-the-icons ace-window)))
+   '(lsp-java properties-mode ng2-mode cmake-mode zig-mode tide cider yasnippet-snippets yasnippet-capf yaml xterm-color which-key web-mode vertico undo-tree spinner smartparens slime shrink-path sesman rust-mode restclient request powershell plantuml-mode pkg-info pfuture pdf-tools ox-gfm org-roam-ui org-noter org-journal org-contrib org-bullets orderless nerd-icons nano-theme nano-modeline my-theme-theme monkeytype mmt markdown-mode marginalia magit lua-mode jenkinsfile-mode hydra ht git-gutter general evil-surround evil-org evil-nerd-commenter evil-multiedit evil-mc evil-goggles evil-collection emmet-mode embark-consult elfeed-org eat doom-themes docker dired-subtree corfu consult-projectile company cfrs cape bui batman-theme auctex all-the-icons ace-window)))
