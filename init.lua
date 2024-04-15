@@ -11,11 +11,15 @@
 --  ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║
 --  ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝
 
+-- todo list: 
+-- [ ] restrcture config file
+
 
 -- ***********************************************************************
 -- ***
 -- *** better defaults
 -- ***
+
 
 -- set font for gui neovim clients
 vim.opt.guifont = 'FiraCode Nerd Font'
@@ -572,6 +576,6 @@ end
 vim.keymap.set('n', '<Leader>gc', open_config_file)
 vim.keymap.set('n', '<Leader>gd', insert_today_date)
 vim.keymap.set('n', '<Leader>gf', insert_current_file_path)
-vim.keymap.set('n', '<Leader>gc', clean_whitespaces)
+-- vim.keymap.set('n', '<Leader>gc', clean_whitespaces)
 vim.keymap.set('n', '<Leader> ', vim.cmd.make)
 
