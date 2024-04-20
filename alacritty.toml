@@ -31,7 +31,8 @@ vi_mode_style = "Beam"
 size = 12.0
 
 [font.normal]
-family = "JuliaMono"
+# family = "CaskaydiaCove Nerd Font"
+family = "JetBrainsMono Nerd Font"
 
 [shell]
 program = "/usr/bin/fish"
