@@ -11,18 +11,12 @@
 --  ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║
 --  ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝
 
--- todo list: 
--- [ ] restrcture config file
-
 
 -- ***********************************************************************
 -- ***
 -- *** better defaults
 -- ***
 
-
--- set font for gui neovim clients
-vim.opt.guifont = 'FiraCode Nerd Font'
 
 -- highlight current line
 vim.o.cursorline = true
@@ -66,16 +60,7 @@ vim.opt.clipboard = 'unnamedplus'
 
 vim.o.tabstop = 2
 vim.o.shiftwidth = 2
--- vim.o.noexpandtab = true
-
--- change default shell
-if vim.fn.has('macunix') == 1 then
-	vim.opt.shell='bash'
-	vim.g.terminal_emulator='bash'
-else
-	vim.opt.shell='pwsh.exe -c '
-	vim.g.terminal_emulator='pwsh.exe'
-end
+vim.o.noexpandtab = true
 
 
 vim.g.mapleader = ' '
@@ -123,7 +108,10 @@ vim.opt.rtp:prepend(lazypath)
 --
 local configure_theme = function()
 	vim.o.background = "dark"
-	vim.cmd([[colorscheme gruvbox]])
+	-- vim.cmd([[colorscheme gruvbox]])
+	local vscode_theme = require('vscode')
+	vscode_theme.setup()
+	vscode_theme.load()
 end
 
 
@@ -139,9 +127,7 @@ local configure_treesitter = function()
 			"vimdoc",
 			"go",
 			"javascript",
-			"typescript",
-			"scss",
-			"zig"
+			"typescript"
 		},
 		auto_intall = true,
 		highlight = {
@@ -163,7 +149,7 @@ local configure_telescope = function()
 		defaults = {
 			layout_config = {
 				bottom_pane = {
-					height = 5,
+					height = 10,
 					prompt_position = "top",
 				},
 			},
@@ -174,39 +160,46 @@ local configure_telescope = function()
 				},
 			},
 		},
+		pickers = {
+			find_files = {
+				theme = 'ivy',
+			},
+			live_grep = {
+				theme = 'ivy',
+				previewer = false
+			},
+			buffers = {
+				theme = 'ivy',
+				previewer = false
+			},
+			help_tags = {
+				theme = 'ivy',
+			},
+		},
 	}
 
-	local telescope_builtin = require('telescope.builtin')
-
 	local fuzzy_find_buffer = function()
-				telescope_builtin
-					.current_buffer_fuzzy_find(require('telescope.themes')
+		require('telescope.builtin')
+				.current_buffer_fuzzy_find(require('telescope.themes')
 					.get_dropdown { previewer = false })
-	end
-
-	local find_dot_file = function ()
-		telescope_builtin.find_files({
-			cwd = "~/git-repos/dot-files"
-		})
 	end
 
 	-- Enable telescope fzf native, if installed
 	pcall(telescope.load_extension, 'fzf')
 
 	-- See `:help telescope.builtin`
+	local telescope_builtin = require('telescope.builtin')
 	-- vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
 	vim.keymap.set('n', '<Leader>f', telescope_builtin.find_files, { desc = 'open [F]ile' })
 	vim.keymap.set('n', '<Leader>b', telescope_builtin.buffers, { desc = 'open [B]uffer' })
-	vim.keymap.set('n', '<Leader>x', telescope_builtin.commands, { desc = '[C]ommands' })
 	vim.keymap.set('n', '<Leader>sh', telescope_builtin.help_tags, { desc = '[H]elp' })
+	vim.keymap.set('n', '<Leader>x', telescope_builtin.commands, { desc = '[C]ommands' })
 	vim.keymap.set('n', '<Leader>sc', telescope_builtin.git_commits, { desc = '[C]ommands' })
 	vim.keymap.set('n', '<Leader>sm', telescope_builtin.marks, { desc = '[S]earch [D]iagnostics' })
 	vim.keymap.set('n', '<Leader>sq', telescope_builtin.quickfix, { desc = '[S]earch [D]iagnostics' })
 	vim.keymap.set('n', '<Leader>sd', telescope_builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
 	vim.keymap.set('n', '<Leader>sw', telescope_builtin.live_grep, { desc = '[S]earch by [G]rep' })
-
 	vim.keymap.set('n', '<Leader>sb', fuzzy_find_buffer, { desc = '[/] Fuzzily search in current buffer]' })
-	vim.keymap.set('n', '<Leader>d', find_dot_file, { desc = '[D]ot files' })
 end
 
 
@@ -218,7 +211,6 @@ end
 local configure_cmp = function()
 	local cmp = require('cmp')
 	local luasnip = require('luasnip')
-	require("luasnip.loaders.from_vscode").lazy_load()
 
 	cmp.setup({
 		snippet = {
@@ -284,13 +276,9 @@ local on_attach = function(_, bufnr)
 
 	nmap('<Leader>a', vim.lsp.buf.code_action, '[A]ction')
 	nmap('<Leader>rr', vim.lsp.buf.rename, '[R]efactor [R]ename')
-	nmap('gd', vim.lsp.buf.type_definition, '[G]oto [D]efinition')
+	nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
 	nmap('gr', telescopeBuildIn.lsp_references, '[G]oto [R]eferences')
-	nmap('<Leader>o', function ()
-		telescopeBuildIn.lsp_document_symbols({
-			show_line = true,
-		})
-	end , 'Document [O]utline')
+	nmap('<Leader>o', telescopeBuildIn.lsp_document_symbols, 'Document [O]utline')
 	nmap('gi', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
 
 	nmap('<Leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
@@ -318,6 +306,10 @@ end
 
 
 local servers = {
+	gopls = {},
+	pyright = {},
+	rust_analyzer = {},
+	tsserver = {},
 
 	lua_ls = {
 		Lua = {
@@ -421,11 +413,7 @@ local configure_nvimtree = function()
 		-- },
 	}
 
-	vim.keymap.set('n', '<Leader>e', function ()
-		api.tree.open({
-			find_file = true
-		})
-	end)
+	vim.keymap.set('n', '<Leader>e', api.tree.toggle)
 end
 
 
@@ -453,7 +441,7 @@ local configure_comment = function()
 			eol = 'gca',
 		},
 		---Enable keybindings
-		--NOTE: If given `false` then the plugin won't create any mappings
+		---NOTE: If given `false` then the plugin won't create any mappings
 		mappings = {
 			---Operator-pending mapping; `gcc` `gbc` `gc[count]{motion}` `gb[count]{motion}`
 			basic = true,
@@ -468,21 +456,27 @@ local configure_comment = function()
 end
 
 
--- ***********************************************************************
--- configure comment
+-- *************************************************
+-- configure toggleterm
 --
-local configure_overseer = function ()
-	--TODO: configure shortcuts
-	require("overseer").setup()
-end
+local configure_toggleterm = function()
+	require('toggleterm').setup({
+		size = 20,
+		open_mapping = '<C-t>',
+		border = 'single',
+		shell = 'pwsh.exe',
+		winbar = {
+			enabled = false
+		}
+	})
 
-
-
--- ***********************************************************************
--- lua line config
---
-local configure_lualine = function ()
-	require("lualine").setup()
+	local opts = { buffer = 0 }
+	vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
+	vim.keymap.set('t', '<M-h>', [[<Cmd>wincmd h<CR>]], opts)
+	vim.keymap.set('t', '<M-j>', [[<Cmd>wincmd j<CR>]], opts)
+	vim.keymap.set('t', '<M-k>', [[<Cmd>wincmd k<CR>]], opts)
+	vim.keymap.set('t', '<M-l>', [[<Cmd>wincmd l<CR>]], opts)
+	vim.keymap.set('t', '<M-w>', [[<C-\><C-n><C-w>]], opts)
 end
 
 
@@ -490,57 +484,85 @@ end
 -- install plugisn and apply configuratio
 --
 require("lazy").setup({
-	{ "ellisonleao/gruvbox.nvim", priority = 1000, config = true, opts = configure_theme },
-	{ "nvim-telescope/telescope.nvim", config = configure_telescope, },
-	{ "nvim-treesitter/nvim-treesitter", config = configure_treesitter, },
-	{ "lewis6991/gitsigns.nvim", config = configure_gitsigns, },
-	{ "numToStr/Comment.nvim", config = configure_comment, },
-	{ "windwp/nvim-autopairs", config = true, },
-	{ "j-hui/fidget.nvim", tag = "legacy", event = "LspAttach", config = true },
-	{ 'stevearc/overseer.nvim', opts = {}, config = configure_overseer },
-	{ "folke/neodev.nvim", config = true, event = "BufEnter init.lua" },
-	{ "sindrets/diffview.nvim", config = true},
-	{ "NeogitOrg/neogit", config = true,
-		dependencies = { "nvim-lua/plenary.nvim", "sindrets/diffview.nvim" } },
-	{ 'hrsh7th/nvim-cmp', config = configure_cmp,
-		dependencies = {
-			'hrsh7th/cmp-path',
-			'hrsh7th/cmp-nvim-lsp',
-			{'L3MON4D3/LuaSnip', dependencies= { "rafamadriz/friendly-snippets" }} ,
-			'saadparwaiz1/cmp_luasnip',
-		}
-	},
-	{ "neovim/nvim-lspconfig", config = configure_lspconfig,
-		dependencies = { "williamboman/mason.nvim", "williamboman/mason-lspconfig.nvim" } },
-	{ 'nvim-tree/nvim-tree.lua', config = configure_nvimtree,
-		dependencies = { 'nvim-tree/nvim-web-devicons' } },
-	{ 'nvim-lualine/lualine.nvim', opts = {}, config = configure_lualine,
-		dependencies = { 'nvim-tree/nvim-web-devicons' }},
-	{ "folke/todo-comments.nvim", config = true,
-		dependencies = { "nvim-lua/plenary.nvim" }},
-	{ 'akinsho/flutter-tools.nvim', lazy = false, config = true,
-			dependencies = { 'nvim-lua/plenary.nvim', 'stevearc/dressing.nvim'}},
+	-- { "ellisonleao/gruvbox.nvim",        config = configure_theme,      lazy = false, priority = 2000 },
+	{ "Mofiqul/vscode.nvim",             config = configure_theme,      lazy = false, priority = 2000 },
+	{ 'nvim-telescope/telescope.nvim',   config = configure_telescope,  lazy = false, priority = 1000 },
+	{ "nvim-treesitter/nvim-treesitter", config = configure_treesitter, lazy = false },
 	{
-		'nvim-orgmode/orgmode',
-		event = 'VeryLazy',
-		ft = { 'org' },
+		'hrsh7th/nvim-cmp',
+		config = configure_cmp,
+		lazy = false,
+		dependencies = {
+			'hrsh7th/cmp-path', 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip' }
+	},
+	{
+		"neovim/nvim-lspconfig",
+		config = configure_lspconfig,
+		lazy = false,
+		dependencies = {
+			"williamboman/mason.nvim", "williamboman/mason-lspconfig.nvim" }
+	},
+	{ 'lewis6991/gitsigns.nvim', config = configure_gitsigns, lazy = false },
+	{
+		"NeogitOrg/neogit",
+		config = true,
+		lazy = false,
+		dependencies = {
+			"nvim-lua/plenary.nvim", "sindrets/diffview.nvim" }
+	},
+	{ 'numToStr/Comment.nvim',   config = configure_comment,  lazy = false },
+	{ 'windwp/nvim-autopairs',   config = true,               lazy = false },
+	{
+		'nvim-tree/nvim-tree.lua',
+		config = configure_nvimtree,
+		lazy = false,
+		dependencies = {
+			'nvim-tree/nvim-web-devicons' }
+	},
+	{ 'lervag/vimtex', lazy = true },
+	{
+		'akinsho/toggleterm.nvim',
+		lazy = false,
+		version = "*",
+		config = configure_toggleterm
+	},
+	{
+		'stevearc/overseer.nvim',
+		lazy = false,
 		config = function()
-			-- Setup orgmode
-			require('orgmode').setup({
-				org_agenda_files = '~/orgfiles/**/*',
-				org_default_notes_file = '~/orgfiles/refile.org',
-			})
-
-			-- NOTE: If you are using nvim-treesitter with `ensure_installed = "all"` option
-			-- add `org` to ignore_install
-			-- require('nvim-treesitter.configs').setup({
-			--   ensure_installed = 'all',
-			--   ignore_install = { 'org' },
-			-- })
+			require('overseer').setup()
+		end
+	},
+	{
+		"nvim-neorg/neorg",
+		build = ":Neorg sync-parsers",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		config = function()
+			require("neorg").setup {
+				load = {
+					["core.defaults"] = {},  -- Loads default behaviour
+					["core.concealer"] = {}, -- Adds pretty icons to your documents
+					["core.dirman"] = {      -- Manages Neorg workspaces
+						config = {
+							workspaces = {
+								notes = "~/notes",
+							},
+						},
+					},
+				},
+			}
 		end,
-	}
-
+	},
+	-- {
+	-- 	'akinsho/flutter-tools.nvim',
+	-- 	lazy = false,
+	-- 	dependencies = {
+	-- 		'nvim-lua/plenary.nvim',
+	-- 	},
+	-- 	config = true,
+	-- }
 })
+
 
 
 -- *************************************************
@@ -567,15 +589,6 @@ local insert_current_file_path = function()
 	insert_at_cursor(vim.fn.expand('%:p'))
 end
 
-local clean_whitespaces = function()
-		local save_cursor = vim.fn.getpos(".")
-		pcall(function() vim.cmd [[%s/\s\+$//e]] end)
-		vim.fn.setpos(".", save_cursor)
-end
-
 vim.keymap.set('n', '<Leader>gc', open_config_file)
 vim.keymap.set('n', '<Leader>gd', insert_today_date)
 vim.keymap.set('n', '<Leader>gf', insert_current_file_path)
--- vim.keymap.set('n', '<Leader>gc', clean_whitespaces)
-vim.keymap.set('n', '<Leader> ', vim.cmd.make)
-
