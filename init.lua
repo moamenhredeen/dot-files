@@ -20,6 +20,11 @@
 -- *** better defaults
 -- ***
 
+<<<<<<< Updated upstream
+=======
+-- better performance 
+vim.loader.enable()
+>>>>>>> Stashed changes
 
 -- set font for gui neovim clients
 vim.opt.guifont = 'FiraCode Nerd Font'
@@ -123,7 +128,7 @@ vim.opt.rtp:prepend(lazypath)
 --
 local configure_theme = function()
 	vim.o.background = "dark"
-	vim.cmd([[colorscheme gruvbox]])
+	vim.cmd.colorscheme "vscode"
 end
 
 
@@ -490,7 +495,8 @@ end
 -- install plugisn and apply configuratio
 --
 require("lazy").setup({
-	{ "ellisonleao/gruvbox.nvim", priority = 1000, config = true, opts = configure_theme },
+	-- { "ellisonleao/gruvbox.nvim", priority = 1000, config = true, opts = configure_theme },
+	{ "Mofiqul/vscode.nvim", priority = 1000, config = true, opts = configure_theme },
 	{ "nvim-telescope/telescope.nvim", config = configure_telescope, },
 	{ "nvim-treesitter/nvim-treesitter", config = configure_treesitter, },
 	{ "lewis6991/gitsigns.nvim", config = configure_gitsigns, },

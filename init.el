@@ -1,4 +1,4 @@
-;; ***********************************************************************
+; ***********************************************************************
 ;; ***
 ;; *** My Personal Emacs Configuration
 ;; ***
@@ -26,7 +26,7 @@
 ;; (set-terminal-coding-system 'utf-8-unix)
 
 ;; custom font
-(add-to-list 'default-frame-alist '(font . "JuliaMono"))
+(add-to-list 'default-frame-alist '(font . "CaskaydiaCove NF"))
 
 
 ;; (OPTIONAL) Shift width for evil-mode users
@@ -480,6 +480,9 @@
 (use-package rust-mode
   :ensure t)
 
+
+(use-package pascal-mode
+  :mode "\\.iss\\'")
 
 (use-package yasnippet-snippets
   :ensure t)
