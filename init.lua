@@ -23,9 +23,6 @@
 -- better performance 
 vim.loader.enable()
 
--- set font for gui neovim clients
-vim.opt.guifont = 'FiraCode Nerd Font'
-
 -- highlight current line
 vim.o.cursorline = true
 
