@@ -1,4 +1,6 @@
 
+working_directory = "C:/Users/moamen.hraden"
+
 [colors.bright]
 black = "0x928374"
 blue = "0x83a598"
