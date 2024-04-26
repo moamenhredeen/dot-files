@@ -20,11 +20,8 @@
 -- *** better defaults
 -- ***
 
-<<<<<<< Updated upstream
-=======
 -- better performance 
 vim.loader.enable()
->>>>>>> Stashed changes
 
 -- set font for gui neovim clients
 vim.opt.guifont = 'FiraCode Nerd Font'
