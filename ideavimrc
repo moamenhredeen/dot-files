@@ -50,8 +50,13 @@ nmap <a-l> <c-w>l
 " *** key binding
 " ***
 
+" better defaults
+nmap <C-o> :action Back<CR>
+
 "nmap K :action MethodUp<cr>
 "nmap J :action MethodDown<cr>
+
+
 
 " set leader key
 let mapleader = " "
