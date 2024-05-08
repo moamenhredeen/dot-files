@@ -1,0 +1,85 @@
+/*****************************************************************
+
+userChrome.css
+author: Moamen Hredeen 
+Description: firefox customization
+Usage: 
+
+
+Style: 
+------------------------------------------ navigator-toolbox ---------------------------------------
+| ------------------navbar------------------------- --------------------- tabar ------------------ |
+| | back- and realod buttons, urlbar              | | tabs, new tab, window controls             | |
+| ------------------------------------------------- ---------------------------------------------- |
+----------------------------------------------------------------------------------------------------
+
+*****************************************************************/
+
+:root {
+	/* colors */
+	--primary-color: yellowgreen; 
+	--accent-color: orange;
+}
+
+
+#navigator-toolbox{
+	display: flex !important;
+	flex-direction: row !important;
+	border: none !important;
+}
+
+
+
+/* navbar bar styles */
+
+#nav-bar {
+	background: transparent !important;
+}
+
+
+#identity-icon-box {
+	display: none !important;
+}
+
+#tracking-protection-icon-container {
+	display: none !important;
+}
+
+#page-action-buttons {
+	display: none !important;
+}
+
+#fxa-toolbar-menu-button{
+	display: none !important;
+}
+
+#unified-extensions-button {
+	display: none !important;
+}
+
+
+#PanelUI-menu-button {
+	display: none !important;
+}
+
+#firefox-view-button {
+	display: none !important;
+}
+
+
+/* titlebar bar styles */
+
+
+#titlebar{
+	order: 1 !important;
+	flex: 1 !important;
+}
+
+#tabbrowser-tabs {
+	border: none !important;
+}
+
+
+.titlebar-button.titlebar-close {
+	padding-right: 10px !important;
+}
