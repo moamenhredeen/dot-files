@@ -1,4 +1,4 @@
-; ***********************************************************************
+;; ***********************************************************************
 ;; ***
 ;; *** My Personal Emacs Configuration
 ;; ***
@@ -72,6 +72,9 @@
         uniquify-ignore-buffers-re "^\\*"))
 
 (setq dired-dwim-target t)
+
+;; do not show documentation in the minibuffer
+(setq eldoc-echo-area-use-multiline-p nil)
 ;; ***********************************************************************
 ;; ***
 ;; *** Utility Functions
@@ -97,17 +100,18 @@
         (consult-project-buffer)
         (consult-buffer)))
 
-    ;; better renaming for new shells
-    (defvar shell-index 0)
-    (defun my/shell ()
-    (interactive)
-    (let (shell-name)
-        (setq shell-name (read-string "enter shell name (default: <number>-shell): "))
-        (if (zerop (length (string-trim shell-name)))
-            (progn
-            (shell (concat (number-to-string shell-index) "-shell"))
-            (setq shell-index (+ shell-index 1)))
-        (shell shell-name))))
+;; better renaming for new shells
+(defvar shell-index 0)
+
+(defun my/shell ()
+  (interactive)
+  (let (shell-name)
+    (setq shell-name (read-string "enter shell name (default: <number>-shell): "))
+    (if (zerop (length (string-trim shell-name)))
+        (progn
+          (shell (concat (number-to-string shell-index) "-shell"))
+          (setq shell-index (+ shell-index 1)))
+      (shell shell-name))))
 
 
 (defun my/window-split-toggle ()
@@ -480,11 +484,10 @@
 (use-package rust-mode
   :ensure t)
 
-
-(use-package pascal-mode
-  :mode "\\.iss\\'")
-
 (use-package yasnippet-snippets
+  :ensure t)
+
+(use-package dart-mode
   :ensure t)
 
 (use-package yasnippet
@@ -493,94 +496,58 @@
   (yas-global-mode 1))
 
 
-(use-package lsp-mode
+(use-package eglot
   :ensure t
-  :init
-  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
-  (setq lsp-keymap-prefix "C-c l")
-  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-         (XXX-mode . lsp)
-         ;; if you want which-key integration
-         (lsp-mode . lsp-enable-which-key-integration))
-  :commands lsp)
+  :after (yasnippet)
+  :hook ((go-ts-mode
+          rust-mode
+          typescript-ts-mode
+          powershell-mode
+          nxml-mode
+          js-ts-mode
+          go-ts-mode
+          dart-mode
+          latex-mode) . eglot-ensure))
 
-;; optionally
-(use-package lsp-ui
+
+(use-package corfu
   :ensure t
-  :commands lsp-ui-mode)
+  :init (global-corfu-mode)
+  :custom
+  (corfu-auto t)                 ;; Enable auto completion
+  (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+  (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+  (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+  (corfu-popupinfo-delay 0.2)
+  (corfu-auto-prefix 2)
+  :bind (:map corfu-map
+              ("TAB" . corfu-next)
+              ([tab] . corfu-next)
+              ("S-TAB" . corfu-previous)
+              ([backtab] . corfu-previous)))
 
 
-;; (use-package eglot
-;;   :ensure t
-;;   :after (yasnippet)
-;;   :hook ((go-ts-mode
-;;           rust-mode
-;;           typescript-ts-mode
-;;           powershell-mode
-;;           nxml-mode
-;;           js-ts-mode
-;;           go-ts-mode
-;;           latex-mode) . eglot-ensure))
-
-
-;; (use-package corfu
-;;   :ensure t
-;;   :init (global-corfu-mode)
-;;   :custom
-;;   (corfu-auto t)                 ;; Enable auto completion
-;;   (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
-;;   (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
-;;   (corfu-on-exact-match nil)     ;; Configure handling of exact matches
-;;   (corfu-popupinfo-delay 0.2)
-;;   (corfu-auto-prefix 2)
-;;   :bind (:map corfu-map
-;;               ("TAB" . corfu-next)
-;;               ([tab] . corfu-next)
-;;               ("S-TAB" . corfu-previous)
-;;               ([backtab] . corfu-previous)))
-
-
-;; (defun corfu-move-to-minibuffer ()
-;;   (interactive)
-;;   (when completion-in-region--data
-;;     (let ((completion-extra-properties corfu--extra)
-;;           completion-cycle-threshold completion-cycling)
-;;       (apply #'consult-completion-in-region completion-in-region--data))))
-;; (keymap-set corfu-map "M-m" #'corfu-move-to-minibuffer)
-;; (add-to-list 'corfu-continue-commands #'corfu-move-to-minibuffer)
+(defun corfu-move-to-minibuffer ()
+  (interactive)
+  (when completion-in-region--data
+    (let ((completion-extra-properties corfu--extra)
+          completion-cycle-threshold completion-cycling)
+      (apply #'consult-completion-in-region completion-in-region--data))))
+(keymap-set corfu-map "M-m" #'corfu-move-to-minibuffer)
+(add-to-list 'corfu-continue-commands #'corfu-move-to-minibuffer)
 
 
 
 ;; Add extensions
-;; (use-package cape
-;;   :ensure t
-;;   :bind (("C-c p p" . completion-at-point)))
+(use-package cape
+  :ensure t
+  :bind (("C-c p p" . completion-at-point)))
 
 
-;; (use-package yasnippet-capf
-;;   :ensure t
-;;   :config
-;;   (add-to-list 'completion-at-point-functions #'yasnippet-capf))
-
-;; (use-package plantuml-mode
-;;   :ensure t
-;;   :custom
-;;   (plantuml-default-exec-mode 'jar)
-;;   (plantuml-jar-path (file-name-concat user-emacs-directory "plantuml.jar"))
-;;   :config
-;;   (when
-;;       (not
-;;        (file-exists-p
-;;         (file-name-concat user-emacs-directory "plantuml.jar")))
-;;     (plantuml-download-jar))
-;;   (add-to-list 'completion-at-point-functions
-;;                (list
-;;                 (cape-capf-super #'cape-dabbrev))))
-
-;; (use-package slime
-;;   :ensure t
-;;   :config
-;;   (setq inferior-lisp-program "sbcl"))
+(use-package yasnippet-capf
+  :ensure t
+  :config
+  (add-to-list 'completion-at-point-functions #'yasnippet-capf))
 
 
 
@@ -728,6 +695,12 @@
   :after evil
   :config
 
+  ;; (general-define-key
+  ;;  ;; addtional lsp keybindings
+  ;;  :states 'normal
+  ;;  :keymap eglot-mode-map
+  ;;  "gi"     'eglot-find-implementation)
+
   (general-define-key
    ;; navigation
    "M-k"    'evil-window-up
@@ -759,14 +732,14 @@
     "x"       'execute-extended-command
     "h"       'consult-apropos
     "d"       'docker
-    "t"       'my/shell
+    "t"       'eshell
     "c"       'evilnc-comment-or-uncomment-lines
     "e"       'dired-jump
 
     ;; eglot
-    "aa"     'eglot-code-actions
-    "ar"     'eglot-rename
-    "af"     'eglot-format
+    "a"     'eglot-code-actions
+    "rr"     'eglot-rename
+    "rf"     'eglot-format
 
 
     ;; search
@@ -783,6 +756,7 @@
     "ps"      'consult-projectile-switch-project
     "pf"      'consult-projectile-find-file
     "pb"      'consult-project-buffer
+    "pe"      'projectile-dired
 
     ;; org roam key binding
     "oa"        'org-agenda
@@ -830,6 +804,7 @@
  ;; If there is more than one, they won't work right.
  '(default ((t (:foreground "#b5b5b5" :background "#242424"))))
  '(cursor ((t (:background "#ffea73"))))
+ '(dired-directory ((t (:foreground "#d4c366" :underline t :bold t))))
  '(eshell-ls-directory ((t (:foreground "#d4c366"))))
  '(eshell-ls-executable ((t (:foreground "#61d874"))))
  '(eshell-prompt ((t (:foreground "#d4c366" :bold t))))
@@ -848,7 +823,7 @@
  '(font-lock-function-name-face ((t (:foreground "#c5c5c5"))))
  '(font-lock-keyword-face ((t (:foreground "#d4c366" :bold t))))
  '(font-lock-string-face ((t (:foreground "#249c64"))))
- '(font-lock-type-face ((t (:foreground "#d4c366" :bold t))))
+ '(font-lock-type-face ((t (:foreground "#c5c5c5" :bold t))))
  '(font-lock-variable-name-face ((t (:foreground "#c5c5c5"))))
  '(font-lock-warning-face ((t (:foreground "red" :bold t))))
  '(fringe ((t (:background "#000000"))))
@@ -884,4 +859,4 @@
  '(git-gutter:deleted-sign " ")
  '(git-gutter:modified-sign " ")
  '(package-selected-packages
-   '(lsp-java properties-mode ng2-mode cmake-mode zig-mode tide cider yasnippet-snippets yasnippet-capf yaml xterm-color which-key web-mode vertico undo-tree spinner smartparens slime shrink-path sesman rust-mode restclient request powershell plantuml-mode pkg-info pfuture pdf-tools ox-gfm org-roam-ui org-noter org-journal org-contrib org-bullets orderless nerd-icons nano-theme nano-modeline my-theme-theme monkeytype mmt markdown-mode marginalia magit lua-mode jenkinsfile-mode hydra ht git-gutter general evil-surround evil-org evil-nerd-commenter evil-multiedit evil-mc evil-goggles evil-collection emmet-mode embark-consult elfeed-org eat doom-themes docker dired-subtree corfu consult-projectile company cfrs cape bui batman-theme auctex all-the-icons ace-window)))
+   '(markdown-mode markdown-ts-mode yasnippet-snippets yasnippet-capf which-key vertico undo-tree solarized-theme smartparens rust-mode restclient pdf-tools ox-gfm org-roam org-noter org-journal orderless nov marginalia magit hydra gruvbox-theme git-gutter general evil-surround evil-org evil-nerd-commenter evil-multiedit evil-goggles evil-collection embark-consult elfeed-org docker dired-subtree dart-mode corfu consult-projectile cape)))
