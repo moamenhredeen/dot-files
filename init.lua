@@ -196,9 +196,10 @@ local configure_telescope = function()
 	pcall(telescope.load_extension, 'fzf')
 
 	-- See `:help telescope.builtin`
-	-- vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
 	vim.keymap.set('n', '<Leader>f', telescope_builtin.find_files, { desc = 'open [F]ile' })
-	vim.keymap.set('n', '<Leader>b', telescope_builtin.buffers, { desc = 'open [B]uffer' })
+	vim.keymap.set('n', '<Leader>b', function ()
+		 telescope_builtin.buffers({sort_lastused = true, only_cwd = true, ignore_current_buffer = true});
+	end, { desc = 'open [B]uffer' })
 	vim.keymap.set('n', '<Leader>x', telescope_builtin.commands, { desc = '[C]ommands' })
 	vim.keymap.set('n', '<Leader>sh', telescope_builtin.help_tags, { desc = '[H]elp' })
 	vim.keymap.set('n', '<Leader>sc', telescope_builtin.git_commits, { desc = '[C]ommands' })
@@ -344,6 +345,12 @@ local servers = {
 }
 
 
+local capabilities = function ()
+	local capabilities = vim.lsp.protocol.make_client_capabilities()
+	return require('cmp_nvim_lsp').default_capabilities(capabilities)
+end
+
+
 local configure_lspconfig = function()
 	-- Setup mason so it can manage external tooling
 	require('mason').setup()
@@ -351,8 +358,6 @@ local configure_lspconfig = function()
 	-- Ensure the servers above are installed
 	local mason_lspconfig = require('mason-lspconfig')
 
-	local capabilities = vim.lsp.protocol.make_client_capabilities()
-	capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 	mason_lspconfig.setup {
 		ensure_installed = vim.tbl_keys(servers),
@@ -361,7 +366,7 @@ local configure_lspconfig = function()
 	mason_lspconfig.setup_handlers {
 		function(server_name)
 			require('lspconfig')[server_name].setup {
-				capabilities = capabilities,
+				capabilities = capabilities(),
 				on_attach = on_attach,
 				settings = servers[server_name],
 			}
@@ -488,6 +493,55 @@ local configure_lualine = function ()
 end
 
 
+-- ***********************************************************************
+-- org mode config
+--
+-- local configure_orgmode = function()
+-- 	-- Setup orgmode
+-- 	require('orgmode').setup({
+-- 		org_agenda_files = '~/orgfiles/**/*',
+-- 		org_default_notes_file = '~/orgfiles/refile.org',
+-- 	})
+-- end
+
+
+
+-- ***********************************************************************
+-- flutter tools config
+--
+local configure_flutter_tools = function ()
+require("flutter-tools").setup {
+  ui = {
+		-- 'native' or 'plugin'
+    notification_style = 'native'
+  },
+  flutter_path = "/home/moamen/tools/flutter/bin/flutter",
+  root_patterns = { ".git", "pubspec.yaml" },
+	widget_guides = {
+    enabled = true,
+  },
+  closing_tags = {
+    prefix = "//",
+    enabled = true
+  },
+  lsp = {
+		color = {
+			enabled = true,
+			background = true,
+		},
+    on_attach = on_attach,
+    capabilities = capabilities(),
+    settings = {
+      showTodos = true,
+      completeFunctionCalls = true,
+      enableSnippets = true,
+      updateImportsOnRename = true,
+    }
+  }
+}
+end
+
+
 -- *************************************************
 -- install plugisn and apply configuratio
 --
@@ -506,13 +560,8 @@ require("lazy").setup({
 	{ "NeogitOrg/neogit", config = true,
 		dependencies = { "nvim-lua/plenary.nvim", "sindrets/diffview.nvim" } },
 	{ 'hrsh7th/nvim-cmp', config = configure_cmp,
-		dependencies = {
-			'hrsh7th/cmp-path',
-			'hrsh7th/cmp-nvim-lsp',
-			{'L3MON4D3/LuaSnip', dependencies= { "rafamadriz/friendly-snippets" }} ,
-			'saadparwaiz1/cmp_luasnip',
-		}
-	},
+		dependencies = { 'hrsh7th/cmp-path', 'hrsh7th/cmp-nvim-lsp', 'saadparwaiz1/cmp_luasnip',
+		{'L3MON4D3/LuaSnip', dependencies= { "rafamadriz/friendly-snippets" }}} },
 	{ "neovim/nvim-lspconfig", config = configure_lspconfig,
 		dependencies = { "williamboman/mason.nvim", "williamboman/mason-lspconfig.nvim" } },
 	{ 'nvim-tree/nvim-tree.lua', config = configure_nvimtree,
@@ -521,28 +570,9 @@ require("lazy").setup({
 		dependencies = { 'nvim-tree/nvim-web-devicons' }},
 	{ "folke/todo-comments.nvim", config = true,
 		dependencies = { "nvim-lua/plenary.nvim" }},
-	{ 'akinsho/flutter-tools.nvim', lazy = false, config = true,
+	{ 'akinsho/flutter-tools.nvim', lazy = false, config = configure_flutter_tools,
 			dependencies = { 'nvim-lua/plenary.nvim', 'stevearc/dressing.nvim'}},
-	{
-		'nvim-orgmode/orgmode',
-		event = 'VeryLazy',
-		ft = { 'org' },
-		config = function()
-			-- Setup orgmode
-			require('orgmode').setup({
-				org_agenda_files = '~/orgfiles/**/*',
-				org_default_notes_file = '~/orgfiles/refile.org',
-			})
-
-			-- NOTE: If you are using nvim-treesitter with `ensure_installed = "all"` option
-			-- add `org` to ignore_install
-			-- require('nvim-treesitter.configs').setup({
-			--   ensure_installed = 'all',
-			--   ignore_install = { 'org' },
-			-- })
-		end,
-	}
-
+	-- { 'nvim-orgmode/orgmode', event = 'VeryLazy', ft = { 'org' }, config = configure_orgmode }
 })
 
 
