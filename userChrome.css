@@ -20,7 +20,6 @@ Style:
 :root {
 	/* colors */
 	--primary-color: yellowgreen; 
-	--accent-color: orange;
 }
 
 
@@ -74,7 +73,19 @@ using the shortcut ctrl+D.
 }
 
 #urlbar-input {
-	color: lime !important;
+	color: var(--primary-color) !important;
+}
+
+
+#urlbar-input::selection {
+	color: black !important;
+	background: var(--primary-color) !important;
+}
+
+
+#urlbar-input::-moz-selection {
+	color: black !important;
+	background: var(--primary-color) !important;
 }
 
 
@@ -102,5 +113,5 @@ using the shortcut ctrl+D.
 }
 
 #TabsToolbar #firefox-view-button[open] > .toolbarbutton-icon, .tab-background:is([selected], [multiselected]) {
-	border-top: 2px solid lime;
+	border-top: 3px solid var(--primary-color);
 }
