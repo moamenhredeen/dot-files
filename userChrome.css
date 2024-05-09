@@ -47,9 +47,14 @@ Style:
 	display: none !important;
 }
 
-#page-action-buttons {
-	display: none !important;
-}
+
+/*
+when the bookmark button is not displayed i can not bookmark a page
+using the shortcut ctrl+D.
+*/
+/* #page-action-buttons { */
+/* 	display: none !important; */
+/* } */
 
 #fxa-toolbar-menu-button{
 	display: none !important;
