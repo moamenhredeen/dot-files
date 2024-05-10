@@ -11,9 +11,6 @@
 --  ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║
 --  ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝
 
--- todo list: 
--- [ ] restrcture config file
-
 
 -- ***********************************************************************
 -- ***
@@ -54,27 +51,24 @@ vim.wo.signcolumn = 'yes'
 
 -- Set colorscheme
 vim.o.termguicolors = true
--- vim.cmd [[colorscheme onedark]]
 
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
 
 vim.o.wrap = false
-
 vim.o.splitbelow = true
 vim.o.splitright = true
-
 vim.opt.clipboard = 'unnamedplus'
-
 vim.o.tabstop = 2
 vim.o.shiftwidth = 2
 -- vim.o.noexpandtab = true
 
+
 -- change default shell
-if vim.fn.has('macunix') == 1 then
-	vim.opt.shell='bash'
-	vim.g.terminal_emulator='bash'
-else
+if vim.fn.has('linux') == 1 then
+	vim.opt.shell='fish'
+	vim.g.terminal_emulator='fish'
+elseif vim.fn.has('win32') == 1 then
 	vim.opt.shell='pwsh.exe -c '
 	vim.g.terminal_emulator='pwsh.exe'
 end
@@ -98,8 +92,6 @@ vim.keymap.set('n', '<M-v>', '<C-w>v')
 vim.keymap.set('n', '<M-r>', '<C-w>r')
 vim.keymap.set('n', '<M-n>', ':windo wincmd H<CR>')
 vim.keymap.set('n', '<M-m>', ':windo wincmd K<CR>')
-
--- TODO: faster navigation
 
 
 -- *************************************************
@@ -270,12 +262,7 @@ end
 --
 
 local on_attach = function(_, bufnr)
-	-- NOTE: Remember that lua is a real programming language, and as such it is possible
-	-- to define small helper and utility functions so you don't have to repeat yourself
-	-- many times.
-	--
-	-- In this case, we create a function that lets us more easily define mappings specific
-	-- for LSP related items. It sets the mode, buffer and description for us each time.
+
 	local nmap = function(keys, func, desc)
 		if desc then
 			desc = 'LSP: ' .. desc
@@ -283,37 +270,19 @@ local on_attach = function(_, bufnr)
 		vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
 	end
 
-	local telescopeBuildIn = require('telescope.builtin')
+	local telescope_built_ins = require('telescope.builtin')
 
+	nmap('ga', vim.lsp.buf.code_action, '[A]ction')
 	nmap('<Leader>a', vim.lsp.buf.code_action, '[A]ction')
 	nmap('<Leader>rr', vim.lsp.buf.rename, '[R]efactor [R]ename')
-	nmap('gd', vim.lsp.buf.type_definition, '[G]oto [D]efinition')
-	nmap('gr', telescopeBuildIn.lsp_references, '[G]oto [R]eferences')
-	nmap('<Leader>o', function ()
-		telescopeBuildIn.lsp_document_symbols({
-			show_line = true,
-		})
-	end , 'Document [O]utline')
+	nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+	nmap('gr', vim.lsp.buf.references, '[G]oto [R]eferences')
 	nmap('gi', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
-
-	nmap('<Leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
-	--nmap('<Leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-	--nmap('<Leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
-
-	-- See `:help K` for why this keymap
+	nmap('gs', telescope_built_ins.lsp_document_symbols, '[D]ocument [S]ymbols')
+	nmap('gS', telescope_built_ins.lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+	nmap('<Leader>t', telescope_built_ins.lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 	nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-	-- nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
-	-- Lesser used LSP functionality
-	nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-	nmap('<Leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
-	nmap('<Leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
-	nmap('<Leader>wl', function()
-		print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-	end, '[W]orkspace [L]ist Folders')
-
-
-	-- Create a command `:Format` local to the LSP buffer
 	vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
 		vim.lsp.buf.format()
 	end, { desc = 'Format current buffer with LSP' })
@@ -493,18 +462,6 @@ local configure_lualine = function ()
 end
 
 
--- ***********************************************************************
--- org mode config
---
--- local configure_orgmode = function()
--- 	-- Setup orgmode
--- 	require('orgmode').setup({
--- 		org_agenda_files = '~/orgfiles/**/*',
--- 		org_default_notes_file = '~/orgfiles/refile.org',
--- 	})
--- end
-
-
 
 -- ***********************************************************************
 -- flutter tools config
@@ -546,7 +503,6 @@ end
 -- install plugisn and apply configuratio
 --
 require("lazy").setup({
-	-- { "ellisonleao/gruvbox.nvim", priority = 1000, config = true, opts = configure_theme },
 	{ "Mofiqul/vscode.nvim", priority = 1000, config = true, opts = configure_theme },
 	{ "nvim-telescope/telescope.nvim", config = configure_telescope, },
 	{ "nvim-treesitter/nvim-treesitter", config = configure_treesitter, },
@@ -572,43 +528,4 @@ require("lazy").setup({
 		dependencies = { "nvim-lua/plenary.nvim" }},
 	{ 'akinsho/flutter-tools.nvim', lazy = false, config = configure_flutter_tools,
 			dependencies = { 'nvim-lua/plenary.nvim', 'stevearc/dressing.nvim'}},
-	-- { 'nvim-orgmode/orgmode', event = 'VeryLazy', ft = { 'org' }, config = configure_orgmode }
 })
-
-
--- *************************************************
--- utils
---
-
-
-local insert_at_cursor = function(message)
-	local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-	vim.api.nvim_buf_set_text(0, row - 1, col, row - 1, col, { message })
-end
-
-local open_config_file = function()
-	local initluaPath = vim.fn.resolve(vim.fn.stdpath('config') .. '/init.lua')
-	print('open ', initluaPath)
-	vim.cmd('e ' .. initluaPath)
-end
-
-local insert_today_date = function()
-	insert_at_cursor(vim.fn.strftime('%c'))
-end
-
-local insert_current_file_path = function()
-	insert_at_cursor(vim.fn.expand('%:p'))
-end
-
-local clean_whitespaces = function()
-		local save_cursor = vim.fn.getpos(".")
-		pcall(function() vim.cmd [[%s/\s\+$//e]] end)
-		vim.fn.setpos(".", save_cursor)
-end
-
-vim.keymap.set('n', '<Leader>gc', open_config_file)
-vim.keymap.set('n', '<Leader>gd', insert_today_date)
-vim.keymap.set('n', '<Leader>gf', insert_current_file_path)
--- vim.keymap.set('n', '<Leader>gc', clean_whitespaces)
-vim.keymap.set('n', '<Leader> ', vim.cmd.make)
-

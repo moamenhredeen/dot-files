@@ -360,6 +360,13 @@
 (use-package pdf-tools
   :ensure t)
 
+
+(use-package multiple-cursors
+  :ensure t
+  :config
+  (require 'multiple-cursors)
+  (setq mc/always-run-for-all t))
+
 ;; ***********************************************************************
 ;; ***
 ;; *** Git configuration
@@ -677,16 +684,16 @@
   (setq which-key-prefix-prefix "+" ))
 
 
-(use-package hydra
-  :ensure t
-  :config
-  (defhydra h/util-functions ()
-    "utilities"
-    ("d" (dired (file-name-concat (my/home-directory) "git-repos" "dot-files")) "dot-files" :column "directories")
-    ("g" (dired (file-name-concat (my/home-directory) "git-repos")) "git-repos" :column "directories")
-    ("e" (shell-command "explorer.exe .") "explorer" :column "system")
-    ("s" (shell-command "Start-Process pwsh") "shell" :column "system")
-    ("m" my/open-main-org-file "open main.org" :column "quick")))
+;; (use-package hydra
+;;   :ensure t
+;;   :config
+;;   (defhydra h/util-functions ()
+;;     "utilities"
+;;     ("d" (dired (file-name-concat (my/home-directory) "git-repos" "dot-files")) "dot-files" :column "directories")
+;;     ("g" (dired (file-name-concat (my/home-directory) "git-repos")) "git-repos" :column "directories")
+;;     ("e" (shell-command "explorer.exe .") "explorer" :column "system")
+;;     ("s" (shell-command "Start-Process pwsh") "shell" :column "system")
+;;     ("m" my/open-main-org-file "open main.org" :column "quick")))
 
 
 ;; cleaner way for defining keymap
@@ -694,12 +701,6 @@
   :ensure t
   :after evil
   :config
-
-  ;; (general-define-key
-  ;;  ;; addtional lsp keybindings
-  ;;  :states 'normal
-  ;;  :keymap eglot-mode-map
-  ;;  "gi"     'eglot-find-implementation)
 
   (general-define-key
    ;; navigation
@@ -711,7 +712,13 @@
    "M-v"    'split-window-right
    "M-q"    'evil-quit
    "M-o"    'tab-switch
-   "M-n"    'h/util-functions/body)
+   "M-n"    'mc/mark-next-like-this
+   "M-N"    'mc/mark-all-like-this)
+
+  (general-define-key
+   :states 'normal
+   ;; add binding for search workspace symbol
+    "gi"    'eglot-find-implementation)
 
   (general-create-definer my-leader-def
     :prefix "SPC")
@@ -859,4 +866,4 @@
  '(git-gutter:deleted-sign " ")
  '(git-gutter:modified-sign " ")
  '(package-selected-packages
-   '(markdown-mode markdown-ts-mode yasnippet-snippets yasnippet-capf which-key vertico undo-tree solarized-theme smartparens rust-mode restclient pdf-tools ox-gfm org-roam org-noter org-journal orderless nov marginalia magit hydra gruvbox-theme git-gutter general evil-surround evil-org evil-nerd-commenter evil-multiedit evil-goggles evil-collection embark-consult elfeed-org docker dired-subtree dart-mode corfu consult-projectile cape)))
+   '(flutter multiple-cursors markdown-mode markdown-ts-mode yasnippet-snippets yasnippet-capf which-key vertico undo-tree solarized-theme smartparens rust-mode restclient pdf-tools ox-gfm org-roam org-noter org-journal orderless nov marginalia magit hydra gruvbox-theme git-gutter general evil-surround evil-org evil-nerd-commenter evil-multiedit evil-goggles evil-collection embark-consult elfeed-org docker dired-subtree dart-mode corfu consult-projectile cape)))

@@ -19,7 +19,7 @@ Style:
 
 :root {
 	/* colors */
-	--primary-color: yellowgreen; 
+	--primary-color: yellow; 
 }
 
 
@@ -47,14 +47,6 @@ Style:
 }
 
 
-/*
-when the bookmark button is not displayed i can not bookmark a page
-using the shortcut ctrl+D.
-*/
-/* #page-action-buttons { */
-/* 	display: none !important; */
-/* } */
-
 #fxa-toolbar-menu-button{
 	display: none !important;
 }
@@ -71,23 +63,6 @@ using the shortcut ctrl+D.
 #firefox-view-button {
 	display: none !important;
 }
-
-#urlbar-input {
-	color: var(--primary-color) !important;
-}
-
-
-#urlbar-input::selection {
-	color: black !important;
-	background: var(--primary-color) !important;
-}
-
-
-#urlbar-input::-moz-selection {
-	color: black !important;
-	background: var(--primary-color) !important;
-}
-
 
 /* titlebar bar styles */
 
@@ -115,3 +90,4 @@ using the shortcut ctrl+D.
 #TabsToolbar #firefox-view-button[open] > .toolbarbutton-icon, .tab-background:is([selected], [multiselected]) {
 	border-top: 3px solid var(--primary-color);
 }
+
