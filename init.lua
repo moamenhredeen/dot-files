@@ -17,7 +17,7 @@
 -- *** better defaults
 -- ***
 
--- better performance 
+-- better performance
 vim.loader.enable()
 
 -- set font for gui neovim clients
@@ -64,13 +64,17 @@ vim.o.shiftwidth = 2
 -- vim.o.noexpandtab = true
 
 
+-- fold markdown
+vim.g.markdown_folding = 1
+
+
 -- change default shell
 if vim.fn.has('linux') == 1 then
-	vim.opt.shell='fish'
-	vim.g.terminal_emulator='fish'
+	vim.opt.shell = 'fish'
+	vim.g.terminal_emulator = 'fish'
 elseif vim.fn.has('win32') == 1 then
-	vim.opt.shell='pwsh.exe -c '
-	vim.g.terminal_emulator='pwsh.exe'
+	vim.opt.shell = 'pwsh.exe -c '
+	vim.g.terminal_emulator = 'pwsh.exe'
 end
 
 
@@ -173,12 +177,12 @@ local configure_telescope = function()
 	local telescope_builtin = require('telescope.builtin')
 
 	local fuzzy_find_buffer = function()
-				telescope_builtin
-					.current_buffer_fuzzy_find(require('telescope.themes')
+		telescope_builtin
+				.current_buffer_fuzzy_find(require('telescope.themes')
 					.get_dropdown { previewer = false })
 	end
 
-	local find_dot_file = function ()
+	local find_dot_file = function()
 		telescope_builtin.find_files({
 			cwd = "~/git-repos/dot-files"
 		})
@@ -189,8 +193,8 @@ local configure_telescope = function()
 
 	-- See `:help telescope.builtin`
 	vim.keymap.set('n', '<Leader>f', telescope_builtin.find_files, { desc = 'open [F]ile' })
-	vim.keymap.set('n', '<Leader>b', function ()
-		 telescope_builtin.buffers({sort_lastused = true, only_cwd = true, ignore_current_buffer = true});
+	vim.keymap.set('n', '<Leader>b', function()
+		telescope_builtin.buffers({ sort_lastused = true, only_cwd = true, ignore_current_buffer = true });
 	end, { desc = 'open [B]uffer' })
 	vim.keymap.set('n', '<Leader>x', telescope_builtin.commands, { desc = '[C]ommands' })
 	vim.keymap.set('n', '<Leader>sh', telescope_builtin.help_tags, { desc = '[H]elp' })
@@ -262,7 +266,6 @@ end
 --
 
 local on_attach = function(_, bufnr)
-
 	local nmap = function(keys, func, desc)
 		if desc then
 			desc = 'LSP: ' .. desc
@@ -314,7 +317,7 @@ local servers = {
 }
 
 
-local capabilities = function ()
+local capabilities = function()
 	local capabilities = vim.lsp.protocol.make_client_capabilities()
 	return require('cmp_nvim_lsp').default_capabilities(capabilities)
 end
@@ -397,7 +400,7 @@ local configure_nvimtree = function()
 		-- },
 	}
 
-	vim.keymap.set('n', '<Leader>e', function ()
+	vim.keymap.set('n', '<Leader>e', function()
 		api.tree.open({
 			find_file = true
 		})
@@ -447,7 +450,7 @@ end
 -- ***********************************************************************
 -- configure comment
 --
-local configure_overseer = function ()
+local configure_overseer = function()
 	--TODO: configure shortcuts
 	require("overseer").setup()
 end
@@ -457,7 +460,7 @@ end
 -- ***********************************************************************
 -- lua line config
 --
-local configure_lualine = function ()
+local configure_lualine = function()
 	require("lualine").setup()
 end
 
@@ -466,36 +469,36 @@ end
 -- ***********************************************************************
 -- flutter tools config
 --
-local configure_flutter_tools = function ()
-require("flutter-tools").setup {
-  ui = {
-		-- 'native' or 'plugin'
-    notification_style = 'native'
-  },
-  flutter_path = "/home/moamen/tools/flutter/bin/flutter",
-  root_patterns = { ".git", "pubspec.yaml" },
-	widget_guides = {
-    enabled = true,
-  },
-  closing_tags = {
-    prefix = "//",
-    enabled = true
-  },
-  lsp = {
-		color = {
-			enabled = true,
-			background = true,
+local configure_flutter_tools = function()
+	require("flutter-tools").setup {
+		ui = {
+			-- 'native' or 'plugin'
+			notification_style = 'native'
 		},
-    on_attach = on_attach,
-    capabilities = capabilities(),
-    settings = {
-      showTodos = true,
-      completeFunctionCalls = true,
-      enableSnippets = true,
-      updateImportsOnRename = true,
-    }
-  }
-}
+		flutter_path = "/home/moamen/tools/flutter/bin/flutter",
+		root_patterns = { ".git", "pubspec.yaml" },
+		widget_guides = {
+			enabled = true,
+		},
+		closing_tags = {
+			prefix = "//",
+			enabled = true
+		},
+		lsp = {
+			color = {
+				enabled = true,
+				background = true,
+			},
+			on_attach = on_attach,
+			capabilities = capabilities(),
+			settings = {
+				showTodos = true,
+				completeFunctionCalls = true,
+				enableSnippets = true,
+				updateImportsOnRename = true,
+			}
+		}
+	}
 end
 
 
@@ -503,29 +506,116 @@ end
 -- install plugisn and apply configuratio
 --
 require("lazy").setup({
-	{ "Mofiqul/vscode.nvim", priority = 1000, config = true, opts = configure_theme },
-	{ "nvim-telescope/telescope.nvim", config = configure_telescope, },
-	{ "nvim-treesitter/nvim-treesitter", config = configure_treesitter, },
-	{ "lewis6991/gitsigns.nvim", config = configure_gitsigns, },
-	{ "numToStr/Comment.nvim", config = configure_comment, },
-	{ "windwp/nvim-autopairs", config = true, },
-	{ "j-hui/fidget.nvim", tag = "legacy", event = "LspAttach", config = true },
-	{ 'stevearc/overseer.nvim', opts = {}, config = configure_overseer },
-	{ "folke/neodev.nvim", config = true, event = "BufEnter init.lua" },
-	{ "sindrets/diffview.nvim", config = true},
-	{ "NeogitOrg/neogit", config = true,
-		dependencies = { "nvim-lua/plenary.nvim", "sindrets/diffview.nvim" } },
-	{ 'hrsh7th/nvim-cmp', config = configure_cmp,
-		dependencies = { 'hrsh7th/cmp-path', 'hrsh7th/cmp-nvim-lsp', 'saadparwaiz1/cmp_luasnip',
-		{'L3MON4D3/LuaSnip', dependencies= { "rafamadriz/friendly-snippets" }}} },
-	{ "neovim/nvim-lspconfig", config = configure_lspconfig,
-		dependencies = { "williamboman/mason.nvim", "williamboman/mason-lspconfig.nvim" } },
-	{ 'nvim-tree/nvim-tree.lua', config = configure_nvimtree,
-		dependencies = { 'nvim-tree/nvim-web-devicons' } },
-	{ 'nvim-lualine/lualine.nvim', opts = {}, config = configure_lualine,
-		dependencies = { 'nvim-tree/nvim-web-devicons' }},
-	{ "folke/todo-comments.nvim", config = true,
-		dependencies = { "nvim-lua/plenary.nvim" }},
-	{ 'akinsho/flutter-tools.nvim', lazy = false, config = configure_flutter_tools,
-			dependencies = { 'nvim-lua/plenary.nvim', 'stevearc/dressing.nvim'}},
+	{
+		"Mofiqul/vscode.nvim",
+		priority = 1000,
+		config = true,
+		opts = configure_theme
+	},
+	{
+		"nvim-telescope/telescope.nvim",
+		config = configure_telescope,
+	},
+	{
+		"nvim-treesitter/nvim-treesitter",
+		config = configure_treesitter,
+	},
+	{
+		"lewis6991/gitsigns.nvim",
+		config = configure_gitsigns,
+	},
+	{
+		"numToStr/Comment.nvim",
+		config = configure_comment,
+	},
+	{
+		"windwp/nvim-autopairs",
+		config = true,
+	},
+	{
+		"j-hui/fidget.nvim",
+		tag = "legacy",
+		event = "LspAttach",
+		config = true
+	},
+	{
+		'stevearc/overseer.nvim',
+		opts = {},
+		config = configure_overseer,
+	},
+	{
+		"folke/neodev.nvim",
+		config = true,
+		event = "BufEnter init.lua",
+	},
+	{
+		"sindrets/diffview.nvim",
+		config = true,
+	},
+	{
+		"NeogitOrg/neogit",
+		config = true,
+		dependencies = { "nvim-lua/plenary.nvim", "sindrets/diffview.nvim" }
+	},
+	{
+		'hrsh7th/nvim-cmp',
+		config = configure_cmp,
+		dependencies = {
+			'hrsh7th/cmp-path',
+			'hrsh7th/cmp-nvim-lsp',
+			'saadparwaiz1/cmp_luasnip',
+			{
+				'L3MON4D3/LuaSnip',
+				dependencies = {
+					"rafamadriz/friendly-snippets",
+				},
+			},
+		}
+	},
+	{
+		"neovim/nvim-lspconfig",
+		config = configure_lspconfig,
+		dependencies = {
+			"williamboman/mason.nvim",
+			"williamboman/mason-lspconfig.nvim"
+		}
+	},
+	{
+		'nvim-tree/nvim-tree.lua',
+		config = configure_nvimtree,
+		dependencies = {
+			'nvim-tree/nvim-web-devicons'
+		}
+	},
+	{
+		'nvim-lualine/lualine.nvim',
+		opts = {},
+		config = configure_lualine,
+		dependencies = {
+			'nvim-tree/nvim-web-devicons'
+		}
+	},
+	{
+		"folke/todo-comments.nvim",
+		config = true,
+		dependencies = {
+			"nvim-lua/plenary.nvim"
+		}
+	},
+	{
+		'akinsho/flutter-tools.nvim',
+		lazy = false,
+		config = configure_flutter_tools,
+		dependencies = {
+			'nvim-lua/plenary.nvim',
+			'stevearc/dressing.nvim'
+		}
+	},
+	{
+		"lukas-reineke/headlines.nvim",
+		config = true,
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter"
+		},
+	},
 })
