@@ -669,3 +669,13 @@ Example:
 ;; ***
 ;; *** Auto Generated
 ;; ***
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(git-gutter:added-sign " ")
+ '(git-gutter:deleted-sign " ")
+ '(git-gutter:modified-sign " ")
+ '(package-selected-packages
+   '(yasnippet-capf cape dart-mode web-mode zig-mode multiple-cursors doom-modeline yasnippet-snippets which-key vertico undo-tree smartparens rust-mode restclient pdf-tools ox-gfm org-roam org-noter org-journal orderless marginalia magit lsp-ui lsp-java git-gutter general evil-surround evil-org evil-nerd-commenter evil-multiedit evil-goggles evil-collection embark-consult elfeed-org docker dired-subtree corfu consult-projectile)))
