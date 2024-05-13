@@ -68,14 +68,8 @@ vim.o.tabstop = 2
 vim.o.shiftwidth = 2
 -- vim.o.noexpandtab = true
 
--- change default shell
-if vim.fn.has('macunix') == 1 then
-	vim.opt.shell = 'bash'
-	vim.g.terminal_emulator = 'bash'
-else
-	vim.opt.shell = 'pwsh.exe -c '
-	vim.g.terminal_emulator = 'pwsh.exe'
-end
+vim.opt.shell = 'fish'
+vim.g.terminal_emulator = 'fish'
 
 
 vim.g.mapleader = ' '
@@ -160,19 +154,10 @@ end
 local configure_telescope = function()
 	local telescope = require('telescope')
 	telescope.setup({
-
 		defaults = {
-			layout_config = {
-				vertical = { width = 0.5 }
-			},
-			mappings = {
-				i = {
-					['<C-u>'] = false,
-					['<C-d>'] = false,
-				},
-			},
+			layout_strategy = 'vertical',
+			layout_config = { height = 0.95 },
 		},
-
 		pickers = {
 			find_files = {
 				previewer = false,
@@ -182,10 +167,16 @@ local configure_telescope = function()
 				previewer = false,
 				theme = "dropdown",
 			},
-			current_buffer_fuzzy_find = {
+			git_branches = {
+				theme = "dropdown",
 				previewer = false,
-				theme = "dropdown"
-			}
+			},
+			git_commits = {
+				previewer = false,
+			},
+			git_bcommits = {
+				previewer = false,
+			},
 		},
 	})
 
@@ -199,13 +190,15 @@ local configure_telescope = function()
 	vim.keymap.set('n', '<Leader>b', telescope_builtin.buffers, { desc = 'open [B]uffer' })
 	vim.keymap.set('n', '<Leader>x', telescope_builtin.commands, { desc = '[C]ommands' })
 
+	vim.keymap.set('n', '<Leader>ss', telescope_builtin.builtin, { desc = 'List Telescope Bultin' })
 	vim.keymap.set('n', '<Leader>sh', telescope_builtin.help_tags, { desc = '[H]elp' })
-	vim.keymap.set('n', '<Leader>sc', telescope_builtin.git_commits, { desc = '[C]ommands' })
-	vim.keymap.set('n', '<Leader>sm', telescope_builtin.marks, { desc = '[S]earch [D]iagnostics' })
-	vim.keymap.set('n', '<Leader>sq', telescope_builtin.quickfix, { desc = '[S]earch [D]iagnostics' })
-	vim.keymap.set('n', '<Leader>sd', telescope_builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
 	vim.keymap.set('n', '<Leader>sg', telescope_builtin.live_grep, { desc = '[S]earch by [G]rep' })
-	vim.keymap.set('n', '<Leader>sb', telescope_builtin.current_buffer_fuzzy_find, { desc = '[/] Fuzzily search in current buffer]' })
+	vim.keymap.set('n', '<Leader>sb', telescope_builtin.current_buffer_fuzzy_find,
+		{ desc = '[/] Fuzzily search in current buffer]' })
+
+	vim.keymap.set('n', '<Leader>ca', telescope_builtin.git_commits, { desc = '[A]ll Commits' })
+	vim.keymap.set('n', '<Leader>cc', telescope_builtin.git_bcommits, { desc = '[C]ommmits for this buffer' })
+	vim.keymap.set('n', '<Leader>cb', telescope_builtin.git_branches, { desc = '[B]ranches' })
 end
 
 
@@ -475,6 +468,24 @@ local configure_lualine = function()
 end
 
 
+
+-- ***********************************************************************
+-- toggleterm config
+--
+function _G.set_terminal_keymaps()
+	local opts = { buffer = 0 }
+	vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
+	vim.keymap.set('t', '<M-h>', [[<Cmd>wincmd h<CR>]], opts)
+	vim.keymap.set('t', '<M-j>', [[<Cmd>wincmd j<CR>]], opts)
+	vim.keymap.set('t', '<M-k>', [[<Cmd>wincmd k<CR>]], opts)
+	vim.keymap.set('t', '<M-l>', [[<Cmd>wincmd l<CR>]], opts)
+	vim.keymap.set('t', '<M-w>', [[<C-\><C-n><C-w>]], opts)
+end
+
+-- if you only want these mappings for toggle term use term://*toggleterm#* instead
+vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
+
+
 -- *************************************************
 -- install plugisn and apply configuratio
 --
@@ -549,6 +560,15 @@ require("lazy").setup({
 			--   ignore_install = { 'org' },
 			-- })
 		end,
+	},
+
+	{
+		{ 'akinsho/toggleterm.nvim', config = true },
+	},
+	{
+		'stevearc/oil.nvim',
+		opts = {},
+		dependencies = { "nvim-tree/nvim-web-devicons" },
 	}
 
 })
