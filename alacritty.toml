@@ -31,12 +31,9 @@ vi_mode_style = "Beam"
 size = 12.0
 
 [font.normal]
-# family = "CaskaydiaCove Nerd Font"
 family = "JetBrainsMono Nerd Font"
-
-[shell]
-program = "/usr/bin/fish"
 
 [window]
 title = "The best way to predict the future is to invent it."
-startup_mode = "Maximized"
+# startup_mode = "Maximized"
+#decorations="None"
