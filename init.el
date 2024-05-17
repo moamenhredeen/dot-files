@@ -70,10 +70,10 @@ Example:
 
 ;; variables
 (setq
- my/elfeed-feed-directory (file-name-concat (my/home-directory) "git-repos" "main" "elfeed")
- my/elfeed-feeds-org (file-name-concat (my/home-directory) "git-repos" "main" "elfeed.org")
- my/org-roam-directory (file-name-concat (expand-file-name (my/home-directory)) "git-repos" "main" "org-roam")
- my/org-journal-directory (file-name-concat (expand-file-name (my/home-directory)) "git-repos" "main" "journal"))
+ my/elfeed-feed-directory (file-name-concat (my/home-directory)  "main" "elfeed")
+ my/elfeed-feeds-org (file-name-concat (my/home-directory)  "main" "elfeed.org")
+ my/org-roam-directory (file-name-concat (expand-file-name (my/home-directory))  "main" "org-roam")
+ my/org-journal-directory (file-name-concat (expand-file-name (my/home-directory))  "main" "journal"))
 
 (setq-default evil-shift-width custom-tab-width)
 (setq compilation-window-height 15

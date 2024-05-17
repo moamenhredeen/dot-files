@@ -35,3 +35,5 @@ family = "JetBrainsMono Nerd Font"
 
 [window]
 title = "The best way to predict the future is to invent it."
+startup_mode = "Maximized"
+#decorations="None"

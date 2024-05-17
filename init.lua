@@ -32,11 +32,20 @@ vim.o.hlsearch = false
 -- Make line numbers default
 vim.o.number = true
 
+
+-- enable relative number
+vim.o.relativenumber = true
+
 -- Enable mouse mode
 vim.o.mouse = 'a'
 
 -- Enable break indent
 vim.o.breakindent = true
+
+--" Decent wildmenu
+-- in completion, when there is more than one match,
+-- list all matches, and only complete to longest common match
+vim.opt.wildmode = 'list:longest'
 
 -- Save undo history
 vim.o.undofile = true
@@ -95,6 +104,13 @@ vim.keymap.set('n', '<M-r>', '<C-w>r')
 vim.keymap.set('n', '<M-n>', ':windo wincmd H<CR>')
 vim.keymap.set('n', '<M-m>', ':windo wincmd K<CR>')
 
+-- always center search results
+vim.keymap.set('n', 'n', 'nzz', { silent = true })
+vim.keymap.set('n', 'N', 'Nzz', { silent = true })
+vim.keymap.set('n', '*', '*zz', { silent = true })
+vim.keymap.set('n', '#', '#zz', { silent = true })
+vim.keymap.set('n', 'g*', 'g*zz', { silent = true })
+
 
 -- *************************************************
 -- bootstrap lazy.nvim
@@ -119,7 +135,7 @@ vim.opt.rtp:prepend(lazypath)
 --
 local configure_theme = function()
 	vim.o.background = "dark"
-	vim.cmd.colorscheme "vscode"
+	vim.cmd.colorscheme "gruvbox"
 end
 
 
@@ -276,9 +292,9 @@ local on_attach = function(_, bufnr)
 	nmap('<Leader>a', vim.lsp.buf.code_action, '[A]ction')
 	nmap('<Leader>rr', vim.lsp.buf.rename, '[R]efactor [R]ename')
 	nmap('gd', vim.lsp.buf.type_definition, '[G]oto [D]efinition')
-	nmap('gr', telescopeBuildIn.lsp_references, '[G]oto [R]eferences')
+	nmap('gr', telescope_built_ins.lsp_references, '[G]oto [R]eferences')
 	nmap('<Leader>o', function()
-		telescopeBuildIn.lsp_document_symbols({
+		telescope_built_ins.lsp_document_symbols({
 			show_line = true,
 		})
 	end, 'Document [O]utline')
@@ -453,7 +469,34 @@ end
 -- lua line config
 --
 local configure_lualine = function()
-	require("lualine").setup()
+	require("lualine").setup{
+	 options = {
+    component_separators = '',
+    section_separators = { left = '█', right = '█' },
+  },
+  sections = {
+    lualine_a = { { 'mode', separator = { left = '█' }, right_padding = 2 } },
+    lualine_b = { 'filename', 'branch' },
+    lualine_c = {
+      '%=', --[[ add your center compoentnts here in place of this comment ]]
+    },
+    lualine_x = {},
+    lualine_y = { 'filetype', 'progress' },
+    lualine_z = {
+      { 'location', separator = { right = '█' }, left_padding = 2 },
+    },
+  },
+  inactive_sections = {
+    lualine_a = { 'filename' },
+    lualine_b = {},
+    lualine_c = {},
+    lualine_x = {},
+    lualine_y = {},
+    lualine_z = { 'location' },
+  },
+  tabline = {},
+  extensions = {},
+}
 end
 
 
@@ -511,12 +554,14 @@ local configure_flutter_tools = function()
 	}
 end
 
+
 -- *************************************************
 -- install plugisn and apply configuratio
 --
 require("lazy").setup({
 	{
-		"Mofiqul/vscode.nvim",
+		-- "Mofiqul/vscode.nvim",
+		"ellisonleao/gruvbox.nvim",
 		priority = 1000,
 		config = true,
 		opts = configure_theme

@@ -35,6 +35,8 @@ Style:
 
 #nav-bar {
 	background: transparent !important;
+	flex: 1 !important;
+	order: -1 !important;
 }
 
 
@@ -64,30 +66,39 @@ Style:
 	display: none !important;
 }
 
+#nav-bar-overflow-button{
+	display: none !important;
+}
+
+#save-to-pocket-button{
+	display: none !important;
+}
+
 /* titlebar bar styles */
 
-
-#titlebar{
-	order: 1 !important;
-	flex: 1 !important;
+#toolbar-menubar{
+	display: none !important;
 }
 
-#tabbrowser-tabs {
-	border: none !important;
-}
-
-
-.titlebar-button.titlebar-close {
-	padding-right: 10px !important;
+#titlebar hbox.titlebar-buttonbox-container{
+	display: none !important;
 }
 
 
-.tab-background{
-	background-color: transparent !important;
-	border-radius: 0 !important;
+#titlebar hbox.titlebar-spacer{
+	display: none !important;
 }
 
-#TabsToolbar #firefox-view-button[open] > .toolbarbutton-icon, .tab-background:is([selected], [multiselected]) {
-	border-top: 3px solid var(--primary-color);
+#firefox-view-button{
+	display: none !important;
 }
 
+
+#tabbrowser-tabs{
+	display: none !important;
+}
+
+
+#new-tab-button{
+	display: none !important;
+}
