@@ -34,7 +34,7 @@ vim.o.number = true
 
 
 -- enable relative number
-vim.o.relativenumber = true
+-- vim.o.relativenumber = true
 
 -- Enable mouse mode
 vim.o.mouse = 'a'
