@@ -17,6 +17,10 @@
 -- *** better defaults
 -- ***
 
+-- status line
+vim.o.statusline = " %Y | %m %f %=%l/%L=%p%% "
+
+
 -- better performance
 vim.loader.enable()
 
@@ -75,6 +79,9 @@ vim.o.shiftwidth = 2
 -- fold markdown
 vim.g.markdown_folding = 1
 
+-- customize status bar
+-- hi StatusLine ctermbg=whatever ctermfg=whatever
+
 
 -- change default shell
 if vim.fn.has('linux') == 1 then
@@ -131,16 +138,6 @@ vim.opt.rtp:prepend(lazypath)
 
 
 -- *************************************************
--- configure theme
---
-local configure_theme = function()
-	vim.o.background = "dark"
-	vim.cmd.colorscheme "gruvbox"
-end
-
-
-
--- *************************************************
 -- configure treesitter
 --
 local configure_treesitter = function()
@@ -153,12 +150,21 @@ local configure_treesitter = function()
 			"javascript",
 			"typescript",
 			"scss",
-			"zig"
+			"zig",
+			"rust",
+			"toml",
+			"java"
 		},
 		auto_intall = true,
 		highlight = {
 			enable = true,
 			additional_vim_regex_highlight = false
+		},
+		ident = { enable = true },
+		rainbow = {
+			enable = true,
+			extended_mode = true,
+			max_file_lines = nil,
 		}
 	})
 end
@@ -168,7 +174,6 @@ end
 -- *************************************************
 -- telescope
 -- See :help telescope and :help telescope.setup()
-
 local configure_telescope = function()
 	local telescope = require('telescope')
 	telescope.setup({
@@ -197,36 +202,29 @@ local configure_telescope = function()
 			},
 		},
 	})
-
 	local telescope_builtin = require('telescope.builtin')
-
-	-- Enable telescope fzf native, if installed
 	pcall(telescope.load_extension, 'fzf')
-
-	-- See `:help telescope.builtin`
 	vim.keymap.set('n', '<Leader>f', telescope_builtin.find_files, { desc = 'open [F]ile' })
 	vim.keymap.set('n', '<Leader>b', function()
 		telescope_builtin.buffers({ sort_lastused = true, only_cwd = true, ignore_current_buffer = true });
 	end, { desc = 'open [B]uffer' })
 	vim.keymap.set('n', '<Leader>x', telescope_builtin.commands, { desc = '[C]ommands' })
-
 	vim.keymap.set('n', '<Leader>ss', telescope_builtin.builtin, { desc = 'List Telescope Bultin' })
 	vim.keymap.set('n', '<Leader>sh', telescope_builtin.help_tags, { desc = '[H]elp' })
 	vim.keymap.set('n', '<Leader>sg', telescope_builtin.live_grep, { desc = '[S]earch by [G]rep' })
 	vim.keymap.set('n', '<Leader>sb', telescope_builtin.current_buffer_fuzzy_find,
 		{ desc = '[/] Fuzzily search in current buffer]' })
-
 	vim.keymap.set('n', '<Leader>ca', telescope_builtin.git_commits, { desc = '[A]ll Commits' })
 	vim.keymap.set('n', '<Leader>cc', telescope_builtin.git_bcommits, { desc = '[C]ommmits for this buffer' })
 	vim.keymap.set('n', '<Leader>cb', telescope_builtin.git_branches, { desc = '[B]ranches' })
 end
 
 
+
 -- ***********************************************************************
 -- ***
 -- *** auto completion
 -- ***
-
 local configure_cmp = function()
 	local cmp = require('cmp')
 	local luasnip = require('luasnip')
@@ -277,7 +275,6 @@ end
 -- *************************************************
 -- configure lsp config
 --
-
 local on_attach = function(_, bufnr)
 	local nmap = function(keys, func, desc)
 		if desc then
@@ -285,9 +282,7 @@ local on_attach = function(_, bufnr)
 		end
 		vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
 	end
-
 	local telescope_built_ins = require('telescope.builtin')
-
 	nmap('ga', vim.lsp.buf.code_action, '[A]ction')
 	nmap('<Leader>a', vim.lsp.buf.code_action, '[A]ction')
 	nmap('<Leader>rr', vim.lsp.buf.rename, '[R]efactor [R]ename')
@@ -311,22 +306,17 @@ end
 
 
 local servers = {
-
 	lua_ls = {
 		Lua = {
 			runtime = {
-				-- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
 				version = 'LuaJIT',
 			},
 			diagnostics = {
-				-- Get the language server to recognize the `vim` global
 				globals = { 'vim' },
 			},
 			workspace = {
-				-- Make the server aware of Neovim runtime files
 				library = vim.api.nvim_get_runtime_file("", true),
 			},
-			-- Do not send telemetry data containing a randomized but unique identifier
 			telemetry = {
 				enable = false,
 			},
@@ -342,13 +332,8 @@ end
 
 
 local configure_lspconfig = function()
-	-- Setup mason so it can manage external tooling
 	require('mason').setup()
-
-	-- Ensure the servers above are installed
 	local mason_lspconfig = require('mason-lspconfig')
-
-
 	mason_lspconfig.setup {
 		ensure_installed = vim.tbl_keys(servers),
 	}
@@ -360,7 +345,7 @@ local configure_lspconfig = function()
 				on_attach = on_attach,
 				settings = servers[server_name],
 			}
-		end,
+		end
 	}
 end;
 
@@ -455,117 +440,11 @@ local configure_comment = function()
 end
 
 
--- ***********************************************************************
--- configure comment
---
-local configure_overseer = function()
-	--TODO: configure shortcuts
-	require("overseer").setup()
-end
-
-
-
--- ***********************************************************************
--- lua line config
---
-local configure_lualine = function()
-	require("lualine").setup{
-	 options = {
-    component_separators = '',
-    section_separators = { left = '█', right = '█' },
-  },
-  sections = {
-    lualine_a = { { 'mode', separator = { left = '█' }, right_padding = 2 } },
-    lualine_b = { 'filename', 'branch' },
-    lualine_c = {
-      '%=', --[[ add your center compoentnts here in place of this comment ]]
-    },
-    lualine_x = {},
-    lualine_y = { 'filetype', 'progress' },
-    lualine_z = {
-      { 'location', separator = { right = '█' }, left_padding = 2 },
-    },
-  },
-  inactive_sections = {
-    lualine_a = { 'filename' },
-    lualine_b = {},
-    lualine_c = {},
-    lualine_x = {},
-    lualine_y = {},
-    lualine_z = { 'location' },
-  },
-  tabline = {},
-  extensions = {},
-}
-end
-
-
-
--- ***********************************************************************
--- toggleterm config
---
-
-function _G.set_terminal_keymaps()
-	local opts = { buffer = 0 }
-	vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
-	vim.keymap.set('t', '<M-h>', [[<Cmd>wincmd h<CR>]], opts)
-	vim.keymap.set('t', '<M-j>', [[<Cmd>wincmd j<CR>]], opts)
-	vim.keymap.set('t', '<M-k>', [[<Cmd>wincmd k<CR>]], opts)
-	vim.keymap.set('t', '<M-l>', [[<Cmd>wincmd l<CR>]], opts)
-	vim.keymap.set('t', '<M-w>', [[<C-\><C-n><C-w>]], opts)
-end
-
--- if you only want these mappings for toggle term use term://*toggleterm#* instead
-vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
-
-
--- ***********************************************************************
--- flutter tools config
---
-local configure_flutter_tools = function()
-	require("flutter-tools").setup {
-		ui = {
-			-- 'native' or 'plugin'
-			notification_style = 'native'
-		},
-		flutter_path = "/home/moamen/tools/flutter/bin/flutter",
-		root_patterns = { ".git", "pubspec.yaml" },
-		widget_guides = {
-			enabled = true,
-		},
-		closing_tags = {
-			prefix = "//",
-			enabled = true
-		},
-		lsp = {
-			color = {
-				enabled = true,
-				background = true,
-			},
-			on_attach = on_attach,
-			capabilities = capabilities(),
-			settings = {
-				showTodos = true,
-				completeFunctionCalls = true,
-				enableSnippets = true,
-				updateImportsOnRename = true,
-			}
-		}
-	}
-end
-
 
 -- *************************************************
 -- install plugisn and apply configuratio
 --
 require("lazy").setup({
-	{
-		-- "Mofiqul/vscode.nvim",
-		"ellisonleao/gruvbox.nvim",
-		priority = 1000,
-		config = true,
-		opts = configure_theme
-	},
 	{
 		"nvim-telescope/telescope.nvim",
 		config = configure_telescope,
@@ -587,17 +466,6 @@ require("lazy").setup({
 		config = true,
 	},
 	{
-		"j-hui/fidget.nvim",
-		tag = "legacy",
-		event = "LspAttach",
-		config = true
-	},
-	{
-		'stevearc/overseer.nvim',
-		opts = {},
-		config = configure_overseer,
-	},
-	{
 		"folke/neodev.nvim",
 		config = true,
 		event = "BufEnter init.lua",
@@ -608,8 +476,12 @@ require("lazy").setup({
 	},
 	{
 		"NeogitOrg/neogit",
-		config = true,
-		dependencies = { "nvim-lua/plenary.nvim", "sindrets/diffview.nvim" }
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"sindrets/diffview.nvim",
+			"nvim-telescope/telescope.nvim",
+		},
+		config = true
 	},
 	{
 		'hrsh7th/nvim-cmp',
@@ -641,35 +513,5 @@ require("lazy").setup({
 			'nvim-tree/nvim-web-devicons'
 		}
 	},
-	{
-		'nvim-lualine/lualine.nvim',
-		opts = {},
-		config = configure_lualine,
-		dependencies = {
-			'nvim-tree/nvim-web-devicons'
-		}
-	},
-	{
-		"folke/todo-comments.nvim",
-		config = true,
-		dependencies = {
-			"nvim-lua/plenary.nvim"
-		}
-	},
-	{
-		'akinsho/flutter-tools.nvim',
-		lazy = false,
-		config = configure_flutter_tools,
-		dependencies = {
-			'nvim-lua/plenary.nvim',
-			'stevearc/dressing.nvim'
-		}
-	},
-	{
-		"lukas-reineke/headlines.nvim",
-		config = true,
-		dependencies = {
-			"nvim-treesitter/nvim-treesitter"
-		},
-	},
 })
+
