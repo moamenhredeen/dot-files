@@ -147,11 +147,11 @@ Example:
 ;; *** Utility Packages
 ;; ***
 
-(use-package doom-modeline
-  :ensure t
-  :custom
-  (doom-modeline-height 40)
-  :init (doom-modeline-mode 1))
+;; (use-package doom-modeline
+;;   :ensure t
+;;   :custom
+;;   (doom-modeline-height 40)
+;;   :init (doom-modeline-mode 1))
 
 (use-package smartparens
   :ensure t
@@ -240,10 +240,6 @@ Example:
   :ensure t)
 
 (use-package restclient
-  :ensure t)
-
-
-(use-package pdf-tools
   :ensure t)
 
 (use-package multiple-cursors
@@ -345,18 +341,6 @@ Example:
 ;; *** Programming
 ;; ***
 
-(use-package zig-mode
-  :ensure t)
-
-(use-package rust-mode
-  :ensure t)
-
-(use-package web-mode
-  :ensure t)
-
-(use-package dart-mode
-  :ensure t)
-
 (use-package yasnippet-snippets
   :ensure t)
 
@@ -418,24 +402,6 @@ Example:
   :config
   (add-to-list 'completion-at-point-functions #'yasnippet-capf))
 
-
-
-;; ***********************************************************************
-;; ***
-;; *** reading news
-;; ***
-
-(use-package elfeed
-  :ensure t
-  :custom
-  (elfeed-db-directory my/elfeed-feed-directory))
-
-(use-package elfeed-org
-  :ensure t
-  :custom
-  (rmh-elfeed-org-files '(my/elfeed-feeds-org))
-  :config
-  (elfeed-org))
 
 
 ;; ***********************************************************************
@@ -669,14 +635,3 @@ Example:
 ;; ***
 ;; *** Auto Generated
 ;; ***
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(git-gutter:added-sign " ")
- '(git-gutter:deleted-sign " ")
- '(git-gutter:modified-sign " ")
- '(package-selected-packages
-   '(org-roam-ui yasnippet-capf cape dart-mode web-mode zig-mode multiple-cursors doom-modeline yasnippet-snippets which-key vertico undo-tree smartparens rust-mode restclient pdf-tools ox-gfm org-roam org-noter org-journal orderless marginalia magit lsp-ui lsp-java git-gutter general evil-surround evil-org evil-nerd-commenter evil-multiedit evil-goggles evil-collection embark-consult elfeed-org docker dired-subtree corfu consult-projectile))
- '(send-mail-function 'smtpmail-send-it))
