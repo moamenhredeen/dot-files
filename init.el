@@ -678,4 +678,5 @@ Example:
  '(git-gutter:deleted-sign " ")
  '(git-gutter:modified-sign " ")
  '(package-selected-packages
-   '(org-roam-ui yasnippet-capf cape dart-mode web-mode zig-mode multiple-cursors doom-modeline yasnippet-snippets which-key vertico undo-tree smartparens rust-mode restclient pdf-tools ox-gfm org-roam org-noter org-journal orderless marginalia magit lsp-ui lsp-java git-gutter general evil-surround evil-org evil-nerd-commenter evil-multiedit evil-goggles evil-collection embark-consult elfeed-org docker dired-subtree corfu consult-projectile)))
+   '(org-roam-ui yasnippet-capf cape dart-mode web-mode zig-mode multiple-cursors doom-modeline yasnippet-snippets which-key vertico undo-tree smartparens rust-mode restclient pdf-tools ox-gfm org-roam org-noter org-journal orderless marginalia magit lsp-ui lsp-java git-gutter general evil-surround evil-org evil-nerd-commenter evil-multiedit evil-goggles evil-collection embark-consult elfeed-org docker dired-subtree corfu consult-projectile))
+ '(send-mail-function 'smtpmail-send-it))
