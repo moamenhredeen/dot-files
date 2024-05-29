@@ -45,7 +45,7 @@
 (global-hl-line-mode 1)
 (column-number-mode)
 (global-display-line-numbers-mode t)
-(toggle-truncate-lines 1)
+(toggle-truncate-lines 0)
 
 ;; disable warning
 (setq warning-minimum-level :emergency)

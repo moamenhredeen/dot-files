@@ -31,8 +31,8 @@
 
 (defun my/home-directory ()
     "os independent home directory.
-        this function return home environment variable on linux
-        and USERPROFILE environment variable on windows."
+this function return home environment variable on linux
+and USERPROFILE environment variable on windows."
   (interactive)
   (if (or (eq system-type 'windows-nt) (eq system-type 'ms-dos))
       (getenv "USERPROFILE")
@@ -47,19 +47,19 @@
   (setq indent-tabs-mode t)
   (setq tab-width custom-tab-width))
 
+;; todo fix error
+;; (defun my/add-hooks (hooks function)
+;;   "my/add-hooks enable you to attach function to a list of hooks
+;; Example:
+;;     (my/add-hooks '(first-hook second-hook) some-function)"
+;;   (mapc (lambda (hook)
+;;           (add-hook hook function))
+;;         hooks))
 
-(defun my/add-hooks (hooks function)
-  "my/add-hooks enable you to attach function to a list of hooks
-Example:
-    (my/add-hooks '(first-hook second-hook) some-function)"
-  (mapc (lambda (hook)
-          (add-hook hook function))
-        hooks))
-
-(defun my/open-init-file ()
-  "Open the init file."
-  (interactive)
-  (find-file user-init-file))
+;; (defun my/open-init-file ()
+;;   "Open the init file."
+;;   (interactive)
+;;   (find-file user-init-file))
 
 
 ;; ***********************************************************************
@@ -69,11 +69,8 @@ Example:
 
 
 ;; variables
-(setq
- my/elfeed-feed-directory (file-name-concat (my/home-directory)  "main" "elfeed")
- my/elfeed-feeds-org (file-name-concat (my/home-directory)  "main" "elfeed.org")
- my/org-roam-directory (file-name-concat (expand-file-name (my/home-directory))  "main" "org-roam")
- my/org-journal-directory (file-name-concat (expand-file-name (my/home-directory))  "main" "journal"))
+(setq my/notes-directory
+	  (file-name-concat (expand-file-name (my/home-directory))  "main"))
 
 (setq-default evil-shift-width custom-tab-width)
 (setq compilation-window-height 15
@@ -97,21 +94,20 @@ Example:
 
 ;; hooks
 (add-hook 'dired-mode-hook 'dired-hide-details-mode)
+
+;; tabs hooks
 (add-hook 'lisp-mode-hook 'my/disable-tabs)
+(add-hook 'prog-mode-hook 'my/enable-tabs)
+(add-hook 'emacs-lisp-mode-hook 'my/enable-tabs)
 
-(my/add-hooks
- '(prog-mode-hook
-   emacs-lisp-mode-hook)
- 'my/enable-tabs)
-
-(my/add-hooks
- '(term-mode-hook
-   shell-mode-hook
-   org-mode-hook
-   treemacs-mode-hook
-   eshell-mode-hook
-   pdf-view-mode-hook)
- (display-line-numbers-mode 0))
+;; disable line nubmer hooks
+(defun my/disable-line-numbers ()
+  (display-line-numbers-mode 0))
+(add-hook 'shell-mode-hook 'my/disable-line-numbers)
+(add-hook 'org-mode-hook 'my/disable-line-numbers)
+(add-hook 'treemacs-mode-hook 'my/disable-line-numbers)
+(add-hook 'eshell-mode-hook 'my/disable-line-numbers)
+(add-hook 'pdf-view-mode-hook 'my/disable-line-numbers)
 
 
 
@@ -144,14 +140,89 @@ Example:
 
 ;; ***********************************************************************
 ;; ***
-;; *** Utility Packages
+;; *** Org mode
 ;; ***
 
-;; (use-package doom-modeline
-;;   :ensure t
-;;   :custom
-;;   (doom-modeline-height 40)
-;;   :init (doom-modeline-mode 1))
+(use-package org
+  :ensure t
+  :config
+  (setq org-src-fontify-natively t
+        org-hide-emphasis-markers t
+        org-src-window-setup 'current-window
+        org-src-strip-leading-and-trailing-blank-lines t
+        org-src-preserve-indentation t
+        org-edit-src-content-indentation 0
+        org-src-tab-acts-natively t
+        org-hide-leading-stars t
+        org-hide-block-startup t
+		org-default-notes-file (file-name-concat my/notes-directory "inbox.org")
+        org-ellipsis " ─╮"
+        org-todo-keywords '("TODO" "WIP"
+							"|"
+							"DONE" "BLOCKED" "CANCELED")
+        org-todo-keyword-faces '(("TODO" . (:foreground "#ff6e6e" :weight bold))
+                                 ("WIP" . (:foreground "#ffea73" :weight bold))
+                                 ("DONE" . (:foreground "#98971a" :weight bold))
+                                 ("CANCELED" . (:foreground "#ebdbb2" :weight bold))
+                                 ("BLOCKED" . (:foreground "#ebdbb2" :weight bold)))))
+
+(use-package ox-latex
+  :custom
+  (org-latex-listings t))
+
+
+(use-package org-roam
+  :ensure t
+  :custom
+  (org-roam-directory (file-name-concat my/notes-directory "org-roam"))
+  (org-roam-capture-templates '(
+    ("d" "default" plain "%?"
+      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+"#+title: ${title}
+#+STARTUP: fold
+#+date: %U
+")
+      :unnarrowed t)
+    ("b" "Book" plain "%?"
+      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+"#+title: ${title}
+#+STARTUP: fold
+#+date: %U
+#+filetags: book
+")
+      :unnarrowed t)
+    ("p" "Project" plain "%?"
+      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+"#+title: ${title}
+#+STARTUP: fold
+#+date: %U
+#+filetags: project
+")
+      :unnarrowed t)
+    )))
+
+(use-package org-journal
+  :ensure t
+  :defer t
+  :init
+  ;; Change default prefix key; needs to be set before loading org-journal
+  (setq org-journal-prefix-key "C-c j ")
+  :custom
+    (org-journal-dir (file-name-concat my/notes-directory "journal"))
+    (org-journal-agenda-integration t)
+    (org-journal-file-format "%Y-%m.org")
+    (org-journal-file-type 'monthly)
+    :config
+    ;; TODO: do i need this ??
+    (setq org-agenda-file-regexp "\\`\\\([^.].*\\.org\\\|[0-9]\\\{8\\\}\\\(\\.gpg\\\)?\\\)\\'")
+    (add-to-list 'org-agenda-files org-journal-dir))
+
+
+
+;; ***********************************************************************
+;; ***
+;; *** Utility Packages
+;; ***
 
 (use-package smartparens
   :ensure t
@@ -270,71 +341,6 @@ Example:
   (global-git-gutter-mode 1))
 
 
-;; ***********************************************************************
-;; ***
-;; *** Org mode
-;; ***
-
-(use-package org
-  :config
-  (setq org-src-fontify-natively t
-        org-hide-emphasis-markers t
-        org-src-window-setup 'current-window ;; edit in current window
-        org-src-strip-leading-and-trailing-blank-lines t
-        org-src-preserve-indentation t;; do not put two spaces on the left
-        org-edit-src-content-indentation 0
-        org-src-tab-acts-natively t
-        org-hide-leading-stars t
-        org-hide-block-startup t
-        org-ellipsis " ─╮"
-        org-todo-keywords '("TODO" "WIP" "|" "DONE" "BLOCKED" "CANCELED")
-        org-todo-keyword-faces '(("TODO" . (:foreground "#ff6e6e" :weight bold))
-                                 ("WIP" . (:foreground "#ffea73" :weight bold))
-                                 ("DONE" . (:foreground "#98971a" :weight bold))
-                                 ("CANCELED" . (:foreground "#ebdbb2" :weight bold))
-                                 ("BLOCKED" . (:foreground "#ebdbb2" :weight bold)))))
-
-(use-package ox-latex
-  :custom
-  (org-latex-listings t))
-
-
-(use-package org-roam
-  :ensure t
-  :custom
-  ;; make sure that the directory exists
-  (org-roam-directory my/org-roam-directory)
-  ;; define org roam templates
-  (org-roam-capture-templates '(
-    ("d" "default" plain "%?"
-      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n")
-      :unnarrowed t)
-    ("b" "Book" plain "%?"
-      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n#+filetags: book\n")
-      :unnarrowed t)
-    ("p" "Project" plain "%?"
-      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+date: %U\n#+filetags: project\n")
-      :unnarrowed t)
-    ))
-  :config
-  (org-roam-setup))
-
-(use-package org-journal
-  :ensure t
-  :defer t
-  :init
-  ;; Change default prefix key; needs to be set before loading org-journal
-  (setq org-journal-prefix-key "C-c j ")
-  :custom
-    (org-journal-dir my/org-journal-directory)
-    (org-journal-agenda-integration t)
-    (org-journal-file-format "%Y-%m.org")
-    (org-journal-file-type 'monthly)
-    :config
-    ;; TODO: do i need this ??
-    (setq org-agenda-file-regexp "\\`\\\([^.].*\\.org\\\|[0-9]\\\{8\\\}\\\(\\.gpg\\\)?\\\)\\'")
-    (add-to-list 'org-agenda-files org-journal-dir))
-
 
 ;; ***********************************************************************
 ;; ***
@@ -445,27 +451,28 @@ Example:
 
 (use-package evil-org
   :ensure t
+  :hook (evil-org . org-mode)
   :after evil
   :after org
   :config
-  (add-hook 'org-mode-hook 'evil-org-mode)
-  (add-hook 'evil-org-mode-hook (lambda () (evil-org-set-key-theme)))
+  ;; (add-hook 'org-mode-hook 'evil-org-mode)
+  ;; (add-hook 'evil-org-mode-hook (lambda () (evil-org-set-key-theme)))
   (require 'evil-org-agenda)
   (evil-org-agenda-set-keys))
 
 
 ;; keybinding helper
-(use-package which-key
-  :ensure t
-  :config
-  (which-key-mode)
-  (setq which-key-popup-type 'side-window)
-  (setq which-key-side-window-location 'bottom)
-  (setq which-key-side-window-max-width 0.33)
-  (setq which-key-side-window-max-height 0.25)
-  (setq which-key-idle-delay 1.0)
-  (setq which-key-separator " → " )
-  (setq which-key-prefix-prefix "+" ))
+;; (use-package which-key
+;;   :ensure t
+;;   :config
+;;   (which-key-mode)
+;;   (setq which-key-popup-type 'side-window)
+;;   (setq which-key-side-window-location 'bottom)
+;;   (setq which-key-side-window-max-width 0.33)
+;;   (setq which-key-side-window-max-height 0.25)
+;;   (setq which-key-idle-delay 1.0)
+;;   (setq which-key-separator " → " )
+;;   (setq which-key-prefix-prefix "+" ))
 
 
 ;; cleaner way for defining keymap
@@ -548,6 +555,7 @@ Example:
     "of"        'org-roam-node-find
     "ob"        'org-roam-buffer
     "ot"        'org-roam-buffer-toggle
+	"oi"		(lambda () (interactive) (find-file (file-name-concat my/notes-directory "inbox.org")))
 
     ;; org journal key binding
     "jn"      'org-journal-next-entry
@@ -635,3 +643,8 @@ Example:
 ;; ***
 ;; *** Auto Generated
 ;; ***
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.

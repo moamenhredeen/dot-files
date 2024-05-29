@@ -286,7 +286,7 @@ local on_attach = function(_, bufnr)
 	nmap('ga', vim.lsp.buf.code_action, '[A]ction')
 	nmap('<Leader>a', vim.lsp.buf.code_action, '[A]ction')
 	nmap('<Leader>rr', vim.lsp.buf.rename, '[R]efactor [R]ename')
-	nmap('gd', vim.lsp.buf.type_definition, '[G]oto [D]efinition')
+	nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
 	nmap('gr', telescope_built_ins.lsp_references, '[G]oto [R]eferences')
 	nmap('<Leader>o', function()
 		telescope_built_ins.lsp_document_symbols({
@@ -334,17 +334,26 @@ end
 local configure_lspconfig = function()
 	require('mason').setup()
 	local mason_lspconfig = require('mason-lspconfig')
+
 	mason_lspconfig.setup {
 		ensure_installed = vim.tbl_keys(servers),
 	}
 
 	mason_lspconfig.setup_handlers {
 		function(server_name)
-			require('lspconfig')[server_name].setup {
-				capabilities = capabilities(),
-				on_attach = on_attach,
-				settings = servers[server_name],
-			}
+			if server_name == "gopls" then
+				require('go').setup{
+					lsp_cfg = false
+				}
+				local cfg = require'go.lsp'.config()
+				require('lspconfig')[server_name].setup(cfg) 
+			else
+				require('lspconfig')[server_name].setup {
+					capabilities = capabilities(),
+					on_attach = on_attach,
+					settings = servers[server_name],
+				}
+			end
 		end
 	}
 end;
@@ -513,5 +522,21 @@ require("lazy").setup({
 			'nvim-tree/nvim-web-devicons'
 		}
 	},
+	{
+		"j-hui/fidget.nvim",
+		tag = "legacy",
+		event = "LspAttach",
+		config = true
+	},
+	{
+		"ray-x/go.nvim",
+		dependencies = {  -- optional packages
+			"ray-x/guihua.lua",
+			"neovim/nvim-lspconfig",
+			"nvim-treesitter/nvim-treesitter",
+		},
+		event = {"CmdlineEnter"},
+		ft = {"go", 'gomod'},
+	}
 })
 
