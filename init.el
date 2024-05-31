@@ -70,7 +70,7 @@ and USERPROFILE environment variable on windows."
 
 ;; variables
 (setq my/notes-directory
-	  (file-name-concat (expand-file-name (my/home-directory))  "main"))
+	  (file-name-concat (expand-file-name (my/home-directory))  "notes"))
 
 (setq-default evil-shift-width custom-tab-width)
 (setq compilation-window-height 15
@@ -156,6 +156,7 @@ and USERPROFILE environment variable on windows."
         org-hide-leading-stars t
         org-hide-block-startup t
 		org-default-notes-file (file-name-concat my/notes-directory "inbox.org")
+		org-agenda-files '("/home/moamen/notes")
         org-ellipsis " ─╮"
         org-todo-keywords '("TODO" "WIP"
 							"|"
@@ -419,6 +420,7 @@ and USERPROFILE environment variable on windows."
   :ensure t
   :init
   (setq
+   evil-undo-system 'undo-redo
    evil-want-integration t
    evil-want-keybinding nil)
   :config
