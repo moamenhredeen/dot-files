@@ -16,9 +16,14 @@ set $down j
 set $up k
 set $right l
 
+
+# bindsym $mod+x split 
+bindsym $mod+x split alacritty
+
 bindsym $mod+Return exec $term
 bindsym $mod+q kill
-bindsym $mod+m exec $menu
+bindsym $mod+period exec $menu
+bindsym $mod+i exec $term
 bindsym $mod+f fullscreen
 bindsym $mod+Shift+r reload
 bindsym $mod+t border none

@@ -77,7 +77,7 @@ vim.o.shiftwidth = 2
 -- vim.o.noexpandtab = true
 
 -- fold markdown
-vim.g.markdown_folding = 1
+-- vim.g.markdown_folding = 1
 
 -- customize status bar
 -- hi StatusLine ctermbg=whatever ctermfg=whatever
@@ -342,11 +342,11 @@ local configure_lspconfig = function()
 	mason_lspconfig.setup_handlers {
 		function(server_name)
 			if server_name == "gopls" then
-				require('go').setup{
+				require('go').setup {
 					lsp_cfg = false
 				}
-				local cfg = require'go.lsp'.config()
-				require('lspconfig')[server_name].setup(cfg) 
+				local cfg = require 'go.lsp'.config()
+				require('lspconfig')[server_name].setup(cfg)
 			else
 				require('lspconfig')[server_name].setup {
 					capabilities = capabilities(),
@@ -450,10 +450,62 @@ end
 
 
 
+-- ***********************************************************************
+-- lua line config
+--
+local configure_lualine = function()
+	require("lualine").setup {
+		options = {
+			component_separators = '',
+			section_separators = { left = '█', right = '█' },
+		},
+		sections = {
+			lualine_a = { { 'mode', separator = { left = '█' }, right_padding = 2 } },
+			lualine_b = { 'filename', 'branch' },
+			lualine_c = {
+				'%=', --[[ add your center compoentnts here in place of this comment ]]
+			},
+			lualine_x = {},
+			lualine_y = { 'filetype', 'progress' },
+			lualine_z = {
+				{ 'location', separator = { right = '█' }, left_padding = 2 },
+			},
+		},
+		inactive_sections = {
+			lualine_a = { 'filename' },
+			lualine_b = {},
+			lualine_c = {},
+			lualine_x = {},
+			lualine_y = {},
+			lualine_z = { 'location' },
+		},
+		tabline = {},
+		extensions = {},
+	}
+end
+
+
+
+
+-- *************************************************
+-- theme
+--
+local configure_theme = function()
+	vim.o.background = "dark"
+	vim.cmd.colorscheme "gruvbox"
+end
+
 -- *************************************************
 -- install plugisn and apply configuratio
 --
 require("lazy").setup({
+	{
+		-- "Mofiqul/vscode.nvim",
+		"ellisonleao/gruvbox.nvim",
+		priority = 1000,
+		config = true,
+		opts = configure_theme
+	},
 	{
 		"nvim-telescope/telescope.nvim",
 		config = configure_telescope,
@@ -530,13 +582,39 @@ require("lazy").setup({
 	},
 	{
 		"ray-x/go.nvim",
-		dependencies = {  -- optional packages
+		dependencies = { -- optional packages
 			"ray-x/guihua.lua",
 			"neovim/nvim-lspconfig",
 			"nvim-treesitter/nvim-treesitter",
 		},
-		event = {"CmdlineEnter"},
-		ft = {"go", 'gomod'},
-	}
+		event = { "CmdlineEnter" },
+		ft = { "go", 'gomod' },
+	},
+	{
+		'nvim-lualine/lualine.nvim',
+		opts = {},
+		config = configure_lualine,
+		dependencies = {
+			'nvim-tree/nvim-web-devicons'
+		}
+	},
+	{
+		"stevearc/overseer.nvim",
+		commit = "6271cab7ccc4ca840faa93f54440ffae3a3918bd",
+		cmd = { "CompilerOpen", "CompilerToggleResults", "CompilerRedo" },
+		opts = {
+			task_list = {
+				direction = "bottom",
+				min_height = 25,
+				max_height = 25,
+				default_detail = 1
+			},
+		},
+	},
+	{
+		"Zeioth/compiler.nvim",
+		cmd = { "CompilerOpen", "CompilerToggleResults", "CompilerRedo" },
+		dependencies = { "stevearc/overseer.nvim", "nvim-telescope/telescope.nvim" },
+		opts = {},
+	},
 })
-

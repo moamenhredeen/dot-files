@@ -219,7 +219,6 @@ and USERPROFILE environment variable on windows."
     (add-to-list 'org-agenda-files org-journal-dir))
 
 
-
 ;; ***********************************************************************
 ;; ***
 ;; *** Utility Packages
