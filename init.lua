@@ -64,6 +64,8 @@ vim.wo.signcolumn = 'yes'
 
 -- Set colorscheme
 vim.o.termguicolors = true
+vim.o.background = "light"
+vim.cmd.colorscheme = "shine"
 
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
@@ -461,7 +463,7 @@ local configure_lualine = function()
 		},
 		sections = {
 			lualine_a = { { 'mode', separator = { left = '█' }, right_padding = 2 } },
-			lualine_b = { 'filename', 'branch' },
+			lualine_b = { {'filename', path = 2 }, 'branch'  },
 			lualine_c = {
 				'%=', --[[ add your center compoentnts here in place of this comment ]]
 			},
@@ -490,22 +492,22 @@ end
 -- *************************************************
 -- theme
 --
-local configure_theme = function()
-	vim.o.background = "dark"
-	vim.cmd.colorscheme "gruvbox"
-end
+-- local configure_theme = function()
+-- 	vim.o.background = "dark"
+-- 	vim.cmd.colorscheme "gruvbox"
+-- end
 
 -- *************************************************
 -- install plugisn and apply configuratio
 --
 require("lazy").setup({
-	{
+	-- {
 		-- "Mofiqul/vscode.nvim",
-		"ellisonleao/gruvbox.nvim",
-		priority = 1000,
-		config = true,
-		opts = configure_theme
-	},
+	-- 	"ellisonleao/gruvbox.nvim",
+	-- 	priority = 1000,
+	-- 	config = true,
+	-- 	opts = configure_theme
+	-- },
 	{
 		"nvim-telescope/telescope.nvim",
 		config = configure_telescope,
@@ -598,23 +600,23 @@ require("lazy").setup({
 			'nvim-tree/nvim-web-devicons'
 		}
 	},
-	{
-		"stevearc/overseer.nvim",
-		commit = "6271cab7ccc4ca840faa93f54440ffae3a3918bd",
-		cmd = { "CompilerOpen", "CompilerToggleResults", "CompilerRedo" },
-		opts = {
-			task_list = {
-				direction = "bottom",
-				min_height = 25,
-				max_height = 25,
-				default_detail = 1
-			},
-		},
-	},
-	{
-		"Zeioth/compiler.nvim",
-		cmd = { "CompilerOpen", "CompilerToggleResults", "CompilerRedo" },
-		dependencies = { "stevearc/overseer.nvim", "nvim-telescope/telescope.nvim" },
-		opts = {},
-	},
+	-- {
+	-- 	"stevearc/overseer.nvim",
+	-- 	commit = "6271cab7ccc4ca840faa93f54440ffae3a3918bd",
+	-- 	cmd = { "CompilerOpen", "CompilerToggleResults", "CompilerRedo" },
+	-- 	opts = {
+	-- 		task_list = {
+	-- 			direction = "bottom",
+	-- 			min_height = 25,
+	-- 			max_height = 25,
+	-- 			default_detail = 1
+	-- 		},
+	-- 	},
+	-- },
+	-- {
+	-- 	"Zeioth/compiler.nvim",
+	-- 	cmd = { "CompilerOpen", "CompilerToggleResults", "CompilerRedo" },
+	-- 	dependencies = { "stevearc/overseer.nvim", "nvim-telescope/telescope.nvim" },
+	-- 	opts = {},
+	-- },
 })
