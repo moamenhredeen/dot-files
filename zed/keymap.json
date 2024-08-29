@@ -1,0 +1,38 @@
+[
+  {
+    "context": "Editor && vim_mode == normal && (vim_operator == none || vim_operator == n) && !VimWaiting",
+    "bindings": {
+      "space b": ["tab_switcher::Toggle", { "select_last": true }],
+      "space f": "file_finder::Toggle",
+      "space x": "command_palette::Toggle",
+      "space e": "project_panel::ToggleFocus",
+      "space w": "workspace::Save",
+      "space r r": "editor::Rename",
+      "space r a": "editor::FindAllReferences",
+      "g i": "editor::GoToImplementation",
+      "K": "editor::Hover"
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "alt-s": "pane::SplitDown",
+      "alt-v": "pane::SplitRight"
+    }
+  },
+  {
+    "context": "ProjectPanel && not_editing",
+    "bindings": {
+      "q": "workspace::ToggleLeftDock",
+      "n": "project_panel::NewFile"
+    }
+  },
+  {
+    "bindings": {
+      "alt-h": ["workspace::ActivatePaneInDirection", "Left"],
+      "alt-l": ["workspace::ActivatePaneInDirection", "Right"],
+      "alt-k": ["workspace::ActivatePaneInDirection", "Up"],
+      "alt-j": ["workspace::ActivatePaneInDirection", "Down"]
+    }
+  }
+]

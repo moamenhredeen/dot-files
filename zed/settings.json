@@ -1,0 +1,13 @@
+{
+  "theme": "One Light",
+  "telemetry": {
+    "metrics": false
+  },
+  "vim_mode": true,
+  "ui_font_size": 18,
+  "buffer_font_size": 18,
+  "autosave": "on_focus_change",
+  "tabs": {
+    "git_status": true
+  }
+}

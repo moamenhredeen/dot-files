@@ -64,6 +64,8 @@ vim.wo.signcolumn = 'yes'
 
 -- Set colorscheme
 vim.o.termguicolors = true
+vim.o.background = "light"
+vim.cmd[[ colorscheme quiet]]
 
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
@@ -165,7 +167,15 @@ local configure_treesitter = function()
 			enable = true,
 			extended_mode = true,
 			max_file_lines = nil,
-		}
+		},
+		incremental_selection = {
+			enable = true,
+			keymaps = {
+				node_incremental = "<Space>",
+				-- scope_incremental = "grc",
+				node_decremental = "<BS>",
+			},
+  	},
 	})
 end
 
@@ -490,22 +500,22 @@ end
 -- *************************************************
 -- theme
 --
-local configure_theme = function()
-	vim.o.background = "dark"
-	vim.cmd.colorscheme "gruvbox"
-end
+-- local configure_theme = function()
+-- 	vim.o.background = "dark"
+-- 	vim.cmd.colorscheme "gruvbox"
+-- end
 
 -- *************************************************
 -- install plugisn and apply configuratio
 --
 require("lazy").setup({
-	{
-		-- "Mofiqul/vscode.nvim",
-		"ellisonleao/gruvbox.nvim",
-		priority = 1000,
-		config = true,
-		opts = configure_theme
-	},
+	-- {
+	-- 	-- "Mofiqul/vscode.nvim",
+	-- 	"ellisonleao/gruvbox.nvim",
+	-- 	priority = 1000,
+	-- 	config = true,
+	-- 	opts = configure_theme
+	-- },
 	{
 		"nvim-telescope/telescope.nvim",
 		config = configure_telescope,

@@ -31,7 +31,7 @@
 	co 	= checkout 
 [core]
 	pager = 
-	editor = nvim
+	editor = helix
 	autocrlf = input
 [pull]
 	rebase = false
