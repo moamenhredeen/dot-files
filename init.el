@@ -355,6 +355,10 @@ and USERPROFILE environment variable on windows."
   :config
   (yas-global-mode 1))
 
+
+(use-package typescript
+  :ensure t)
+
 (use-package eglot
   :ensure t
   :after (yasnippet)
