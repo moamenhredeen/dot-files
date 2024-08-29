@@ -167,7 +167,15 @@ local configure_treesitter = function()
 			enable = true,
 			extended_mode = true,
 			max_file_lines = nil,
-		}
+		},
+		incremental_selection = {
+			enable = true,
+			keymaps = {
+				node_incremental = "<Space>",
+				-- scope_incremental = "grc",
+				node_decremental = "<BS>",
+			},
+  	},
 	})
 end
 
@@ -502,7 +510,6 @@ end
 --
 require("lazy").setup({
 	-- {
-		-- "Mofiqul/vscode.nvim",
 	-- 	"ellisonleao/gruvbox.nvim",
 	-- 	priority = 1000,
 	-- 	config = true,
