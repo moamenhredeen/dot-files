@@ -10,6 +10,7 @@
 ;; Minimize garbage collection during startup
 (setq gc-cons-threshold most-positive-fixnum)
 
+
 (setq large-file-warning-thresold 100000000)
 (setq byte-compile-warnings '(not obsolete))
 (setq warning-suppress-log-types '((comp) (bytecomp)))
@@ -62,11 +63,11 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 
-(setq default-frame-alist '(;; Setting the face in here prevents flashes of
-                            ;; color as the theme gets activated
-                            (background-color . "#000000")
-                            (ns-appearance . dark)
-                            (ns-transparent-titlebar . t)))
+; (setq default-frame-alist '(;; Setting the face in here prevents flashes of
+;                             ;; color as the theme gets activated
+;                             (background-color . "#000000")
+;                             (ns-appearance . dark)
+;                             (ns-transparent-titlebar . t)))
 
 
 ;; remove window fringes

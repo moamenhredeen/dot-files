@@ -16,6 +16,7 @@
 ;; *** Utility Functions
 ;; ***
 
+
 (defun my/smart-find-file ()
         (interactive)
         (if (projectile-project-p)
@@ -359,21 +360,13 @@ and USERPROFILE environment variable on windows."
 (use-package typescript
   :ensure t)
 
-(use-package eglot
-  :ensure t
-  :after (yasnippet)
-  :hook ((go-ts-mode
-          rust-mode
-          typescript-ts-mode
-          powershell-mode
-          nxml-mode
-          js-ts-mode
-          go-ts-mode
-          dart-mode
-          latex-mode
-          csharp-mode
-          svelte-mode)
-         . eglot-ensure))
+(use-package lsp-mode
+  :init
+  (setq lsp-keymap-prefix "C-c l")
+  :hook ((typescript-ts-mode . lsp-deferred)
+		 (html-mode . lsp-deferred))
+  :commands (lsp lsp-deferred))
+
 
 
 (use-package corfu
@@ -596,53 +589,53 @@ and USERPROFILE environment variable on windows."
 ;; *** User UI Customization
 ;; ***
 
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:foreground "#b5b5b5" :background "#242424"))))
- '(cursor ((t (:background "#ffea73"))))
- '(dired-directory ((t (:foreground "#d4c366" :underline t :bold t))))
- '(eshell-ls-directory ((t (:foreground "#d4c366"))))
- '(eshell-ls-executable ((t (:foreground "#61d874"))))
- '(eshell-prompt ((t (:foreground "#d4c366" :bold t))))
- '(evil-goggles-change-face ((t (:inherit diff-removed))))
- '(evil-goggles-default-face ((t (:inherit 'highlight))))
- '(evil-goggles-delete-face ((t (:inherit diff-removed))))
- '(evil-goggles-paste-face ((t (:inherit diff-added))))
- '(evil-goggles-undo-redo-add-face ((t (:inherit diff-added))))
- '(evil-goggles-undo-redo-change-face ((t (:inherit diff-changed))))
- '(evil-goggles-undo-redo-remove-face ((t (:inherit diff-removed))))
- '(evil-goggles-yank-face ((t (:inherit diff-changed))))
- '(font-lock-bracket-face ((t (:foreground "#d4c366"))))
- '(font-lock-builtin-face ((t (:foreground "#d4c366"))))
- '(font-lock-comment-face ((t (:foreground "#6f6f6f" :italic t))))
- '(font-lock-constant-face ((t (:foreground "#c5c5c5"))))
- '(font-lock-function-name-face ((t (:foreground "#c5c5c5"))))
- '(font-lock-keyword-face ((t (:foreground "#d4c366" :bold t))))
- '(font-lock-string-face ((t (:foreground "#249c64"))))
- '(font-lock-type-face ((t (:foreground "#c5c5c5" :bold t))))
- '(font-lock-variable-name-face ((t (:foreground "#c5c5c5"))))
- '(font-lock-warning-face ((t (:foreground "red" :bold t))))
- '(fringe ((t (:background "#000000"))))
- '(hl-line ((t (:background "#1f1f1f"))))
- '(line-number ((t (:foreground "#6f6f6f"))))
- '(line-number-current-line ((t (:background "#1f1f1f" :foreground "#ffea73"))))
- '(minibuffer-prompt ((t (:foreground "#bfbfbf" :bold t))))
- '(mode-line ((t (:background "#1a1a1a" :foreground "#a1a1a1" :height 1.1))))
- '(mode-line-emphasis ((t (:foreground "red"))))
- '(org-checkbox ((t (:foreground "#d4c366" :bold t))))
- '(org-checkbox-statistics-todo ((t (:foreground "#d4c366" :bold t))))
- '(org-document-title ((t (:foreground "#d4c366" :bold t :height 1.8))))
- '(org-headline-done ((t (:foreground "#878787" :italic t))))
- '(org-level-1 ((t (:foreground "#c5c5c5" :bold t :height 1.5))))
- '(org-level-2 ((t (:foreground "#61d874" :bold t :height 1.3))))
- '(org-level-3 ((t (:foreground "pink" :bold t :height 1.1))))
- '(region ((t (:background "#515151"))))
- '(secondary-selection ((t (:background "#515151"))))
- '(show-paren-match ((t (:foreground "#d4c366" :underline t :bold t))))
- '(vertico-current ((t (:underline "#d2c57d")))))
+;; (custom-set-faces
+;;  ;; custom-set-faces was added by Custom.
+;;  ;; If you edit it by hand, you could mess it up, so be careful.
+;;  ;; Your init file should contain only one such instance.
+;;  ;; If there is more than one, they won't work right.
+;;  '(default ((t (:foreground "#b5b5b5" :background "#242424"))))
+;;  '(cursor ((t (:background "#ffea73"))))
+;;  '(dired-directory ((t (:foreground "#d4c366" :underline t :bold t))))
+;;  '(eshell-ls-directory ((t (:foreground "#d4c366"))))
+;;  '(eshell-ls-executable ((t (:foreground "#61d874"))))
+;;  '(eshell-prompt ((t (:foreground "#d4c366" :bold t))))
+;;  '(evil-goggles-change-face ((t (:inherit diff-removed))))
+;;  '(evil-goggles-default-face ((t (:inherit 'highlight))))
+;;  '(evil-goggles-delete-face ((t (:inherit diff-removed))))
+;;  '(evil-goggles-paste-face ((t (:inherit diff-added))))
+;;  '(evil-goggles-undo-redo-add-face ((t (:inherit diff-added))))
+;;  '(evil-goggles-undo-redo-change-face ((t (:inherit diff-changed))))
+;;  '(evil-goggles-undo-redo-remove-face ((t (:inherit diff-removed))))
+;;  '(evil-goggles-yank-face ((t (:inherit diff-changed))))
+;;  '(font-lock-bracket-face ((t (:foreground "#d4c366"))))
+;;  '(font-lock-builtin-face ((t (:foreground "#d4c366"))))
+;;  '(font-lock-comment-face ((t (:foreground "#6f6f6f" :italic t))))
+;;  '(font-lock-constant-face ((t (:foreground "#c5c5c5"))))
+;;  '(font-lock-function-name-face ((t (:foreground "#c5c5c5"))))
+;;  '(font-lock-keyword-face ((t (:foreground "#d4c366" :bold t))))
+;;  '(font-lock-string-face ((t (:foreground "#249c64"))))
+;;  '(font-lock-type-face ((t (:foreground "#c5c5c5" :bold t))))
+;;  '(font-lock-variable-name-face ((t (:foreground "#c5c5c5"))))
+;;  '(font-lock-warning-face ((t (:foreground "red" :bold t))))
+;;  '(fringe ((t (:background "#000000"))))
+;;  '(hl-line ((t (:background "#1f1f1f"))))
+;;  '(line-number ((t (:foreground "#6f6f6f"))))
+;;  '(line-number-current-line ((t (:background "#1f1f1f" :foreground "#ffea73"))))
+;;  '(minibuffer-prompt ((t (:foreground "#bfbfbf" :bold t))))
+;;  '(mode-line ((t (:background "#1a1a1a" :foreground "#a1a1a1" :height 1.1))))
+;;  '(mode-line-emphasis ((t (:foreground "red"))))
+;;  '(org-checkbox ((t (:foreground "#d4c366" :bold t))))
+;;  '(org-checkbox-statistics-todo ((t (:foreground "#d4c366" :bold t))))
+;;  '(org-document-title ((t (:foreground "#d4c366" :bold t :height 1.8))))
+;;  '(org-headline-done ((t (:foreground "#878787" :italic t))))
+;;  '(org-level-1 ((t (:foreground "#c5c5c5" :bold t :height 1.5))))
+;;  '(org-level-2 ((t (:foreground "#61d874" :bold t :height 1.3))))
+;;  '(org-level-3 ((t (:foreground "pink" :bold t :height 1.1))))
+;;  '(region ((t (:background "#515151"))))
+;;  '(secondary-selection ((t (:background "#515151"))))
+;;  '(show-paren-match ((t (:foreground "#d4c366" :underline t :bold t))))
+;;  '(vertico-current ((t (:underline "#d2c57d")))))
 
 ;; ***********************************************************************
 ;; ***
@@ -653,3 +646,14 @@ and USERPROFILE environment variable on windows."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(git-gutter:added-sign " ")
+ '(git-gutter:deleted-sign " ")
+ '(git-gutter:modified-sign " ")
+ '(package-selected-packages
+   '(lsp-mode typescript yasnippet-snippets yasnippet-capf vertico smartparens restclient org-roam org-journal orderless multiple-cursors marginalia magit git-gutter general evil-surround evil-org evil-nerd-commenter evil-multiedit evil-collection embark-consult dired-subtree corfu consult-projectile cape)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
