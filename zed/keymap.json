@@ -2,11 +2,13 @@
   {
     "context": "Editor && vim_mode == normal && (vim_operator == none || vim_operator == n) && !VimWaiting",
     "bindings": {
+      "space space": "task::Rerun",
       "space b": ["tab_switcher::Toggle", { "select_last": true }],
       "space f": "file_finder::Toggle",
       "space x": "command_palette::Toggle",
       "space e": "project_panel::ToggleFocus",
       "space w": "workspace::Save",
+      "space o": "outline::Toggle",
       "space r r": "editor::Rename",
       "space r a": "editor::FindAllReferences",
       "g i": "editor::GoToImplementation",

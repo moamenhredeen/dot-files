@@ -19,6 +19,7 @@
 " *** general
 " ***
 
+set incsearch
 set ignorecase
 set smartcase
 set scrolloff=3             " 3 lines above/below cursor when scrolling
@@ -43,11 +44,6 @@ set commentary
 nmap <C-o> :action Back<CR>
 let mapleader = " "
 
-" *** change font size
-nmap + :action EditorIncreaseFontSize<CR>
-nmap - :action EditorDecreaseFontSize<CR>
-nmap <leader>= :action EditorResetFontSize<CR>
-
 
 " *** window
 nmap <a-j> <c-w>j
@@ -55,31 +51,41 @@ nmap <a-k> <c-w>k
 nmap <a-h> <c-w>h
 nmap <a-l> <c-w>l
 
+
+
+" *** most used actions
+nmap <leader><leader> :action Run<cr>
 nmap <leader>e :action ToggleDistractionFreeMode<cr>
 nmap <leader>b :action RecentFiles<cr>
 nmap <leader>f :action GotoFile<cr>
 nmap <leader>t :action GotoClass<cr>
 nmap <leader>o :action FileStructurePopup<cr>
 nmap <leader>x :action GotoAction<cr>
+nmap <leader>d :action ShowErrorDescription<cr>
+" TODO: save only current buffer
+nmap <leader>w :action SaveAll<cr>
 
-nmap <leader>sb :action Find<cr>
-vmap <leader>sb :action Find<cr>
-
+" *** search
+nmap / :action Find<CR>
+vmap / :action Find<CR>
+nmap n :action FindNext<CR>
+vmap n :action FindNext<CR>
+nmap <s-n> :action FindPrevious<CR>
+vmap <s-n> :action FindPrevious<CR>
 nmap <leader>sp :action FindInPath<cr>
 vmap <leader>sp :action FindInPath<cr>
-
-nmap <leader>ss :action GotoSymbol<cr>
+map <leader>ss :action GotoSymbol<cr>
 vmap <leader>ss :action GotoSymbol<cr>
-
 nmap <leader>sm :action ShowBookmarks<cr>
 nmap <leader>sl :action RecentLocations<cr>
 
 " *** code navigation 
 nmap gd :action GotoDeclaration<cr>
 nmap gi :action GotoImplementation<cr>
-nmap gs :action FindUsages<cr>
+nmap gu :action FindUsages<cr>
 nmap ga :action Generate<cr>
 nmap gh :action InspectThis<cr>
+nmap gs :action FileStructurePopup<cr>
 
 
 " ***  refactoring

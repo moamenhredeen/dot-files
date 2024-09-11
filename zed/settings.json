@@ -3,11 +3,15 @@
   "telemetry": {
     "metrics": false
   },
+  "tabs": {
+    "git_status": true
+  },
   "vim_mode": true,
   "ui_font_size": 18,
   "buffer_font_size": 18,
   "autosave": "on_focus_change",
-  "tabs": {
-    "git_status": true
-  }
+  "ui_font_family": "JetBrainsMono Nerd Font",
+  "buffer_font_family": "JetBrainsMono Nerd Font",
+  "buffer_font_weight": 500,
+  "cursor_blink": false
 }
