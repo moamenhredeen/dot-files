@@ -8,7 +8,7 @@ import = [
 vi_mode_style = "Beam"
 
 [font]
-size = 14.0
+size = 12.0
 
 [font.normal]
 # family = "JetBrainsMono Nerd Font"
