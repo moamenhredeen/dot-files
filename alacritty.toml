@@ -1,7 +1,7 @@
 working_directory = "/home/moamen"
 
 import = [
-	"~/.config/alacritty/themes/themes/github_light_default.toml"
+	"~/.config/alacritty/themes/themes/everforest_light.toml"
 ]
 
 [cursor]

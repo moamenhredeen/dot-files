@@ -45,6 +45,10 @@ nmap <C-o> :action Back<CR>
 let mapleader = " "
 
 
+" *** folding
+nmap za :action ExpandCollapseToggleAction<cr>
+
+
 " *** window
 nmap <a-j> <c-w>j
 nmap <a-k> <c-w>k
@@ -54,7 +58,7 @@ nmap <a-l> <c-w>l
 
 
 " *** most used actions
-nmap <leader><leader> :action Run<cr>
+" nmap <leader><leader> :action Run<cr>
 nmap <leader>e :action ToggleDistractionFreeMode<cr>
 nmap <leader>b :action RecentFiles<cr>
 nmap <leader>f :action GotoFile<cr>
