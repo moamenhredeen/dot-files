@@ -1,0 +1,104 @@
+/*****************************************************************
+
+userChrome.css
+author: Moamen Hredeen 
+Description: firefox customization
+Usage: 
+
+TODO:
+- describe how this file could be used
+- document the other config i done through firefox config page (about:config)
+Style: 
+------------------------------------------ navigator-toolbox ---------------------------------------
+| ------------------navbar------------------------- --------------------- tabar ------------------ |
+| | back- and realod buttons, urlbar              | | tabs, new tab, window controls             | |
+| ------------------------------------------------- ---------------------------------------------- |
+----------------------------------------------------------------------------------------------------
+
+*****************************************************************/
+
+:root {
+	/* colors */
+	--primary-color: yellow; 
+}
+
+
+#navigator-toolbox{
+	display: flex !important;
+	flex-direction: row !important;
+	border: none !important;
+}
+
+
+
+/* navbar bar styles */
+
+#nav-bar {
+	background: transparent !important;
+	flex: 1 !important;
+	order: -1 !important;
+}
+
+
+#identity-icon-box {
+	display: none !important;
+}
+
+#tracking-protection-icon-container {
+	display: none !important;
+}
+
+
+#fxa-toolbar-menu-button{
+	display: none !important;
+}
+
+#unified-extensions-button {
+	display: none !important;
+}
+
+
+#PanelUI-menu-button {
+	display: none !important;
+}
+
+#firefox-view-button {
+	display: none !important;
+}
+
+#nav-bar-overflow-button{
+	display: none !important;
+}
+
+#save-to-pocket-button{
+	display: none !important;
+}
+
+/* titlebar bar styles */
+
+#toolbar-menubar{
+	display: none !important;
+}
+
+#titlebar hbox.titlebar-buttonbox-container{
+	display: none !important;
+}
+
+
+#titlebar hbox.titlebar-spacer{
+	display: none !important;
+}
+
+#firefox-view-button{
+	display: none !important;
+}
+
+
+#tabbrowser-tabs{
+	display: none !important;
+}
+
+
+#new-tab-button{
+	display: none !important;
+}

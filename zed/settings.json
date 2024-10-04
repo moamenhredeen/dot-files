@@ -1,0 +1,28 @@
+{
+  "features": {
+    "inline_completion_provider": "none"
+  },
+  "assistant": {
+    "default_model": {
+      "provider": "anthropic",
+      "model": "claude-3-5-sonnet-20240620"
+    },
+    "version": "2"
+  },
+  "theme": "One Light",
+  "telemetry": {
+    "metrics": false
+  },
+  "tabs": {
+    "git_status": true
+  },
+  "vim_mode": true,
+  "ui_font_size": 18,
+  "buffer_font_size": 18,
+  "autosave": "on_focus_change",
+  "ui_font_family": "JetBrainsMono Nerd Font",
+  "buffer_font_family": "CaskaydiaCove Nerd Font",
+  "buffer_font_weight": 500,
+  "cursor_blink": false,
+  "current_line_highlight": "none"
+}

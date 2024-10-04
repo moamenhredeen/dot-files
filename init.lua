@@ -11,20 +11,21 @@
 --  ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║
 --  ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝
 
--- todo list: 
--- [ ] restrcture config file
-
 
 -- ***********************************************************************
 -- ***
 -- *** better defaults
 -- ***
 
--- better performance 
+-- status line
+vim.o.statusline = " %Y | %m %f %=%l/%L=%p%% "
+
+
+-- better performance
 vim.loader.enable()
 
 -- set font for gui neovim clients
-vim.opt.guifont = 'FiraCode Nerd Font'
+vim.opt.guifont = 'JetBrainsMono Nerd Font'
 
 -- highlight current line
 vim.o.cursorline = true
@@ -35,11 +36,20 @@ vim.o.hlsearch = false
 -- Make line numbers default
 vim.o.number = true
 
+
+-- enable relative number
+-- vim.o.relativenumber = true
+
 -- Enable mouse mode
 vim.o.mouse = 'a'
 
 -- Enable break indent
 vim.o.breakindent = true
+
+--" Decent wildmenu
+-- in completion, when there is more than one match,
+-- list all matches, and only complete to longest common match
+vim.opt.wildmode = 'list:longest'
 
 -- Save undo history
 vim.o.undofile = true
@@ -54,31 +64,35 @@ vim.wo.signcolumn = 'yes'
 
 -- Set colorscheme
 vim.o.termguicolors = true
--- vim.cmd [[colorscheme onedark]]
+vim.o.background = "light"
+vim.cmd.colorscheme = "shine"
 
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
 
 vim.o.wrap = false
-
 vim.o.splitbelow = true
 vim.o.splitright = true
-
 vim.opt.clipboard = 'unnamedplus'
-
 vim.o.tabstop = 2
 vim.o.shiftwidth = 2
 -- vim.o.noexpandtab = true
 
--- change default shell
-if vim.fn.has('macunix') == 1 then
-	vim.opt.shell='bash'
-	vim.g.terminal_emulator='bash'
-else
-	vim.opt.shell='pwsh.exe -c '
-	vim.g.terminal_emulator='pwsh.exe'
-end
+-- fold markdown
+-- vim.g.markdown_folding = 1
 
+-- customize status bar
+-- hi StatusLine ctermbg=whatever ctermfg=whatever
+
+
+-- change default shell
+if vim.fn.has('linux') == 1 then
+	vim.opt.shell = 'fish'
+	vim.g.terminal_emulator = 'fish'
+elseif vim.fn.has('win32') == 1 then
+	vim.opt.shell = 'pwsh.exe -c '
+	vim.g.terminal_emulator = 'pwsh.exe'
+end
 
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ','
@@ -99,7 +113,12 @@ vim.keymap.set('n', '<M-r>', '<C-w>r')
 vim.keymap.set('n', '<M-n>', ':windo wincmd H<CR>')
 vim.keymap.set('n', '<M-m>', ':windo wincmd K<CR>')
 
--- TODO: faster navigation
+-- always center search results
+vim.keymap.set('n', 'n', 'nzz', { silent = true })
+vim.keymap.set('n', 'N', 'Nzz', { silent = true })
+vim.keymap.set('n', '*', '*zz', { silent = true })
+vim.keymap.set('n', '#', '#zz', { silent = true })
+vim.keymap.set('n', 'g*', 'g*zz', { silent = true })
 
 
 -- *************************************************
@@ -121,16 +140,6 @@ vim.opt.rtp:prepend(lazypath)
 
 
 -- *************************************************
--- configure theme
---
-local configure_theme = function()
-	vim.o.background = "dark"
-	vim.cmd.colorscheme "vscode"
-end
-
-
-
--- *************************************************
 -- configure treesitter
 --
 local configure_treesitter = function()
@@ -143,13 +152,30 @@ local configure_treesitter = function()
 			"javascript",
 			"typescript",
 			"scss",
-			"zig"
+			"zig",
+			"rust",
+			"toml",
+			"java"
 		},
 		auto_intall = true,
 		highlight = {
 			enable = true,
 			additional_vim_regex_highlight = false
-		}
+		},
+		ident = { enable = true },
+		rainbow = {
+			enable = true,
+			extended_mode = true,
+			max_file_lines = nil,
+		},
+		incremental_selection = {
+			enable = true,
+			keymaps = {
+				node_incremental = "<Space>",
+				-- scope_incremental = "grc",
+				node_decremental = "<BS>",
+			},
+  	},
 	})
 end
 
@@ -158,65 +184,57 @@ end
 -- *************************************************
 -- telescope
 -- See :help telescope and :help telescope.setup()
-
 local configure_telescope = function()
 	local telescope = require('telescope')
-	telescope.setup {
+	telescope.setup({
 		defaults = {
-			layout_config = {
-				bottom_pane = {
-					height = 5,
-					prompt_position = "top",
-				},
+			layout_strategy = 'vertical',
+			layout_config = { height = 0.95 },
+		},
+		pickers = {
+			find_files = {
+				previewer = false,
+				theme = "dropdown",
 			},
-			mappings = {
-				i = {
-					['<C-u>'] = false,
-					['<C-d>'] = false,
-				},
+			buffers = {
+				previewer = false,
+				theme = "dropdown",
+			},
+			git_branches = {
+				theme = "dropdown",
+				previewer = false,
+			},
+			git_commits = {
+				previewer = false,
+			},
+			git_bcommits = {
+				previewer = false,
 			},
 		},
-	}
-
+	})
 	local telescope_builtin = require('telescope.builtin')
-
-	local fuzzy_find_buffer = function()
-				telescope_builtin
-					.current_buffer_fuzzy_find(require('telescope.themes')
-					.get_dropdown { previewer = false })
-	end
-
-	local find_dot_file = function ()
-		telescope_builtin.find_files({
-			cwd = "~/git-repos/dot-files"
-		})
-	end
-
-	-- Enable telescope fzf native, if installed
 	pcall(telescope.load_extension, 'fzf')
-
-	-- See `:help telescope.builtin`
-	-- vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
 	vim.keymap.set('n', '<Leader>f', telescope_builtin.find_files, { desc = 'open [F]ile' })
-	vim.keymap.set('n', '<Leader>b', telescope_builtin.buffers, { desc = 'open [B]uffer' })
+	vim.keymap.set('n', '<Leader>b', function()
+		telescope_builtin.buffers({ sort_lastused = true, only_cwd = true, ignore_current_buffer = true });
+	end, { desc = 'open [B]uffer' })
 	vim.keymap.set('n', '<Leader>x', telescope_builtin.commands, { desc = '[C]ommands' })
+	vim.keymap.set('n', '<Leader>ss', telescope_builtin.builtin, { desc = 'List Telescope Bultin' })
 	vim.keymap.set('n', '<Leader>sh', telescope_builtin.help_tags, { desc = '[H]elp' })
-	vim.keymap.set('n', '<Leader>sc', telescope_builtin.git_commits, { desc = '[C]ommands' })
-	vim.keymap.set('n', '<Leader>sm', telescope_builtin.marks, { desc = '[S]earch [D]iagnostics' })
-	vim.keymap.set('n', '<Leader>sq', telescope_builtin.quickfix, { desc = '[S]earch [D]iagnostics' })
-	vim.keymap.set('n', '<Leader>sd', telescope_builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
-	vim.keymap.set('n', '<Leader>sw', telescope_builtin.live_grep, { desc = '[S]earch by [G]rep' })
-
-	vim.keymap.set('n', '<Leader>sb', fuzzy_find_buffer, { desc = '[/] Fuzzily search in current buffer]' })
-	vim.keymap.set('n', '<Leader>d', find_dot_file, { desc = '[D]ot files' })
+	vim.keymap.set('n', '<Leader>sg', telescope_builtin.live_grep, { desc = '[S]earch by [G]rep' })
+	vim.keymap.set('n', '<Leader>sb', telescope_builtin.current_buffer_fuzzy_find,
+		{ desc = '[/] Fuzzily search in current buffer]' })
+	vim.keymap.set('n', '<Leader>ca', telescope_builtin.git_commits, { desc = '[A]ll Commits' })
+	vim.keymap.set('n', '<Leader>cc', telescope_builtin.git_bcommits, { desc = '[C]ommmits for this buffer' })
+	vim.keymap.set('n', '<Leader>cb', telescope_builtin.git_branches, { desc = '[B]ranches' })
 end
+
 
 
 -- ***********************************************************************
 -- ***
 -- *** auto completion
 -- ***
-
 local configure_cmp = function()
 	local cmp = require('cmp')
 	local luasnip = require('luasnip')
@@ -267,52 +285,30 @@ end
 -- *************************************************
 -- configure lsp config
 --
-
 local on_attach = function(_, bufnr)
-	-- NOTE: Remember that lua is a real programming language, and as such it is possible
-	-- to define small helper and utility functions so you don't have to repeat yourself
-	-- many times.
-	--
-	-- In this case, we create a function that lets us more easily define mappings specific
-	-- for LSP related items. It sets the mode, buffer and description for us each time.
 	local nmap = function(keys, func, desc)
 		if desc then
 			desc = 'LSP: ' .. desc
 		end
 		vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
 	end
-
-	local telescopeBuildIn = require('telescope.builtin')
-
+	local telescope_built_ins = require('telescope.builtin')
+	nmap('ga', vim.lsp.buf.code_action, '[A]ction')
 	nmap('<Leader>a', vim.lsp.buf.code_action, '[A]ction')
 	nmap('<Leader>rr', vim.lsp.buf.rename, '[R]efactor [R]ename')
-	nmap('gd', vim.lsp.buf.type_definition, '[G]oto [D]efinition')
-	nmap('gr', telescopeBuildIn.lsp_references, '[G]oto [R]eferences')
-	nmap('<Leader>o', function ()
-		telescopeBuildIn.lsp_document_symbols({
+	nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+	nmap('gr', telescope_built_ins.lsp_references, '[G]oto [R]eferences')
+	nmap('<Leader>o', function()
+		telescope_built_ins.lsp_document_symbols({
 			show_line = true,
 		})
-	end , 'Document [O]utline')
+	end, 'Document [O]utline')
 	nmap('gi', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
-
-	nmap('<Leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
-	--nmap('<Leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-	--nmap('<Leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
-
-	-- See `:help K` for why this keymap
+	nmap('gs', telescope_built_ins.lsp_document_symbols, '[D]ocument [S]ymbols')
+	nmap('gS', telescope_built_ins.lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+	nmap('<Leader>t', telescope_built_ins.lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 	nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-	-- nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
-	-- Lesser used LSP functionality
-	nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-	nmap('<Leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
-	nmap('<Leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
-	nmap('<Leader>wl', function()
-		print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-	end, '[W]orkspace [L]ist Folders')
-
-
-	-- Create a command `:Format` local to the LSP buffer
 	vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
 		vim.lsp.buf.format()
 	end, { desc = 'Format current buffer with LSP' })
@@ -320,22 +316,17 @@ end
 
 
 local servers = {
-
 	lua_ls = {
 		Lua = {
 			runtime = {
-				-- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
 				version = 'LuaJIT',
 			},
 			diagnostics = {
-				-- Get the language server to recognize the `vim` global
 				globals = { 'vim' },
 			},
 			workspace = {
-				-- Make the server aware of Neovim runtime files
 				library = vim.api.nvim_get_runtime_file("", true),
 			},
-			-- Do not send telemetry data containing a randomized but unique identifier
 			telemetry = {
 				enable = false,
 			},
@@ -344,15 +335,15 @@ local servers = {
 }
 
 
-local configure_lspconfig = function()
-	-- Setup mason so it can manage external tooling
-	require('mason').setup()
-
-	-- Ensure the servers above are installed
-	local mason_lspconfig = require('mason-lspconfig')
-
+local capabilities = function()
 	local capabilities = vim.lsp.protocol.make_client_capabilities()
-	capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+	return require('cmp_nvim_lsp').default_capabilities(capabilities)
+end
+
+
+local configure_lspconfig = function()
+	require('mason').setup()
+	local mason_lspconfig = require('mason-lspconfig')
 
 	mason_lspconfig.setup {
 		ensure_installed = vim.tbl_keys(servers),
@@ -360,12 +351,20 @@ local configure_lspconfig = function()
 
 	mason_lspconfig.setup_handlers {
 		function(server_name)
-			require('lspconfig')[server_name].setup {
-				capabilities = capabilities,
-				on_attach = on_attach,
-				settings = servers[server_name],
-			}
-		end,
+			if server_name == "gopls" then
+				require('go').setup {
+					lsp_cfg = false
+				}
+				local cfg = require 'go.lsp'.config()
+				require('lspconfig')[server_name].setup(cfg)
+			else
+				require('lspconfig')[server_name].setup {
+					capabilities = capabilities(),
+					on_attach = on_attach,
+					settings = servers[server_name],
+				}
+			end
+		end
 	}
 end;
 
@@ -423,7 +422,7 @@ local configure_nvimtree = function()
 		-- },
 	}
 
-	vim.keymap.set('n', '<Leader>e', function ()
+	vim.keymap.set('n', '<Leader>e', function()
 		api.tree.open({
 			find_file = true
 		})
@@ -447,35 +446,16 @@ local configure_comment = function()
 			block = 'gbc'
 		},
 		extra = {
-			---Add comment on the line above
 			above = 'gck',
-			---Add comment on the line below
 			below = 'gcj',
-			---Add comment at the end of line
 			eol = 'gca',
 		},
-		---Enable keybindings
 		--NOTE: If given `false` then the plugin won't create any mappings
 		mappings = {
-			---Operator-pending mapping; `gcc` `gbc` `gc[count]{motion}` `gb[count]{motion}`
 			basic = true,
-			---Extra mapping; `gco`, `gcO`, `gcA`
 			extra = true,
 		},
-		---Function to call before (un)comment
-		-- pre_hook = nil,
-		---Function to call after (un)comment
-		-- post_hook = nil
 	}
-end
-
-
--- ***********************************************************************
--- configure comment
---
-local configure_overseer = function ()
-	--TODO: configure shortcuts
-	require("overseer").setup()
 end
 
 
@@ -483,102 +463,167 @@ end
 -- ***********************************************************************
 -- lua line config
 --
-local configure_lualine = function ()
-	require("lualine").setup()
+local configure_lualine = function()
+	require("lualine").setup {
+		options = {
+			component_separators = '',
+			section_separators = { left = '█', right = '█' },
+		},
+		sections = {
+			lualine_a = { { 'mode', separator = { left = '█' }, right_padding = 2 } },
+			lualine_b = { {'filename', path = 2 }, 'branch'  },
+			lualine_c = {
+				'%=', --[[ add your center compoentnts here in place of this comment ]]
+			},
+			lualine_x = {},
+			lualine_y = { 'filetype', 'progress' },
+			lualine_z = {
+				{ 'location', separator = { right = '█' }, left_padding = 2 },
+			},
+		},
+		inactive_sections = {
+			lualine_a = { 'filename' },
+			lualine_b = {},
+			lualine_c = {},
+			lualine_x = {},
+			lualine_y = {},
+			lualine_z = { 'location' },
+		},
+		tabline = {},
+		extensions = {},
+	}
 end
 
+
+
+
+-- *************************************************
+-- theme
+--
+-- local configure_theme = function()
+-- 	vim.o.background = "dark"
+-- 	vim.cmd.colorscheme "gruvbox"
+-- end
 
 -- *************************************************
 -- install plugisn and apply configuratio
 --
 require("lazy").setup({
-	-- { "ellisonleao/gruvbox.nvim", priority = 1000, config = true, opts = configure_theme },
-	{ "Mofiqul/vscode.nvim", priority = 1000, config = true, opts = configure_theme },
-	{ "nvim-telescope/telescope.nvim", config = configure_telescope, },
-	{ "nvim-treesitter/nvim-treesitter", config = configure_treesitter, },
-	{ "lewis6991/gitsigns.nvim", config = configure_gitsigns, },
-	{ "numToStr/Comment.nvim", config = configure_comment, },
-	{ "windwp/nvim-autopairs", config = true, },
-	{ "j-hui/fidget.nvim", tag = "legacy", event = "LspAttach", config = true },
-	{ 'stevearc/overseer.nvim', opts = {}, config = configure_overseer },
-	{ "folke/neodev.nvim", config = true, event = "BufEnter init.lua" },
-	{ "sindrets/diffview.nvim", config = true},
-	{ "NeogitOrg/neogit", config = true,
-		dependencies = { "nvim-lua/plenary.nvim", "sindrets/diffview.nvim" } },
-	{ 'hrsh7th/nvim-cmp', config = configure_cmp,
+	-- {
+	-- 	"ellisonleao/gruvbox.nvim",
+	-- 	priority = 1000,
+	-- 	config = true,
+	-- 	opts = configure_theme
+	-- },
+	{
+		"nvim-telescope/telescope.nvim",
+		config = configure_telescope,
+	},
+	{
+		"nvim-treesitter/nvim-treesitter",
+		config = configure_treesitter,
+	},
+	{
+		"lewis6991/gitsigns.nvim",
+		config = configure_gitsigns,
+	},
+	{
+		"numToStr/Comment.nvim",
+		config = configure_comment,
+	},
+	{
+		"windwp/nvim-autopairs",
+		config = true,
+	},
+	{
+		"folke/neodev.nvim",
+		config = true,
+		event = "BufEnter init.lua",
+	},
+	{
+		"sindrets/diffview.nvim",
+		config = true,
+	},
+	{
+		"NeogitOrg/neogit",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"sindrets/diffview.nvim",
+			"nvim-telescope/telescope.nvim",
+		},
+		config = true
+	},
+	{
+		'hrsh7th/nvim-cmp',
+		config = configure_cmp,
 		dependencies = {
 			'hrsh7th/cmp-path',
 			'hrsh7th/cmp-nvim-lsp',
-			{'L3MON4D3/LuaSnip', dependencies= { "rafamadriz/friendly-snippets" }} ,
 			'saadparwaiz1/cmp_luasnip',
+			{
+				'L3MON4D3/LuaSnip',
+				dependencies = {
+					"rafamadriz/friendly-snippets",
+				},
+			},
 		}
 	},
-	{ "neovim/nvim-lspconfig", config = configure_lspconfig,
-		dependencies = { "williamboman/mason.nvim", "williamboman/mason-lspconfig.nvim" } },
-	{ 'nvim-tree/nvim-tree.lua', config = configure_nvimtree,
-		dependencies = { 'nvim-tree/nvim-web-devicons' } },
-	{ 'nvim-lualine/lualine.nvim', opts = {}, config = configure_lualine,
-		dependencies = { 'nvim-tree/nvim-web-devicons' }},
-	{ "folke/todo-comments.nvim", config = true,
-		dependencies = { "nvim-lua/plenary.nvim" }},
-	{ 'akinsho/flutter-tools.nvim', lazy = false, config = true,
-			dependencies = { 'nvim-lua/plenary.nvim', 'stevearc/dressing.nvim'}},
 	{
-		'nvim-orgmode/orgmode',
-		event = 'VeryLazy',
-		ft = { 'org' },
-		config = function()
-			-- Setup orgmode
-			require('orgmode').setup({
-				org_agenda_files = '~/orgfiles/**/*',
-				org_default_notes_file = '~/orgfiles/refile.org',
-			})
-
-			-- NOTE: If you are using nvim-treesitter with `ensure_installed = "all"` option
-			-- add `org` to ignore_install
-			-- require('nvim-treesitter.configs').setup({
-			--   ensure_installed = 'all',
-			--   ignore_install = { 'org' },
-			-- })
-		end,
-	}
-
+		"neovim/nvim-lspconfig",
+		config = configure_lspconfig,
+		dependencies = {
+			"williamboman/mason.nvim",
+			"williamboman/mason-lspconfig.nvim"
+		}
+	},
+	{
+		'nvim-tree/nvim-tree.lua',
+		config = configure_nvimtree,
+		dependencies = {
+			'nvim-tree/nvim-web-devicons'
+		}
+	},
+	{
+		"j-hui/fidget.nvim",
+		tag = "legacy",
+		event = "LspAttach",
+		config = true
+	},
+	{
+		"ray-x/go.nvim",
+		dependencies = { -- optional packages
+			"ray-x/guihua.lua",
+			"neovim/nvim-lspconfig",
+			"nvim-treesitter/nvim-treesitter",
+		},
+		event = { "CmdlineEnter" },
+		ft = { "go", 'gomod' },
+	},
+	{
+		'nvim-lualine/lualine.nvim',
+		opts = {},
+		config = configure_lualine,
+		dependencies = {
+			'nvim-tree/nvim-web-devicons'
+		}
+	},
+	-- {
+	-- 	"stevearc/overseer.nvim",
+	-- 	commit = "6271cab7ccc4ca840faa93f54440ffae3a3918bd",
+	-- 	cmd = { "CompilerOpen", "CompilerToggleResults", "CompilerRedo" },
+	-- 	opts = {
+	-- 		task_list = {
+	-- 			direction = "bottom",
+	-- 			min_height = 25,
+	-- 			max_height = 25,
+	-- 			default_detail = 1
+	-- 		},
+	-- 	},
+	-- },
+	-- {
+	-- 	"Zeioth/compiler.nvim",
+	-- 	cmd = { "CompilerOpen", "CompilerToggleResults", "CompilerRedo" },
+	-- 	dependencies = { "stevearc/overseer.nvim", "nvim-telescope/telescope.nvim" },
+	-- 	opts = {},
+	-- },
 })
-
-
--- *************************************************
--- utils
---
-
-
-local insert_at_cursor = function(message)
-	local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-	vim.api.nvim_buf_set_text(0, row - 1, col, row - 1, col, { message })
-end
-
-local open_config_file = function()
-	local initluaPath = vim.fn.resolve(vim.fn.stdpath('config') .. '/init.lua')
-	print('open ', initluaPath)
-	vim.cmd('e ' .. initluaPath)
-end
-
-local insert_today_date = function()
-	insert_at_cursor(vim.fn.strftime('%c'))
-end
-
-local insert_current_file_path = function()
-	insert_at_cursor(vim.fn.expand('%:p'))
-end
-
-local clean_whitespaces = function()
-		local save_cursor = vim.fn.getpos(".")
-		pcall(function() vim.cmd [[%s/\s\+$//e]] end)
-		vim.fn.setpos(".", save_cursor)
-end
-
-vim.keymap.set('n', '<Leader>gc', open_config_file)
-vim.keymap.set('n', '<Leader>gd', insert_today_date)
-vim.keymap.set('n', '<Leader>gf', insert_current_file_path)
--- vim.keymap.set('n', '<Leader>gc', clean_whitespaces)
-vim.keymap.set('n', '<Leader> ', vim.cmd.make)
-
