@@ -2,6 +2,7 @@
 local vscode = require('vscode-neovim')
 
 vim.g.mapleader = " "
+
 vim.keymap.set('n', '<Leader>f', function ()
     vscode.action('workbench.action.quickOpen')
 end)
@@ -9,6 +10,12 @@ end)
 vim.keymap.set('n', '<Leader>b', function ()
     vscode.action('workbench.action.quickOpen')
 end)
+
+
+vim.keymap.set('n', '<Leader>w', function ()
+    vscode.action('workbench.action.files.save')
+end)
+
 
 
 vim.keymap.set('n', '<Leader>x', function ()

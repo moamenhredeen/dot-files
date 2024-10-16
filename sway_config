@@ -1,14 +1,20 @@
-
-# style
-default_border none
+# my sway config
 
 
-# keys
+# ------------------------------------------ style --------------------------------------
+default_border pixel 4
+smart_borders on
+client.focused #4c7899 #285577 #ffffff #2e9ef4 #f85552
+
+
+# ------------------------------------------ default apps --------------------------------------
 set $mod Mod4
 set $term alacritty
 set $menu fuzzel | xargs swaymsg exec --
 
-output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+
+# ------------------------------------------ output/output --------------------------------------
+output * background  /home/moamen/pictures/everforest-walls/other/japanese_pedestrian_street.png fill #9DA9A0
 
 input "type:keyboard" {
     xkb_layout 		"de"
@@ -18,27 +24,31 @@ input "type:keyboard" {
 }
 
 
+
+# ------------------------------------------ key bindings --------------------------------------
 set $left h
 set $down j
 set $up k
 set $right l
 
-bindsym $mod+Return exec $term
+bindsym $mod+t exec $term
 bindsym $mod+Shift+q kill
 bindsym $mod+x exec $menu
-bindsym $mod+t exec $term
 bindsym $mod+f fullscreen
 bindsym $mod+Shift+r reload
-#bindsym $mod+t border none
-#bindsym $mod+Shift+t border normal
+
 bindsym $mod+minus scratchpad show
 bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+Shift+Escape exec swaymsg exit
+bindsym $mod+w floating toggle
 
-bindsym $mod+$left 				focus left
-bindsym $mod+$down 				focus down
-bindsym $mod+$up 					focus up
-bindsym $mod+$right 			focus right
+# hide and show the bar
+bindsym $mod+b bar "mainbar" mode toggle
+
+bindsym $mod+$left 	focus left
+bindsym $mod+$down 	focus down
+bindsym $mod+$up 	focus up
+bindsym $mod+$right focus right
 
 bindsym $mod+Shift+$left 	move left
 bindsym $mod+Shift+$down 	move down
@@ -56,62 +66,78 @@ bindsym $mod+8 workspace number 8
 bindsym $mod+9 workspace number 9
 bindsym $mod+0 workspace number 10
 
-bindsym $mod+Shift+1 move container to workspace number 1, workspace number 1
-bindsym $mod+Shift+2 move container to workspace number 2, workspace number 2
-bindsym $mod+Shift+3 move container to workspace number 3, workspace number 3
-bindsym $mod+Shift+4 move container to workspace number 4, workspace number 4
-bindsym $mod+Shift+5 move container to workspace number 5, workspace number 5
-bindsym $mod+Shift+6 move container to workspace number 6, workspace number 6
-bindsym $mod+Shift+7 move container to workspace number 7, workspace number 7
-bindsym $mod+Shift+8 move container to workspace number 8, workspace number 8
-bindsym $mod+Shift+9 move container to workspace number 9, workspace number 9
+bindsym $mod+Shift+1 move container to workspace number 1, 	workspace number 1
+bindsym $mod+Shift+2 move container to workspace number 2, 	workspace number 2
+bindsym $mod+Shift+3 move container to workspace number 3, 	workspace number 3
+bindsym $mod+Shift+4 move container to workspace number 4, 	workspace number 4
+bindsym $mod+Shift+5 move container to workspace number 5, 	workspace number 5
+bindsym $mod+Shift+6 move container to workspace number 6, 	workspace number 6
+bindsym $mod+Shift+7 move container to workspace number 7, 	workspace number 7
+bindsym $mod+Shift+8 move container to workspace number 8, 	workspace number 8
+bindsym $mod+Shift+9 move container to workspace number 9, 	workspace number 9
 bindsym $mod+Shift+0 move container to workspace number 10, workspace number 10
 
 
 floating_modifier $mod normal
 
 
-mode "layout" {
-		bindsym t layout tabbed
-		bindsym s layout stacking
-		bindsym h layout splith
-		bindsym v layout splitv
-		bindsym f floating toggle
+# -------------------------------- legacy settings ---------------------------------
 
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
-bindsym $mod+w mode "layout"
+# use smart border feature instead of manually disabling and enabling borders
+#bindsym $mod+t border none
+#bindsym $mod+Shift+t border normal
+
+# replace layout mode with float mode toggle, since i don't use it
+# mode "layout" {
+# 		bindsym t layout tabbed
+# 		bindsym s layout stacking
+# 		bindsym h layout splith
+# 		bindsym v layout splitv
+# 		bindsym f floating toggle
+
+#     bindsym Return mode "default"
+#     bindsym Escape mode "default"
+# }
+# bindsym $mod+w mode "layout"
 
 
-mode "resize" {
-    bindsym $left 	resize shrink width 25px
-    bindsym $down 	resize grow height 25px
-    bindsym $up 		resize shrink height 25px
-    bindsym $right 	resize grow width 25px
+# resize with the mouse is way easier than with the keyboard
+# mode "resize" {
+#     bindsym $right 	resize shrink 	width 	25px
+#     bindsym $up 	resize grow 	height 	25px
+#     bindsym $down 	resize shrink 	height 	25px
+#     bindsym $left 	resize grow 	width 	25px
 
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
-bindsym $mod+r mode "resize"
+#     bindsym Return mode "default"
+#     bindsym Escape mode "default"
+# }
+# bindsym $mod+r mode "resize"
 
+
+
+# -----------------------------	sway bar -----------------------------------
 
 bar {
-    position bottom
-    status_command while date +' | %Y.%m.%d %H:%M '; do sleep 60; done
-    colors {
-        statusline #ffffff
-        background #323232
-        inactive_workspace #32323200 #32323200 #5c5c5c
-    }
+	id "mainbar"
+	position bottom
+	status_command while date +' | %Y.%m.%d %H:%M '; do sleep 60; done
+	font "CaskaydiaCove NF normal regular 12"
+	colors {
+		statusline #5c6a72
+		background #FFFBEF
+		separator #fef2d5
+		inactive_workspace #fef2d5 #fef2d5 #5c6a72
+		active_workspace #DBBC7F #DBBC7F #5c6a72
+		focused_workspace #DBBC7F #DBBC7F #5c6a72
+	}
 
+# diable vertical scrolling
+	bindsym button4 nop
+	bindsym button5 nop
 
-    # diable vertical scrolling
-    bindsym button4 nop
-    bindsym button5 nop
-    # diable horizontal scrolling
-    bindsym button6 nop
-    bindsym button7 nop
+# diable horizontal scrolling
+	bindsym button6 nop
+	bindsym button7 nop
 }
 
 include /etc/sway/config.d/*

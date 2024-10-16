@@ -1,0 +1,13 @@
+
+
+set background=light
+colorscheme default
+
+set cursorline
+
+
+nmap m :Man 
+nmap 2 :Man 2   
+nmap 3 :Man 3   
+nmap 4 :Man 4   
+nmap 5 :Man 5  
