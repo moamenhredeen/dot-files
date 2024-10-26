@@ -37,6 +37,10 @@ bindsym $mod+x exec $menu
 bindsym $mod+f fullscreen
 bindsym $mod+Shift+r reload
 
+bindsym $mod+i exec alacritty --title "floating-scratch-nvim" --command nvim -c "e ~/temp/$(date +'%d-%m-%Y').md"
+bindsym $mod+Shift+i exec alacritty --command nvim -c "e ~/temp/$(date +'%d-%m-%Y').md"
+for_window [title="floating-scratch-nvim"] floating enable, resize set height 50ppt, resize set width 50ppt 
+
 bindsym $mod+minus scratchpad show
 bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+Shift+Escape exec swaymsg exit
@@ -121,6 +125,7 @@ bar {
 	id "mainbar"
 	position bottom
 	status_command while date +' | %Y.%m.%d %H:%M '; do sleep 60; done
+	# status_command exec /home/moamen/moamenhredeen/sway_status_manager/target/release/sway_status_manager
 	font "CaskaydiaCove NF normal regular 12"
 	colors {
 		statusline #5c6a72
