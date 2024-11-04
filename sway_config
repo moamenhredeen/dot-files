@@ -151,6 +151,9 @@ bar {
 # diable horizontal scrolling
 	bindsym button6 nop
 	bindsym button7 nop
+
+	# hide the bar by defualt
+	mode hide
 }
 
 include /etc/sway/config.d/*
