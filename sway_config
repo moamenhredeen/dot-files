@@ -40,13 +40,13 @@ bindsym $mod+x exec $menu
 bindsym $mod+f fullscreen
 bindsym $mod+Shift+r reload, exec notify-send -t 2000 "Sway" "sway config reloaded successfully"
 
-bindsym $mod+i exec alacritty --title "floating-scratch-nvim" --command nvim -c "e ~/moamenhredeen/level-up/README.md" \
-	&& cd ~/moamenhredeen/level-up/ \
-	&& git add . \
-	&& git cm "update README" \
-	&& git push \
-	&& notify-send -t 2000 "Level-Up" "changes saved and synced successfully"
-bindsym $mod+Shift+i exec alacritty --command nvim -c "e ~/temp/$(date +'%d-%m-%Y').md"
+# bindsym $mod+i exec alacritty --title "floating-scratch-nvim" --command nvim -c "e ~/moamenhredeen/level-up/README.md" \
+# 	&& cd ~/moamenhredeen/level-up/ \
+# 	&& git add . \
+# 	&& git cm "update README" \
+# 	&& git push \
+# 	&& notify-send -t 2000 "Level-Up" "changes saved and synced successfully"
+bindsym $mod+i exec alacritty --command nvim -c "e ~/notes/scratch.md"
 for_window [title="floating-scratch-nvim"] floating enable, resize set height 50ppt, resize set width 50ppt 
 
 bindsym $mod+minus scratchpad show
