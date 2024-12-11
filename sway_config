@@ -114,16 +114,16 @@ floating_modifier $mod normal
 
 
 # resize with the mouse is way easier than with the keyboard
-# mode "resize" {
-#     bindsym $right 	resize shrink 	width 	25px
-#     bindsym $up 	resize grow 	height 	25px
-#     bindsym $down 	resize shrink 	height 	25px
-#     bindsym $left 	resize grow 	width 	25px
+mode "resize" {
+    bindsym $right 	resize shrink 	width 	25px
+    bindsym $up 	resize grow 	height 	25px
+    bindsym $down 	resize shrink 	height 	25px
+    bindsym $left 	resize grow 	width 	25px
 
-#     bindsym Return mode "default"
-#     bindsym Escape mode "default"
-# }
-# bindsym $mod+r mode "resize"
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
 
 
 
@@ -153,7 +153,7 @@ bar {
 	bindsym button7 nop
 
 	# hide the bar by defualt
-	mode hide
+	# mode hide
 }
 
 include /etc/sway/config.d/*
