@@ -8,7 +8,7 @@ shell = "tmux"
 vi_mode_style = "Beam"
 
 [font]
-size = 14.0
+size = 12.0
 
 [font.normal]
 #family = "Monaspace Radon"
@@ -16,58 +16,57 @@ family = "JetbrainsMono NF"
 
 
 # zenbones light
-[colors.bright]
-black = "#CFC1BA"
-red = "#94253E"
-green = "#3F5A22"
-yellow = "#803D1C"
-blue = "#1D5573"
-magenta = "#7B3B70"
-cyan = "#2B747C"
-white = "#4F5E68"
-[colors.cursor]
-cursor = "#2C363C"
-text = "#F0EDEC"
-[colors.normal]
-black = "#F0EDEC"
-blue = "#286486"
-cyan = "#3B8992"
-green = "#4F6C31"
-magenta = "#88507D"
-red = "#A8334C"
-white = "#2C363C"
-yellow = "#944927"
-[colors.primary]
-background = "#F0EDEC"
-foreground = "#2C363C"
-
-
-# base 16 gray scale
 # [colors.bright]
-# black   = '#F7F7F7'
-# red     = '#7C7C7C'
-# green   = '#8E8E8E'
-# yellow  = '#A0A0A0'
-# blue    = '#686868'
-# magenta = '#747474'
-# cyan    = '#868686'
-# white   = '#464646'
-# [colors.primary]
-# background = '#F7F7F7'
-# foreground = '#464646'
-# [colors.normal]
-# black   = '#ABABAB'
-# red     = '#7C7C7C'
-# green   = '#8E8E8E'
-# yellow  = '#A0A0A0'
-# blue    = '#686868'
-# magenta = '#747474'
-# cyan    = '#868686'
-# white   = '#101010'
+# black = "#CFC1BA"
+# red = "#94253E"
+# green = "#3F5A22"
+# yellow = "#803D1C"
+# blue = "#1D5573"
+# magenta = "#7B3B70"
+# cyan = "#2B747C"
+# white = "#4F5E68"
 # [colors.cursor]
-# cursor = '#f5e042'
-# text = '#ffffff'
-# [colors.selection]
-# background = '#bdbdbd'
-# text = '#000000'
+# cursor = "#2C363C"
+# text = "#F0EDEC"
+# [colors.normal]
+# black = "#F0EDEC"
+# blue = "#286486"
+# cyan = "#3B8992"
+# green = "#4F6C31"
+# magenta = "#88507D"
+# red = "#A8334C"
+# white = "#2C363C"
+# yellow = "#944927"
+# [colors.primary]
+# background = "#F0EDEC"
+# foreground = "#2C363C"
 
+
+# Colors (Everforest Dark)
+
+# Default colors
+[colors.primary]
+background = '#2d353b'
+foreground = '#d3c6aa'
+
+# Normal colors
+[colors.normal]
+black   = '#475258'
+red     = '#e67e80'
+green   = '#a7c080'
+yellow  = '#dbbc7f'
+blue    = '#7fbbb3'
+magenta = '#d699b6'
+cyan    = '#83c092'
+white   = '#d3c6aa'
+
+# Bright colors
+[colors.bright]
+black   = '#475258'
+red     = '#e67e80'
+green   = '#a7c080'
+yellow  = '#dbbc7f'
+blue    = '#7fbbb3'
+magenta = '#d699b6'
+cyan    = '#83c092'
+white   = '#d3c6aa'
