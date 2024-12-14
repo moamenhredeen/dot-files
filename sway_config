@@ -17,7 +17,7 @@ set $menu fuzzel | xargs swaymsg exec --
 
 
 # ------------------------------------------ output/output --------------------------------------
-output * background  /home/moamen/pictures/everforest-walls/other/japanese_pedestrian_street.png fill #9DA9A0
+# output * background  /home/moamen/downloads/4k-Arch-Dark-Background.png fill #9DA9A0
 
 input "type:keyboard" {
     xkb_layout 		"de"
@@ -134,14 +134,14 @@ bar {
 	position bottom
 	status_command while date +' | %Y.%m.%d %H:%M '; do sleep 60; done
 	# status_command exec /home/moamen/moamenhredeen/sway_status_manager/target/release/sway_status_manager
-	font "CaskaydiaCove NF normal regular 12"
+	font "CaskaydiaCove NF normal bold 12"
 	colors {
-		statusline #5c6a72
-		background #FFFBEF
+		statusline #7fbbb3
+		background #384b55
 		separator #fef2d5
-		inactive_workspace #fef2d5 #fef2d5 #5c6a72
-		active_workspace #DBBC7F #DBBC7F #5c6a72
-		focused_workspace #DBBC7F #DBBC7F #5c6a72
+		inactive_workspace #7fbbb3 #384b55 #7fbbb3
+		active_workspace #7fbbb3 #384b55 #7fbbb3
+		focused_workspace #7fbbb3 #7fbbb3 #5c6a72
 	}
 
 # diable vertical scrolling
