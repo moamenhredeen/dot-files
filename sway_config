@@ -139,9 +139,9 @@ bar {
 		statusline #7fbbb3
 		background #384b55
 		separator #fef2d5
-		inactive_workspace #7fbbb3 #384b55 #7fbbb3
-		active_workspace #7fbbb3 #384b55 #7fbbb3
-		focused_workspace #7fbbb3 #7fbbb3 #5c6a72
+		inactive_workspace #384b55 #384b55 #7fbbb3
+		active_workspace #384b55 #384b55 #7fbbb3
+		focused_workspace #7fbbb3 #384b55 #7fbbb3
 	}
 
 # diable vertical scrolling
