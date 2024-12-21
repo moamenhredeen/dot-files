@@ -1,0 +1,218 @@
+
+<?xml version="1.0"?>
+
+<!--
+  This is a very simple config file with many options missing. For a complete
+  set of options with comments, see docs/rc.xml.all
+-->
+
+<labwc_config>
+
+  <windowSwitcher show="true" preview="true" outlines="true" allWorkspaces="false">
+    <fields>
+      <field content="trimmed_identifier" width="100%" />
+      <!-- <field content="identifier" width="25%" /> -->
+      <!-- <field content="title" width="50%" /> -->
+    </fields>
+  </windowSwitcher>
+
+	<desktops number="10">
+		<prefix>W</prefix>
+		<popupTime>0</popupTime>
+	</desktops>
+
+  <theme>
+    <cornerRadius>0</cornerRadius>
+		<keepBorder>false</keepBorder>
+		<dropShadow>true</dropShadow>
+  </theme>
+	 
+
+	<libinput>
+		<device category="default">
+			<naturalScroll>false</naturalScroll>
+      <pointerSpeed>0.4</pointerSpeed>
+		</device>
+		<device category="touchpad">
+			<naturalScroll>true</naturalScroll>
+		</device>
+	</libinput>
+
+
+	<windowRules>
+		<windowRule identifier="Alacritty">
+			<serverDecoration>no</serverDecoration>
+		</windowRule>
+	</windowRules>
+
+
+  <keyboard>
+    <default />
+    <keybind key="W-t">
+      <action name="Execute" command="alacritty" />
+    </keybind>
+    <keybind key="W-x">
+      <action name="Execute" command="fuzzel" />
+    </keybind>
+    <keybind key="W-f">
+      <action name="ToggleFullscreen"/>
+    </keybind>
+    <keybind key="W-m">
+      <action name="ToggleMaximize"/>
+    </keybind>
+    <keybind key="W-S-r">
+      <action name="Reconfigure"/>
+    </keybind>
+    <keybind key="W-Escape">
+      <action name="Execute" command="waylock"/>
+    </keybind>
+    <keybind key="W-w">
+			<action>
+				<name>Execute</name>
+				<command>bash -c 'wlrctl window focus "$(wlrctl window list | grep '^[^:]*' -o | fuzzel -d)"'</command>
+			</action>
+    </keybind>
+    <keybind key="W-p">
+			<action>
+				<name>Execute</name>
+				<command>bash -c "bash ~/dot-files/commands/$(ls ~/dot-files/commands/ | sed -e 's/-/ /g' | fuzzel -d | sed -e 's/ /-/g')"</command>
+			</action>
+    </keybind>
+
+		<!-- navigate between workspaces -->
+    <keybind key="W-1">
+			<action name="GoToDesktop" to="1"/>
+    </keybind>
+    <keybind key="W-2">
+			<action name="GoToDesktop" to="2"/>
+    </keybind>
+    <keybind key="W-3">
+			<action name="GoToDesktop" to="3"/>
+    </keybind>
+    <keybind key="W-4">
+			<action name="GoToDesktop" to="4"/>
+    </keybind>
+    <keybind key="W-5">
+			<action name="GoToDesktop" to="5"/>
+    </keybind>
+    <keybind key="W-6">
+			<action name="GoToDesktop" to="6"/>
+    </keybind>
+    <keybind key="W-7">
+			<action name="GoToDesktop" to="7"/>
+    </keybind>
+    <keybind key="W-8">
+			<action name="GoToDesktop" to="8"/>
+    </keybind>
+    <keybind key="W-9">
+			<action name="GoToDesktop" to="9"/>
+    </keybind>
+    <keybind key="W-0">
+			<action name="GoToDesktop" to="0"/>
+    </keybind>
+
+    <keybind key="W-S-1">
+			<action name="SendToDesktop" to="1"/>
+    </keybind>
+    <keybind key="W-S-2">
+			<action name="SendToDesktop" to="2"/>
+    </keybind>
+    <keybind key="W-S-3">
+			<action name="SendToDesktop" to="3"/>
+    </keybind>
+    <keybind key="W-S-4">
+			<action name="SendToDesktop" to="4"/>
+    </keybind>
+    <keybind key="W-S-5">
+			<action name="SendToDesktop" to="5"/>
+    </keybind>
+    <keybind key="W-S-6">
+			<action name="SendToDesktop" to="6"/>
+    </keybind>
+    <keybind key="W-S-7">
+			<action name="SendToDesktop" to="7"/>
+    </keybind>
+    <keybind key="W-S-8">
+			<action name="SendToDesktop" to="8"/>
+    </keybind>
+    <keybind key="W-S-9">
+			<action name="SendToDesktop" to="9"/>
+    </keybind>
+    <keybind key="W-S-0">
+			<action name="SendToDesktop" to="0"/>
+    </keybind>
+
+    <keybind key="A-space">
+			<action name="Execute" command="fuzzel"/>
+    </keybind>
+
+		<!-- quit -->
+    <keybind key="W-S-escape">
+			<action name="Exit"/>
+    </keybind>
+  </keyboard>
+
+	<mouse>
+		<default />
+
+    <context name="Frame">
+			<mousebind button="A-Left" action="Press"/>
+			<mousebind button="A-Left" action="Drag"/>
+			<mousebind button="A-Right" action="Press"/>
+			<mousebind button="A-Right" action="Drag" />
+
+      <mousebind button="W-Left" action="Press">
+        <action name="Focus" />
+        <action name="Raise" />
+      </mousebind>
+      <mousebind button="W-Left" action="Drag">
+        <action name="Move" />
+      </mousebind>
+      <mousebind button="W-Right" action="Press">
+        <action name="Focus" />
+        <action name="Raise" />
+      </mousebind>
+      <mousebind button="W-Right" action="Drag">
+        <action name="Resize" />
+      </mousebind>
+    </context>
+
+		<context name="Root">
+			<mousebind button="Left" action="Press">
+				<action name="None"/>
+			</mousebind>
+			<mousebind button="Right" action="Press">
+				<action name="None" />
+			</mousebind>
+			<mousebind button="Middle" action="Press">
+				<action name="None" />
+			</mousebind>
+			<mousebind direction="Up" action="Scroll">
+				<action name="None" />
+			</mousebind>
+			<mousebind direction="Down" action="Scroll">
+				<action name="None" />
+			</mousebind>
+		</context>
+
+		<context name="All">
+			<mousebind direction="W-Up" action="Scroll">
+				<action name="ZoomIn"/>
+			</mousebind>
+			<mousebind direction="W-Down" action="Scroll">
+				<action name="ZoomOut"/>
+			</mousebind>
+		</context>
+	</mouse>
+
+	<magnifier>
+		<width>-1</width>
+		<height>-1</height>
+		<initScale>2</initScale>
+		<increment>0.2</increment>
+		<useFilter>true</useFilter>
+	</magnifier>
+	 
+
+
+</labwc_config>

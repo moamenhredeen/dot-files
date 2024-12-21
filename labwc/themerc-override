@@ -1,0 +1,11 @@
+
+### osd
+
+osd.bg.color: #272e33
+osd.border.color: #d3c6aa
+osd.border.width: 2
+osd.label.text.color: #d3c6aa
+osd.window-switcher.width: 10%
+osd.window-switcher.padding: 8
+osd.window-switcher.item.padding.y: 8
+osd.window-switcher.item.padding.y: 8
