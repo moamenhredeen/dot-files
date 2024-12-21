@@ -5,9 +5,13 @@
 exec mako
 
 # ------------------------------------------ style --------------------------------------
-default_border pixel 4
+default_border pixel 1
 smart_borders on
-client.focused #4c7899 #285577 #ffffff #2e9ef4 #f85552
+client.focused #4c7899 #285577 #ffffff #2e9ef4 #7fbbb3
+
+
+# ------------------------------------------ default config --------------------------------------
+exec swaymsg output eDP-1 toggle
 
 
 # ------------------------------------------ default apps --------------------------------------
