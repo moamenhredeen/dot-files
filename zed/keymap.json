@@ -2,9 +2,11 @@
   {
     "context": "Editor && vim_mode == normal && (vim_operator == none || vim_operator == n) && !VimWaiting",
     "bindings": {
-      "space space": "task::Rerun",
-      "space b": ["tab_switcher::Toggle", { "select_last": true }],
-      "space f": "file_finder::Toggle",
+      ", t": "task::Spawn",
+      ", r": "task::Rerun",
+      // "space b": ["tab_switcher::Toggle", { "select_last": true }],
+      "space b": ["file_finder::Toggle", { "separate_history": true }],
+      "space f": ["file_finder::Toggle", { "separate_history": true }],
       "space x": "command_palette::Toggle",
       "space e": "project_panel::ToggleFocus",
       "space w": "workspace::Save",
@@ -26,15 +28,17 @@
     "context": "ProjectPanel && not_editing",
     "bindings": {
       "q": "workspace::ToggleLeftDock",
-      "n": "project_panel::NewFile"
+      "a": "project_panel::NewFile",
+      "d": "project_panel::Delete",
+      "space f": "file_finder::Toggle"
     }
   },
   {
     "bindings": {
-      "alt-h": ["workspace::ActivatePaneInDirection", "Left"],
-      "alt-l": ["workspace::ActivatePaneInDirection", "Right"],
-      "alt-k": ["workspace::ActivatePaneInDirection", "Up"],
-      "alt-j": ["workspace::ActivatePaneInDirection", "Down"]
+      "ctrl-h": ["workspace::ActivatePaneInDirection", "Left"],
+      "ctrl-l": ["workspace::ActivatePaneInDirection", "Right"],
+      "ctrl-k": ["workspace::ActivatePaneInDirection", "Up"],
+      "ctrl-j": ["workspace::ActivatePaneInDirection", "Down"]
     }
   }
 ]

@@ -1,13 +1,19 @@
 {
-  "features": {
-    "inline_completion_provider": "none"
-  },
   "assistant": {
     "default_model": {
-      "provider": "anthropic",
-      "model": "claude-3-5-sonnet-20240620"
+      "provider": "zed.dev",
+      "model": "claude-3-7-sonnet-latest"
     },
     "version": "2"
+  },
+  "buffer_font_size": 18.0,
+  "terminal": {
+    "shell": {
+      "program": "/opt/homebrew/bin/fish"
+    }
+  },
+  "features": {
+    "edit_prediction_provider": "none"
   },
   "theme": "One Light",
   "telemetry": {
@@ -16,13 +22,36 @@
   "tabs": {
     "git_status": true
   },
+  "git": {
+    "inline_blame": {
+      "enabled": false
+    }
+  },
+  "format_on_save": "off",
+  "remove_trailing_whitespace_on_save": false,
   "vim_mode": true,
-  "ui_font_size": 18,
-  "buffer_font_size": 18,
   "autosave": "on_focus_change",
   "ui_font_family": "JetBrainsMono Nerd Font",
   "buffer_font_family": "CaskaydiaCove Nerd Font",
   "buffer_font_weight": 500,
   "cursor_blink": false,
-  "current_line_highlight": "none"
+  "selection_highlight": false,
+  "current_line_highlight": "none",
+  "tab_bar": {
+    "show": true
+  },
+  "indent_guides": {
+    "enabled": false
+  },
+  "toolbar": {
+    "quick_actions": false
+  },
+  "file_types": {
+    "HTML": ["*.webc"]
+  },
+  "languages": {
+    "TypeScript": {
+      "tab_size": 4
+    }
+  }
 }
