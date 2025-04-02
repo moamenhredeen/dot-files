@@ -50,10 +50,10 @@ nmap za :action ExpandCollapseToggleAction<cr>
 
 
 " *** window
-nmap <a-j> <c-w>j
-nmap <a-k> <c-w>k
-nmap <a-h> <c-w>h
-nmap <a-l> <c-w>l
+nmap <c-j> <c-w>j
+nmap <c-k> <c-w>k
+nmap <c-h> <c-w>h
+nmap <c-l> <c-w>l
 
 
 
@@ -70,12 +70,12 @@ nmap <leader>d :action ShowErrorDescription<cr>
 nmap <leader>w :action SaveAll<cr>
 
 " *** search
-nmap / :action Find<CR>
-vmap / :action Find<CR>
-nmap n :action FindNext<CR>
-vmap n :action FindNext<CR>
-nmap <s-n> :action FindPrevious<CR>
-vmap <s-n> :action FindPrevious<CR>
+" nmap / :action Find<CR>
+" vmap / :action Find<CR>
+" nmap n :action FindNext<CR>
+" vmap n :action FindNext<CR>
+" nmap <s-n> :action FindPrevious<CR>
+" vmap <s-n> :action FindPrevious<CR>
 nmap <leader>sp :action FindInPath<cr>
 vmap <leader>sp :action FindInPath<cr>
 map <leader>ss :action GotoSymbol<cr>
