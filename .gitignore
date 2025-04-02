@@ -1,2 +1,4 @@
 **/*.html
 .DS_Store
+zed/conversations/
+zed/prompts/
