@@ -37,6 +37,15 @@
 	ff = true
 [push]
 	default = upstream 
+[merge]
+	conflictstyle = zdiff3
+	tool = nvimdiff2
+[diff]
+	algorithm = histogram
+	tool = nvimdiff
+[interactive]
+    	diffFilter = delta --color-only
+[delta]
+    	navigate = true
 [safe]
 	directory = D:\\dot-files\\
-
