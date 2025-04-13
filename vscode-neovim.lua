@@ -1,6 +1,5 @@
 
 if not vim.g.vscode then
-	vim.o.background = "dark"
 	vim.o.number = true
 	vim.o.cursorline = true
 	return
