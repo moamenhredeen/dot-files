@@ -1,8 +1,6 @@
 # ***********************************************************************
 # ***
 # *** My Personal Git Config
-# ***
-
 #   ██████╗ ██╗████████╗
 #  ██╔════╝ ██║╚══██╔══╝
 #  ██║  ███╗██║   ██║   
@@ -13,28 +11,32 @@
 [init]
 	defaultBranch = main
 [user]
-	email = moamen.hraden@primion.eu
-	name = Moamen Hraden
+	email = moamen@hredeen.com
+	name = Moamen Hredeen
 [alias]
 	lg 	= log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)'
 	l 	= log -n 10 --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)'
-	ll 	= log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
-	st 	= status -s -b --show-stash
+	ll 	= log  --all --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)'
+	st 	= status --short --branch --show-stash
 	cm 	= commit -m
+	m	= commit
 	a 	= add 
 	s 	= switch 
 	sc 	= switch -c 
 	b 	= branch 
 	br 	= branch -r
 	wl 	= worktree list
-	wa  = worktree add
+	wa  	= worktree add
 	wp 	= worktree prune
 	co 	= checkout 
 [core]
-	pager = 
+	pager = delta 
 	editor = nvim 
 	autocrlf = input
 [pull]
-	rebase = false
+	ff = true
+[push]
+	default = upstream 
 [safe]
 	directory = D:\\dot-files\\
+
